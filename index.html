@@ -73,20 +73,27 @@ Some of our clients –
     <!-- LD Json markups and additional info -->
 
     <style>
-      /* Compact Timeline Styles */
+      /* Horizontal Timeline Styles */
       .compact-timeline {
         background: #fff;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-        margin: 15px auto;
-        max-width: 800px;
+        border-radius: 12px;
+        padding: 30px 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        margin: 30px auto;
+        max-width: 1000px;
+        overflow: hidden;
+      }
+
+      .timeline-container {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        padding: 40px 0;
       }
 
       .timeline-track {
         position: relative;
-        padding: 20px 0;
-        margin-bottom: 20px;
+        margin: 0 40px;
       }
 
       .timeline-line {
@@ -95,8 +102,7 @@ Some of our clients –
         right: 0;
         height: 3px;
         background: #e9ecef;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 0;
         z-index: 1;
       }
 
@@ -105,148 +111,126 @@ Some of our clients –
         justify-content: space-between;
         position: relative;
         z-index: 2;
+        margin: 0 -20px;
       }
 
       .milestone {
+        position: relative;
+        width: 22%;
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border-top: 4px solid #3498db;
+        margin: 0 10px;
+      }
+
+      .milestone::before {
+        content: '';
+        position: absolute;
         width: 16px;
         height: 16px;
-        background: #fff;
-        border: 3px solid #3498db;
-        border-radius: 50%;
-        position: relative;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .milestone:hover, .milestone.active {
-        transform: scale(1.3);
         background: #3498db;
-      }
-
-      .milestone::after {
-        content: attr(data-year);
-        position: absolute;
-        top: -30px;
+        border-radius: 50%;
+        top: -10px;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 12px;
-        font-weight: 600;
-        color: #6c757d;
-        white-space: nowrap;
+        z-index: 3;
       }
 
-      .milestone:hover::after {
-        color: #3498db;
+      .milestone:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      }
+
+      .milestone-year {
+        display: block;
+        font-size: 18px;
         font-weight: 700;
+        color: #3498db;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .milestone-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .milestone-desc {
+        font-size: 14px;
+        color: #6c757d;
+        line-height: 1.5;
+        text-align: center;
+        margin-bottom: 0;
       }
 
       .timeline-details {
         text-align: center;
-        padding: 15px 0 0;
-      }
-
-      .timeline-details h4 {
-        color: #2c3e50;
-        margin-bottom: 10px;
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
       }
 
       .timeline-details p {
         color: #6c757d;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       .btn-timeline {
         display: inline-block;
         background: #3498db;
         color: white !important;
-        padding: 8px 20px;
-        border-radius: 4px;
+        padding: 10px 25px;
+        border-radius: 30px;
         text-decoration: none;
         font-weight: 500;
         transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
       }
 
       .btn-timeline:hover {
         background: #2980b9;
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 6px 16px rgba(41, 128, 185, 0.4);
       }
 
-      /* Tooltip styles */
-      .milestone:hover::before {
-        content: attr(data-title) ' - ' attr(data-desc);
-        position: absolute;
-        bottom: 30px;
-        background: #2c3e50;
-        color: white;
-        padding: 8px 12px;
-        border-radius: 4px;
-        font-size: 12px;
-        white-space: nowrap;
-        z-index: 10;
-        pointer-events: none;
-        min-width: 200px;
-        text-align: left;
-      }
-      
-      /* First milestone - tooltip to the right */
-      .milestone:first-child:hover::before {
-        left: 100%;
-        transform: translateX(10px);
-      }
-      
-      /* Middle milestones - centered */
-      .milestone:nth-child(2):hover::before,
-      .milestone:nth-child(3):hover::before,
-      .milestone:nth-child(4):hover::before {
-        left: 50%;
-        transform: translateX(-50%);
-      }
-      
-      /* Last milestone - tooltip to the left */
-      .milestone:last-child:hover::before {
-        right: 100%;
-        left: auto;
-        transform: translateX(-10px);
-      }
-
-      /* First milestone - arrow to the right */
-      .milestone:first-child:hover::after {
-        content: '';
-        position: absolute;
-        top: -8px;
-        left: 100%;
-        transform: translateX(5px);
-        border-width: 5px 5px 5px 0;
-        border-style: solid;
-        border-color: transparent #2c3e50 transparent transparent;
-      }
-      
-      /* Middle milestones - centered arrow */
-      .milestone:nth-child(2):hover::after,
-      .milestone:nth-child(3):hover::after,
-      .milestone:nth-child(4):hover::after {
-        content: '';
-        position: absolute;
-        top: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        border-width: 0 5px 5px 5px;
-        border-style: solid;
-        border-color: transparent transparent #2c3e50 transparent;
-      }
-      
-      /* Last milestone - arrow to the left */
-      .milestone:last-child:hover::after {
-        content: '';
-        position: absolute;
-        top: -8px;
-        right: 100%;
-        left: auto;
-        transform: translateX(-5px);
-        border-width: 5px 0 5px 5px;
-        border-style: solid;
-        border-color: transparent transparent transparent #2c3e50;
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .timeline-milestones {
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .milestone {
+          width: 80%;
+          margin-bottom: 30px;
+          margin-left: 0;
+          margin-right: 0;
+        }
+        
+        .timeline-line {
+          left: 50%;
+          width: 3px;
+          height: 100%;
+          top: 0;
+          bottom: 0;
+          transform: translateX(-50%);
+        }
+        
+        .milestone::before {
+          left: 50%;
+          top: -8px;
+        }
       }
     </style>
 
@@ -411,22 +395,41 @@ Some of our clients –
           <div class="text-center">
             <h3 class="cta-title">Celebrating our 4 years of Industry 4.0!</h3>
             <div class="compact-timeline">
-              <div class="timeline-track">
-                <div class="timeline-milestones">
-                  <div class="milestone" data-year="2021" data-title="Humble Beginnings" data-desc="Born as a hobby project under The Navlakha Brothers."></div>
-                  <div class="milestone" data-year="2022" data-title="First Milestone" data-desc="Delivered our first proof of concept (PoC)."></div>
-                  <div class="milestone" data-year="2023" data-title="Commercial Launch" data-desc="Landed first paying client and deployed production app."></div>
-                  <div class="milestone" data-year="2024" data-title="Company Formation" data-desc="Officially registered and expanded partnerships."></div>
-                  <div class="milestone active" data-year="2025" data-title="Expansion" data-desc="25+ clients and strategic partnerships."></div>
+              <div class="timeline-container">
+                <div class="timeline-track">
+                  <div class="timeline-line"></div>
+                  <div class="timeline-milestones">
+                    <div class="milestone">
+                      <span class="milestone-year">2021</span>
+                      <h4 class="milestone-title">Humble Beginnings</h4>
+                      <p class="milestone-desc">Born as a hobby project under The Navlakha Brothers.</p>
+                    </div>
+                    <div class="milestone">
+                      <span class="milestone-year">2022</span>
+                      <h4 class="milestone-title">First Milestone</h4>
+                      <p class="milestone-desc">Delivered our first proof of concept (PoC).</p>
+                    </div>
+                    <div class="milestone">
+                      <span class="milestone-year">2023</span>
+                      <h4 class="milestone-title">Commercial Launch</h4>
+                      <p class="milestone-desc">Landed first paying client and deployed production app.</p>
+                    </div>
+                    <div class="milestone">
+                      <span class="milestone-year">2024</span>
+                      <h4 class="milestone-title">Company Formation</h4>
+                      <p class="milestone-desc">Officially registered and expanded partnerships.</p>
+                    </div>
+                    <div class="milestone">
+                      <span class="milestone-year">2025</span>
+                      <h4 class="milestone-title">Expansion</h4>
+                      <p class="milestone-desc">25+ clients and strategic partnerships.</p>
+                    </div>
+                  </div>
                 </div>
-                <div class="timeline-line"></div>
-              </div>
-              <div class="timeline-details">
-                <!-- <h4>Our Journey</h4> -->
-                <p>From a small project to a growing company, we've been transforming industries since 2021.</p>
-                <!-- <a href="#" class="btn-timeline">View Full Story</a> -->
-                 <!-- todo: add a modal to show the full story -->
-              </div>
+                <div class="timeline-details">
+                  <p>From a small project to a growing company, we've been transforming industries since 2021.</p>
+                  <!-- <a href="#" class="btn-timeline">View Full Story</a> -->
+                </div>
             </div>
           </div>
           <!-- <div class="col-lg-3 cta-btn-container text-center">
@@ -507,7 +510,7 @@ Some of our clients –
       <section id="modules">
         <div class="modules-wrapper">
             <h2 class="module-head">Featured Products</h2>
-            <p class="module-subtitle">Comprehensive ERP solutions designed for modern businesses</p>
+            <p class="module-subtitle">Comprehensive solutions designed for modern businesses</p>
 
             <!-- Module Cards Grid -->
             <div class="modules-container">
@@ -563,7 +566,7 @@ Some of our clients –
                     <div class="module-icon">
                         <i class="fas fa-comments fa-beat"></i>
                     </div>
-                    <h3>SafeChat</h3>
+                    <h3>Privacy Chatbox</h3>
                     <p>End-to-end encrypted messaging with disappearing messages, group management, and security controls.</p>
                     <div class="module-features-preview">
                         <span class="feature-tag">End-to-End Encryption</span>
@@ -935,7 +938,7 @@ Some of our clients –
                     <i class="fas fa-comments fa-beat"></i>
                 </div>
                 <div class="module-header-content">
-                    <h2>SafeChat</h2>
+                    <h2>Privacy Chatbox</h2>
                     <p>Secure your internal communications with SafeChat, our end-to-end encrypted messaging application. Designed for the modern enterprise, SafeChat ensures that your sensitive conversations remain private and protected.</p>
                 </div>
             </div>
