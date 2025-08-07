@@ -453,96 +453,742 @@ Some of our clients –
       </section> -->
       <!-- #about -->
 
+
+
       <!--==========================
-      Services Section
+      Modules Section
     ============================-->
-      <section id="services" class="section-bg">
-        <div class="container">
-          <header class="section-header">
-            <h3>Featured Products</h3>
-            <!-- TODO: Add a more products page to display all the products -->
-            <!-- <p>
-              Our platforms are designed specifically for businesses looking to optimize their casual workforce and retail operations.
-            </p> -->
-          </header>
+      <section id="modules">
+        <div class="modules-wrapper">
+            <h2 class="module-head">Our Modules</h2>
+            <p class="module-subtitle">Comprehensive ERP solutions designed for modern businesses</p>
 
-          <div class="row">
-            <div class="col-md-6 col-lg-4 wow bounceInUp" data-wow-duration="1.4s">
-              <div class="box">
-                <div class="icon" style="background: #fceef3">
-                  <i
-                    class="ion-ios-paper-outline"
-                    style="color: #ff689b"
-                  ></i>
+            <!-- Module Cards Grid -->
+            <div class="modules-container">
+                <div class="module-card" data-module="hrms">
+                    <div class="module-icon">
+                        <i class="fas fa-users-cog"></i>
                 </div>
-                <h4 class="title">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="#contact"
-                    >Casual Labour Tracking</a>
-                </h4>
-                <div class="description">
-                  <ul>
-                    <li>Multi-shift support</li>
-                    <li>Offline Biometrics</li>
-                    <li>Remote Machine Controls</li>
-                  </ul>
+                    <h3>HRMS & Payroll</h3>
+                    <p>Comprehensive HR management with biometric support, payroll processing, and employee self-service portal.</p>
+                    <div class="module-features-preview">
+                        <span class="feature-tag">Biometric Support</span>
+                        <span class="feature-tag">Payroll Processing</span>
+                        <span class="feature-tag">Self-Service</span>
                 </div>
+                    <div class="arrow-indicator">
+                        <span>Access Records</span>
+                        <i class="fas fa-arrow-right"></i>
+              </div>
+            </div>
+                <div class="module-card" data-module="crm">
+                    <div class="module-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3>CRM & Location Tracking</h3>
+                    <p>Advanced customer relationship management with real-time location tracking and call monitoring.</p>
+                    <div class="module-features-preview">
+                        <span class="feature-tag">Location Tracking</span>
+                        <span class="feature-tag">Call Monitoring</span>
+                        <span class="feature-tag">Route Optimization</span>
+                    </div>
+                    <div class="arrow-indicator">
+                        <span>Track Customers</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="module-card" data-module="gatepass">
+                    <div class="module-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <h3>Visitor & Gatepass Management</h3>
+                    <p>Complete visitor management system with ID tagging, approval workflows, and security integration.</p>
+                    <div class="module-features-preview">
+                        <span class="feature-tag">ID Tagging</span>
+                        <span class="feature-tag">Approval Workflows</span>
+                        <span class="feature-tag">Security Integration</span>
+                    </div>
+                    <div class="arrow-indicator">
+                        <span>Enter Inside</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="module-card" data-module="safechat">
+                    <div class="module-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>SafeChat</h3>
+                    <p>End-to-end encrypted messaging with disappearing messages, group management, and security controls.</p>
+                    <div class="module-features-preview">
+                        <span class="feature-tag">End-to-End Encryption</span>
+                        <span class="feature-tag">Disappearing Messages</span>
+                        <span class="feature-tag">Group Management</span>
+                    </div>
+                    <div class="arrow-indicator">
+                        <span>Open Chat</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="module-card" data-module="inventory">
+                    <div class="module-icon">
+                        <i class="fas fa-warehouse"></i>
+                    </div>
+                    <h3>Store & Inventory Management</h3>
+                    <p>Complete inventory control with batch tracking, quality inspection, and automated reordering.</p>
+                    <div class="module-features-preview">
+                        <span class="feature-tag">Batch Tracking</span>
+                        <span class="feature-tag">Quality Inspection</span>
+                        <span class="feature-tag">Auto Reordering</span>
+                    </div>
+                    <div class="arrow-indicator">
+                        <span>Enter Inventory</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="module-card" data-module="projects">
+                    <div class="module-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Project Management</h3>
+                    <p>Comprehensive project tracking with Gantt charts, resource allocation, and profitability analysis.</p>
+                    <div class="module-features-preview">
+                        <span class="feature-tag">Gantt Charts</span>
+                        <span class="feature-tag">Resource Allocation</span>
+                        <span class="feature-tag">Profitability Analysis</span>
+                    </div>
+                    <div class="arrow-indicator">
+                        <span>View Progress</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module Overlay -->
+    <div class="module-overlay" id="moduleOverlay">
+        <div class="overlay-content">
+            <button class="close-overlay" id="closeOverlay">&times;</button>
+            <div id="overlayDetails">
+                <!-- Dynamic content will be injected here -->
+                </div>
+                </div>
+    </div>
+
+    <!-- Hidden Detailed Content -->
+    <div style="display: none;">
+        <div id="details-hrms">
+            <div class="module-header">
+                <div class="module-header-icon">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <div class="module-header-content">
+                    <h2>HRMS & Payroll</h2>
+                    <p>Our comprehensive HRMS solution provides both White Collar and Casual Labour management with advanced biometric support, automated payroll processing, and complete employee lifecycle management.</p>
               </div>
             </div>
 
-            <div class="col-md-6 col-lg-4 wow bounceInUp" data-wow-duration="1.4s">
-              <div class="box">
-                <div class="icon" style="background: #eefcf3">
-                  <i
-                    class="ion-ios-analytics-outline"
-                    style="color: #03abf3"
-                  ></i>
+            <div class="features-grid">
+                <div class="feature-category">
+                    <h3><i class="fas fa-fingerprint"></i> Biometric & Attendance</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Multiple Shift & Attendance Tracking</span>
                 </div>
-                <h4 class="title">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="#contact"
-                    >HR & Payroll</a>
-                </h4>
-                <div class="description">
-                  <ul>
-                    <li>Attendance with Payroll</li>
-                    <li>Statutory compliances</li>
-                    <li>TADA Allowances</li>
-                  </ul>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Native Biometrics Support</span>
                 </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Remote biometric management</span>
               </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4 wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s">
-              <div class="box">
-                <div class="icon" style="background: #ecebff">
-                  <i class="ion-ios-alarm-outline" style="color: #8660fe"></i>
-                </div>
-                <h4 class="title">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://wa.me/918275269688/?text=Hi, got your reference from website. Looking for a solution for my business"
-                  > Privacy chat-box </a>
-                </h4>
-                <div class="description">
-                  <ul>
-                    <li>AI learning & analytics</li>
-                    <li>Company msg keeping policies</li>
-                    <li>Defined Access controls</li>
-                  </ul>
-                </div>
-              </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Biometric verification for payments</span>
             </div>
           </div>
         </div>
-      </section>
-
-      <!-- #services -->
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-money-bill-wave"></i> Payroll & Compliance</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>TADA Allowances & Bonus management</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Payroll & Statutory Document Generation</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Weekly and biweekly Payroll support</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Compliance alerts (PF/ESIC, CLRA)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-user-cog"></i> Employee Management</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Employee self-service portal</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Asset Allocation & Tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Full & Final Settlements</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Appraisal Management</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-briefcase"></i> Recruitment & Training</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Recruitment & Training Notifications</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Interviews & Recruitment Planning</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Contractor detail management</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Bulk worker import/export</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="details-crm">
+            <div class="module-header">
+                <div class="module-header-icon">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <div class="module-header-content">
+                    <h2>CRM & Location Tracking</h2>
+                    <p>Transform your sales operations with our integrated CRM and location tracking system. Monitor field teams in real-time, track customer interactions, and optimize routes for maximum productivity.</p>
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-category">
+                    <h3><i class="fas fa-map-marker-alt"></i> Location & Route Management</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Geofencing & AI identification</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Route planning & Optimization</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Integrated with Google Maps</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Real-time location updates</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-phone"></i> Call Management</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Automatic caller identification</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Total call time analysis</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Automatic call recording</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Recording Transcription (Beta)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-chart-line"></i> Performance Analytics</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Points based performance tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>New lead conversion tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Employee vs team breakup</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Admin console and work reports</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-mobile-alt"></i> Mobile & Access</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Android and iOS apps</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Click to call functionalities</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Note keeping scratchpad</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Schedule calls back-to-back</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="details-gatepass">
+            <div class="module-header">
+                <div class="module-header-icon">
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <div class="module-header-content">
+                    <h2>Visitor & Gatepass Management</h2>
+                    <p>Enhance your facility's security with our comprehensive visitor and gatepass management system. Track visitors, vehicles, and materials with robust approval workflows, ID verification, and detailed logging.</p>
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-category">
+                    <h3><i class="fas fa-user-clock"></i> Visitor Management</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Visitor Timelines & Approval workflows</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Checklists for frequent visitors</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Real-time check-in/check-out logs</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Emergency contacts per visitor</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-shield-alt"></i> Security & Integration</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>ID tagging with turnstiles/barriers</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>ID and document verification</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Integration with security checkpoints</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Assets tagging and tracking</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-truck"></i> Vehicle & Fleet</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Driver and fleet management</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Vehicle tracking and monitoring</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Digital gatepass for vehicles</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Multi-branch and multi-entity support</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-hotel"></i> Accommodation & Compliance</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Hotel booking and tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>ISO certification reports</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Expense and feedback loops</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Reminders and Host notifications</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="details-safechat">
+            <div class="module-header">
+                <div class="module-header-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="module-header-content">
+                    <h2>SafeChat</h2>
+                    <p>Secure your internal communications with SafeChat, our end-to-end encrypted messaging application. Designed for the modern enterprise, SafeChat ensures that your sensitive conversations remain private and protected.</p>
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-category">
+                    <h3><i class="fas fa-lock"></i> Security & Encryption</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>End to end encryption</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>JWT/SSO/OpenAuth/SAML authentication</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Geo-fencing based Access Controls</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>No copy text or download restrictions</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-comments"></i> Messaging Features</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Chat with internal and external users</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Group messages with permissions</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Disappearing messages (timer-based)</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Pinned/starred messages</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-video"></i> Communication Tools</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Call, screen share, video calling</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>AI based bots for internal questions</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Secure file and document sharing</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Private and public channels</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-cog"></i> Management & Control</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Permission controlled user management</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Multiple device policies</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>One click cleanup from groups</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Custom reports for analytics</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="details-inventory">
+            <div class="module-header">
+                <div class="module-header-icon">
+                    <i class="fas fa-warehouse"></i>
+                </div>
+                <div class="module-header-content">
+                    <h2>Store & Inventory Management</h2>
+                    <p>Achieve optimal inventory levels and streamline your warehouse operations with our comprehensive Store & Inventory module. Track stock across multiple locations, manage serial and batch numbers, and automate reordering.</p>
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-category">
+                    <h3><i class="fas fa-shopping-cart"></i> Purchase Management</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Issue Purchase Orders (PO)</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Auto email supplier reminders</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Suppliers Quotations via portal</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Delivery, debit and credit notes</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-boxes"></i> Inventory Control</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Real-time inventory tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Batch and Serial management</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Multi-warehouse management</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Negative stock checks & alerts</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-search"></i> Quality & Tracking</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Quality inspection and Tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Subcontracting items tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Warranty and service tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Minimum Stock Level monitoring</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-chart-bar"></i> Analytics & Reports</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Comprehensive inventory reports</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Stock valuation and analysis</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Multiple cost centers support</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Alternate items & UOMs support</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="details-projects">
+            <div class="module-header">
+                <div class="module-header-icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <div class="module-header-content">
+                    <h2>Project Management</h2>
+                    <p>Streamline your project execution with our comprehensive project management module. From task planning to resource allocation, our system provides complete visibility into project progress, costs, and profitability.</p>
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-category">
+                    <h3><i class="fas fa-tasks"></i> Task & Timeline Management</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Task Lists & Timeline Estimation</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Gantt Charts & Kanban Boards</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Agile & Waterfall Management</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Real-time Progress Tracking</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-users"></i> Resource Management</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Resource Allocation & Planning</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Capacity management</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Customizable Project Workflows</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Project Templates & Documentation</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-dollar-sign"></i> Financial Management</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Project Invoicing & Profitability Analysis</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Milestone Billing & Time Tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Cost vs Budget Analysis</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Project Expense Monitoring</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3><i class="fas fa-bug"></i> Issue & Quality Management</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Issue Tracking & Bug Reports</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Retrospective & Performance Analysis</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Service Tracking & Housekeeping</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Automated Task Notifications</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
       <!--==========================
       Why Us Section
@@ -629,7 +1275,7 @@ Some of our clients –
               <p class="cta-text">
                 Speak directly with our founders and explore how your operations can be optimized with practical, easy-to-use solutions.
                 <br><br>
-                Already have something in mind? Let’s talk.
+                Already have something in mind? Let's talk.
               </p>
             </div>
             <div class="col-lg-3 cta-btn-container text-center">
@@ -1264,6 +1910,8 @@ Some of our clients –
       </div>
     </section> -->
       <!-- #faq -->
+
+
     </main>
 
     <!--==========================
@@ -1312,20 +1960,19 @@ Some of our clients –
                     <h4>Contact Us</h4>
                     <p>
                       The Navlakha Brothers <br>
-                      Mahyco Colony <br>
-                      Shivaji Putala <br>
-                      Jalna, Maharashtra - 431203 <br>
+                      Mumbai | Jalna<br>
                       India <br>
                       <strong>Phone:</strong> <a href="tel:+918275269688">+91 8275269688</a><br>
-                      <strong>Email:</strong> <a href="mailto:nnautatva@gmail.com">nnautatva@gmail.com</a><br>
+                      <strong>Email:</strong> <a href="mailto:nnautatva@gmail.com">nautatva@navlakha.tech</a><br>
+                      <strong>Phone:</strong> <a href="tel:+918275269688">+91 9404065828</a><br>
+                      <strong>Email:</strong> <a href="mailto:nnautatva@gmail.com">mahaveer@navlakha.tech</a><br>
                     </p>
                   </div>
 
                   <div class="social-links">
-                    <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
-                    <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
-                    <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
                     <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+                    <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
+                    
                   </div>
 
                 </div>
