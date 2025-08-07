@@ -1,6 +1,13 @@
 <!-- todo: remove bootstrap made logo -->
 <!-- Use gulp to automate things -->
 <!-- cleanup folder and git repo -->
+
+
+<!-- include parts - Who are we – Tech consultancy and Automation platform provider
+Vision – Strategic partner for our clients (both tech consulting and platform)
+Our Expertise – 10+ sectors Including Chemical, Agriculture, Retail and Manufacturing
+Some of our clients –
+ -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,11 +17,14 @@
     <meta name="format-detection" content="telephone=yes" />
     <meta name="HandheldFriendly" content="true" />
 
-    <title>theNB Digital and ERP Solutions</title>
-    <meta name="description" content="theNb provides tailored digital and ERP solutions to help businesses thrive in the technology-driven world. Our services include website and application development, ERP implementation, hosting, and consultancy. Visit nbnext.in for more information on our ERP solution.">
-    <meta name="keywords" content="digital solutions, website development, application development, ERP implementation, hosting, consultancy, nbnext, erpnext, ERP Next, Enterprise Resource Planning Systems, cloud, web, design, dev, email, domain, personal, business, data, app, application">
+    <title>Navlakha Technologies - Powering Industry 4.0</title>
+    <meta name="description" content="Leading provider of workforce and retail management solutions. Specializing in Casual Labor Management, HR & Payroll, Retail Store Management, and Secure Communication tools. Streamline your operations today.">
+    <meta name="keywords" content="Casual Labor Management, HR Solutions, Payroll Management, Retail Store Management, POS System, Inventory Control, Privacy Chatbox, Workforce Analytics, Employee Attendance, Labor Compliance, Retail Operations, Business Automation">
 
+    <link rel="canonical" href="https://www.navlakha.tech/" />
     <link rel="canonical" href="https://www.thenb.in/" />
+    <link rel="canonical" href="https://thenb.in/" />
+  
     <!-- Google indexes -->
     <meta name="robots" content="index, follow" />
     <!-- <meta name="google-site-verification" content="" /> -->
@@ -62,6 +72,184 @@
     <!-- TODO: Twitter tags -->
     <!-- LD Json markups and additional info -->
 
+    <style>
+      /* Compact Timeline Styles */
+      .compact-timeline {
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        margin: 15px auto;
+        max-width: 800px;
+      }
+
+      .timeline-track {
+        position: relative;
+        padding: 20px 0;
+        margin-bottom: 20px;
+      }
+
+      .timeline-line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: #e9ecef;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1;
+      }
+
+      .timeline-milestones {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        z-index: 2;
+      }
+
+      .milestone {
+        width: 16px;
+        height: 16px;
+        background: #fff;
+        border: 3px solid #3498db;
+        border-radius: 50%;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .milestone:hover, .milestone.active {
+        transform: scale(1.3);
+        background: #3498db;
+      }
+
+      .milestone::after {
+        content: attr(data-year);
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 12px;
+        font-weight: 600;
+        color: #6c757d;
+        white-space: nowrap;
+      }
+
+      .milestone:hover::after {
+        color: #3498db;
+        font-weight: 700;
+      }
+
+      .timeline-details {
+        text-align: center;
+        padding: 15px 0 0;
+      }
+
+      .timeline-details h4 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+      }
+
+      .timeline-details p {
+        color: #6c757d;
+        margin-bottom: 15px;
+      }
+
+      .btn-timeline {
+        display: inline-block;
+        background: #3498db;
+        color: white !important;
+        padding: 8px 20px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .btn-timeline:hover {
+        background: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      }
+
+      /* Tooltip styles */
+      .milestone:hover::before {
+        content: attr(data-title) ' - ' attr(data-desc);
+        position: absolute;
+        bottom: 30px;
+        background: #2c3e50;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        z-index: 10;
+        pointer-events: none;
+        min-width: 200px;
+        text-align: left;
+      }
+      
+      /* First milestone - tooltip to the right */
+      .milestone:first-child:hover::before {
+        left: 100%;
+        transform: translateX(10px);
+      }
+      
+      /* Middle milestones - centered */
+      .milestone:nth-child(2):hover::before,
+      .milestone:nth-child(3):hover::before,
+      .milestone:nth-child(4):hover::before {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      
+      /* Last milestone - tooltip to the left */
+      .milestone:last-child:hover::before {
+        right: 100%;
+        left: auto;
+        transform: translateX(-10px);
+      }
+
+      /* First milestone - arrow to the right */
+      .milestone:first-child:hover::after {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: 100%;
+        transform: translateX(5px);
+        border-width: 5px 5px 5px 0;
+        border-style: solid;
+        border-color: transparent #2c3e50 transparent transparent;
+      }
+      
+      /* Middle milestones - centered arrow */
+      .milestone:nth-child(2):hover::after,
+      .milestone:nth-child(3):hover::after,
+      .milestone:nth-child(4):hover::after {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 0 5px 5px 5px;
+        border-style: solid;
+        border-color: transparent transparent #2c3e50 transparent;
+      }
+      
+      /* Last milestone - arrow to the left */
+      .milestone:last-child:hover::after {
+        content: '';
+        position: absolute;
+        top: -8px;
+        right: 100%;
+        left: auto;
+        transform: translateX(-5px);
+        border-width: 5px 0 5px 5px;
+        border-style: solid;
+        border-color: transparent transparent transparent #2c3e50;
+      }
+    </style>
+
     <!-- =======================================================
     Theme Name: Rapid
     Theme URL: https://bootstrapmade.com/rapid-multipurpose-bootstrap-business-template/
@@ -104,7 +292,7 @@
         <div class="logo float-left">
           <!-- Uncomment below if you prefer to use an image logo -->
           <h1 class="text">
-            <a href="#intro" class="scrollto"><span>theNB Solutions</span></a>
+            <a href="#intro" class="scrollto"><span>Navlakha Technologies</span></a>
           </h1>
           <!-- <a href="#header" class="scrollto"><img src="img/logo.png" alt="" class="img-fluid"></a> -->
         </div>
@@ -112,8 +300,8 @@
         <nav class="main-nav float-right d-none d-lg-block">
           <ul>
             <li class="active"><a href="#intro">Home</a></li>
-            <li><a href="#about">About Us</a></li>
             <li><a href="#services">Services</a></li>
+            <li><a href="#why-us">About Us</a></li>
             <!-- <li><a href="#portfolio">Portfolio</a></li> -->
             <!-- <li><a href="#solution"> Bundled packages </a></li> -->
             <!-- <li><a href="#team">Team</a></li> -->
@@ -156,9 +344,10 @@
       <div class="container d-flex h-100">
         <div class="row justify-content-center align-self-center">
           <div class="col-md-6 intro-info order-md-first order-last">
-            <h2>Industrial solutions<br />for Your <span>Business</span></h2>
+            <h2>Powering Industry <span>4.0</span></h2>
+              <h3>From Paper to Paperless Operations</h3>
             <div>
-              <a href="#call-to-action" class="btn-get-started scrollto">New releases</a>
+              <a href="#call-to-action" class="btn-get-started scrollto">Let's go!</a>
             </div>
           </div>
 
@@ -172,37 +361,42 @@
 
     <section id="call-to-action" class="wow fadeInUp">
       <div class="container">
-        <div class="row">
-          <div class="col-lg-9 text-lg-left">
-            <h3 class="cta-title">Try NB Next</h3>
-            <p class="cta-text" style="margin-bottom: 5px;">
-              NB Next helps you manage all the aspects of your business to streamline operations, reduce costs, and increase productivity.
-            </p>
-            <ul class="cta-text">
-              <li>Sales</li> 
-              <li>Stock and Inventory Monitors</li>
-              <li>Accounting</li>
-              <li>Quality management and Manufacturing</li>
-              <li>CRM and Customer relationship</li>
-              <li>HR, Payroll and Leave management</li>
-              <li>Project Supervision and Task coordination</li>
-            </ul>
+        <!-- <div class="row"> -->
+          <div class="text-center">
+            <h3 class="cta-title">Celebrating our 4 years of Industry 4.0!</h3>
+            <div class="compact-timeline">
+              <div class="timeline-track">
+                <div class="timeline-milestones">
+                  <div class="milestone" data-year="2021" data-title="Humble Beginnings" data-desc="Born as a hobby project under The Navlakha Brothers."></div>
+                  <div class="milestone" data-year="2022" data-title="First Milestone" data-desc="Delivered our first proof of concept (PoC)."></div>
+                  <div class="milestone" data-year="2023" data-title="Commercial Launch" data-desc="Landed first paying client and deployed production app."></div>
+                  <div class="milestone" data-year="2024" data-title="Company Formation" data-desc="Officially registered and expanded partnerships."></div>
+                  <div class="milestone active" data-year="2025" data-title="Expansion" data-desc="25+ clients and strategic partnerships."></div>
+                </div>
+                <div class="timeline-line"></div>
+              </div>
+              <div class="timeline-details">
+                <!-- <h4>Our Journey</h4> -->
+                <p>From a small project to a growing company, we've been transforming industries since 2021.</p>
+                <!-- <a href="#" class="btn-timeline">View Full Story</a> -->
+                 <!-- todo: add a modal to show the full story -->
+              </div>
+            </div>
           </div>
-          <div class="col-lg-3 cta-btn-container text-center">
-            <!-- href="https://wa.me/918275269688/?text=Hi, interested in a demo for NB Next." -->
+          <!-- <div class="col-lg-3 cta-btn-container text-center">
+            href="https://wa.me/918275269688/?text=Hi, interested in a demo for NB Next."
             <a
               class="cta-btn align-middle"
               target="_blank"
               rel="noopener noreferrer"
               href="nbnext"
               target="_blank"
-              >Why NB Next?</a
-            >
-          </div>
+              >Our Story</a>
+          </div> -->
             <!-- <a class="logo-text" style="margin: auto;" href="http://demo.nbnext.in" target="_blank">
                Access NB Next at demo.nbnext.in 
             </a> -->
-        </div>
+        <!-- </div> -->
       </div>
     </section>
 
@@ -210,7 +404,7 @@
       <!--==========================
       About Us Section
     ============================-->
-      <section id="about">
+      <!-- <section id="about">
         <div class="container">
           <div class="row">
             <div class="col-lg-5 col-md-6 flex-center">
@@ -221,41 +415,42 @@
 
             <div class="col-lg-7 col-md-6">
               <div class="about-content">
-                <h2>About Us</h2>
-                <!-- . We develop products for clients. We teach. We mine data for research. We research ourself. We develop applications. And now we are starting to get into web spaces development.
-               -->
+                <h2>About Navlakha Technologies</h2>
                 <p>
-                  At theNB, we are dedicated to providing customized solutions that exceed our clients' expectations.
-                  We believe in thinking outside the box and tailoring our services to meet each client's unique needs.
+                  As a leading tech consultancy and automation platform provider, we've been at the forefront of digital transformation for businesses across various industries. 
+                  Our journey began with a vision to be a strategic partner for our clients, helping them transition from traditional paper-based processes to efficient, automated solutions.
+                </p>
+                <p>
+                  With over 10+ years of experience across sectors including Chemical, Agriculture, Retail, and Manufacturing, we've established ourselves as trusted advisors in the Industry 4.0 revolution.
                 </p>
                 <ul>
                   <li>
-                    <i class="ion-android-checkmark-circle"></i> Transparent pricing
+                    <i class="ion-android-checkmark-circle"></i> 10+ years of industry expertise
                   </li>
                   <li>
-                    <i class="ion-android-checkmark-circle"></i> Customised solutions
+                    <i class="ion-android-checkmark-circle"></i> End-to-end digital transformation
                   </li>
                   <li>
-                    <i class="ion-android-checkmark-circle"></i> Focus on security
+                    <i class="ion-android-checkmark-circle"></i> Customized Industry 4.0 solutions
                   </li>
                   <li>
-                    <i class="ion-android-checkmark-circle"></i> Restricted user and role permissions
+                    <i class="ion-android-checkmark-circle"></i> Secure and scalable platforms
                   </li>
                   <li>
-                    <i class="ion-android-checkmark-circle"></i> Industry level intelligent solutions
+                    <i class="ion-android-checkmark-circle"></i> 24/7 dedicated support
                   </li>
                   <li>
-                    <i class="ion-android-checkmark-circle"></i> Quick support and response
+                    <i class="ion-android-checkmark-circle"></i> Seamless integration capabilities
                   </li>
                   <li>
-                    <i class="ion-android-checkmark-circle"></i> Complete work transparency
+                    <i class="ion-android-checkmark-circle"></i> Transparent and collaborative approach
                   </li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
       <!-- #about -->
 
       <!--==========================
@@ -264,20 +459,15 @@
       <section id="services" class="section-bg">
         <div class="container">
           <header class="section-header">
-            <h3>Services</h3>
-            <p>
-              At theNb, we offer tailored solutions to help businesses thrive in the digital age.
-              <br>
-              We provide the tools and strategies needed to stay ahead of the competition in the technology-driven world.
-            </p>
+            <h3>Featured Products</h3>
+            <!-- TODO: Add a more products page to display all the products -->
+            <!-- <p>
+              Our platforms are designed specifically for businesses looking to optimize their casual workforce and retail operations.
+            </p> -->
           </header>
 
           <div class="row">
-
-            <div
-              class="col-md-6 col-lg-4 wow bounceInUp"
-              data-wow-duration="1.4s"
-            >
+            <div class="col-md-6 col-lg-4 wow bounceInUp" data-wow-duration="1.4s">
               <div class="box">
                 <div class="icon" style="background: #fceef3">
                   <i
@@ -289,24 +479,20 @@
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="https://wa.me/918275269688/?text=Hi, got your reference from thenb.in. Let's talk about building NB Next"
-                    > Business Automation </a>
+                    href="#contact"
+                    >Casual Labour Tracking</a>
                 </h4>
                 <div class="description">
                   <ul>
-                    <li>Single, centralized system for automated planning</li>
-                    <!-- <li>HR, Payroll, Projects, Operations</li> -->
-                    <li>Keep your business data organized wherever you go</li>
-                    <!-- <li>Customised solutions by experienced professionals</li> -->
+                    <li>Multi-shift support</li>
+                    <li>Offline Biometrics</li>
+                    <li>Remote Machine Controls</li>
                   </ul>
                 </div>
               </div>
             </div>
 
-            <div
-              class="col-md-6 col-lg-4 wow bounceInUp"
-              data-wow-duration="1.4s"
-            >
+            <div class="col-md-6 col-lg-4 wow bounceInUp" data-wow-duration="1.4s">
               <div class="box">
                 <div class="icon" style="background: #eefcf3">
                   <i
@@ -318,25 +504,20 @@
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="https://wa.me/918275269688/?text=Hi, got your reference from thenb.in. Let's talk about building a website"
-                    >Website designing</a
-                  >
+                    href="#contact"
+                    >HR & Payroll</a>
                 </h4>
                 <div class="description">
                   <ul>
-                    <li>User-friendly, appealing interfaces</li>
-                    <li>Quality support, customised forms</li>
-                    <li>Free link to share your business</li>
+                    <li>Attendance with Payroll</li>
+                    <li>Statutory compliances</li>
+                    <li>TADA Allowances</li>
                   </ul>
                 </div>
               </div>
             </div>
 
-            <div
-              class="col-md-6 col-lg-4 wow bounceInUp"
-              data-wow-delay="0.2s"
-              data-wow-duration="1.4s"
-            >
+            <div class="col-md-6 col-lg-4 wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s">
               <div class="box">
                 <div class="icon" style="background: #ecebff">
                   <i class="ion-ios-alarm-outline" style="color: #8660fe"></i>
@@ -346,171 +527,35 @@
                     target="_blank"
                     rel="noopener noreferrer"
                     href="https://wa.me/918275269688/?text=Hi, got your reference from website. Looking for a solution for my business"
-                  > Consultancy </a>
+                  > Privacy chat-box </a>
                 </h4>
                 <div class="description">
                   <ul>
-                    <li>Strategic guidance for Implementing tech solutions</li>
-                    <li>Experts on security and costing</li>
+                    <li>AI learning & analytics</li>
+                    <li>Company msg keeping policies</li>
+                    <li>Defined Access controls</li>
                   </ul>
                 </div>
               </div>
             </div>
-
-            <div
-              class="col-md-6 col-lg-4 wow bounceInUp"
-              data-wow-delay="0.1s"
-              data-wow-duration="1.4s"
-            >
-              <div class="box">
-                <div class="icon" style="background: #e6fdfc">
-                  <i class="ion-ios-speedometer-outline" style="color: #3fcdc7"></i>
-                </div>
-                <h4 class="title">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://wa.me/918275269688/?text=Hi, got your reference from website. I already have a website and want to update/maintain content."
-                  >
-                    Maintenance & Updates
-                  </a>
-                </h4>
-                <div class="description">
-                  <ul>
-                    <li>Updating content/images</li>
-                    <li>Search Engine Optimization (SEO)</li>
-                    <li>Regular website backups</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <!-- <div
-              class="col-md-6 col-lg-4 wow bounceInUp"
-              data-wow-delay="0.1s"
-              data-wow-duration="1.4s"
-            >
-              <div class="box">
-                <div class="icon" style="background: #eafde7">
-                  <i
-                    class="ion-ios-speedometer-outline"
-                    style="color: #41cf2e"
-                  ></i>
-                </div>
-                <h4 class="title">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://wa.me/918275269688/?text=Hi, got your reference from website. I want to have my own email solution"
-                    >Email solutions</a
-                  >
-                </h4>
-                <div class="description">
-                  <ul>
-                    <li>Pay what you use</li>
-                    <li>Authentic and personal</li>
-                    <li>Mobile support available</li>
-                  </ul>
-                </div>
-              </div>
-            </div> -->
-
-            <div
-              class="col-md-6 col-lg-4 wow bounceInUp"
-              data-wow-delay="0.2s"
-              data-wow-duration="1.4s"
-            >
-              <div class="box">
-                <div class="icon" style="background: #e1eeff">
-                  <i class="ion-ios-world-outline" style="color: #2282ff"></i>
-                </div>
-                <h4 class="title">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://wa.me/918275269688/?text=Hi, got your reference from website. I want to hosting a website/web-app"
-                    >Hosting services</a
-                  >
-                </h4>
-                <div class="description">
-                  Host websites, files or even web applications which scale
-                  <!-- Everything at a single place -->
-                  <!-- accessible to everyone -->
-                  <!-- <ul>
-                  <li>Websites</li>
-                  <li>Applications</li>
-                  <li>Services</li>
-                </ul> -->
-                </div>
-              </div>
-            </div>
-
-            <!-- <div
-              class="col-md-6 col-lg-4 wow bounceInUp"
-              data-wow-delay="0.2s"
-              data-wow-duration="1.4s"
-            >
-              <div class="box">
-                <div class="icon" style="background: #ecebff">
-                  <i class="ion-ios-clock-outline" style="color: #8660fe"></i>
-                </div>
-                <h4 class="title">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://wa.me/918275269688/?text=Hi, got your reference from website. I want to make a desktop application"
-                    >Desktop applications</a
-                  >
-                </h4>
-                <p class="description">
-                  Power of desktop applications on Windows, Mac or even Linux
-                  brought to action
-                </p>
-              </div>
-            </div> -->
-
-            <div
-              class="col-md-6 col-lg-4 wow bounceInUp"
-              data-wow-delay="0.2s"
-              data-wow-duration="1.4s"
-            >
-              <div class="box">
-                <div class="icon" style="background: #ecebff">
-                  <i class="ion-ios-barcode-outline" style="color: #fe09ac"></i>
-                </div>
-                <h4 class="title">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://wa.me/918275269688/?text=Hi, got your reference from website. I want a android application"
-                    >Android applications</a
-                  >
-                </h4>
-                <p class="description">
-                  We develop custom android applications for you to carry
-                  everything wherever you go
-                </p>
-              </div>
-            </div>
-
           </div>
         </div>
       </section>
+
       <!-- #services -->
 
       <!--==========================
       Why Us Section
     ============================-->
-      <!-- <section id="why-us" class="wow fadeIn">
+      <section id="why-us" class="wow fadeIn">
       <div class="container-fluid">
 
         <header class="section-header">
-          <h3>Why choose us?</h3>
-          <p>Laudem latine persequeris id sed, ex fabulas delectus quo. No vel partiendo abhorreant vituperatoribus.</p>
+          <h3>We are not just a software provider</h3>
+          <!-- <p>4 years and 10+ sectors working experience</p> -->
         </header>
 
         <div class="row">
-
           <div class="col-lg-6">
             <div class="why-us-img">
               <img src="img/why-us.jpg" alt="" class="img-fluid">
@@ -519,67 +564,59 @@
 
           <div class="col-lg-6">
             <div class="why-us-content">
-              <p>Molestiae omnis numquam corrupti omnis itaque. Voluptatum quidem impedit. Odio dolorum exercitationem est error omnis repudiandae ad dolorum sit.</p>
               <p>
-                Explicabo repellendus quia labore. Non optio quo ea ut ratione et quaerat. Porro facilis deleniti porro consequatur
-                et temporibus. Labore est odio.
-
-                Odio omnis saepe qui. Veniam eaque ipsum. Ea quia voluptatum quis explicabo sed nihil repellat..
+                We are an end-to-end digital transformation partner, offering optimizations for businesses.
               </p>
 
               <div class="features wow bounceInUp clearfix">
                 <i class="fa fa-diamond" style="color: #f058dc;"></i>
-                <h4>Corporis dolorem</h4>
-                <p>Commodi quia voluptatum. Est cupiditate voluptas quaerat officiis ex alias dignissimos et ipsum. Soluta at enim modi ut incidunt dolor et.</p>
+                <h4>Experience</h4>
+                <p>4 years and 10+ sectors working experience across <b>Chemical</b>, <b>Agriculture</b>, <b>Retail</b>, and <b>Manufacturing</b></p>
               </div>
 
               <div class="features wow bounceInUp clearfix">
                 <i class="fa fa-object-group" style="color: #ffb774;"></i>
-                <h4>Eum ut aspernatur</h4>
-                <p>Molestias eius rerum iusto voluptas et ab cupiditate aut enim. Assumenda animi occaecati. Quo dolore fuga quasi autem aliquid ipsum odit. Perferendis doloremque iure nulla aut.</p>
+                <h4>Vision</h4>
+                <p>Strategic golden data source for partner clients</p>
               </div>
 
               <div class="features wow bounceInUp clearfix">
                 <i class="fa fa-language" style="color: #589af1;"></i>
-                <h4>Voluptates dolores</h4>
-                <p>Voluptates nihil et quis omnis et eaque omnis sint aut. Ducimus dolorum aspernatur. Totam dolores ut enim ullam voluptas distinctio aut.</p>
+                <h4>Who are we?</h4>
+                <p>Tech consultancy and Automation platform provider</p>
               </div>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
 
       <div class="container">
         <div class="row counters">
 
           <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">274</span>
-            <p>Clients</p>
+            <span data-toggle="counter-up">4</span>
+            <p>Years of experience</p>
           </div>
 
           <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">421</span>
-            <p>Projects</p>
+            <span data-toggle="counter-up">12</span>
+            <p>Sectors</p>
           </div>
 
           <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">1,364</span>
+            <span data-toggle="counter-up">74</span>
+            <p>Implementations</p>
+          </div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">13642</span>
             <p>Hours Of Support</p>
-          </div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">18</span>
-            <p>Hard Workers</p>
           </div>
 
         </div>
 
       </div>
-    </section> -->
+    </section>
 
       <!--==========================
       Call To Action Section
@@ -588,22 +625,22 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-9 text-center text-lg-left">
-              <h3 class="cta-title">I want a business solution</h3>
+              <h3 class="cta-title">Ready to transform your business?</h3>
               <p class="cta-text">
-                Be it a simple question or the most complicated data handling,
-                we will always work out a solution! Give this a try, Send a
-                message or just a missed call and we will call you back.
+                Speak directly with our founders and explore how your operations can be optimized with practical, easy-to-use solutions.
+                <br><br>
+                Already have something in mind? Let’s talk.
               </p>
             </div>
             <div class="col-lg-3 cta-btn-container text-center">
-              <!-- href="https://wa.me/918275269688/?text=Hi, I am interested to work with theNB!" -->
+              <!-- href="" -->
               <a
                 class="cta-btn align-middle"
                 target="_blank"
                 rel="noopener noreferrer"
-                href="https://thenb.nbnext.in/contact-us"
+                href="https://wa.me/918275269688/?text=Hi, how I can automate my business!?"
                 target="_blank"
-                >Contact us</a
+                >Let's chat</a
               >
             </div>
           </div>
@@ -827,27 +864,27 @@
             <div class="owl-carousel testimonials-carousel wow fadeInUp">
 
               <div class="testimonial-item">
-                <img src="img/testimonial-1.jpg" class="testimonial-img" alt="">
-                <h3>Saul Goodman</h3>
-                <h4>Ceo &amp; Founder</h4>
-                <p>
-                  Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
-                </p>
-              </div>
-
-              <div class="testimonial-item">
                 <img src="img/testimonial-2.jpg" class="testimonial-img" alt="">
-                <h3>Sara Wilsson</h3>
-                <h4>Designer</h4>
+                <h3>Vineeth Chandran</h3>
+                <h4>Chief Operating Officer, SMISL</h4>
                 <p>
                   Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
                 </p>
               </div>
 
               <div class="testimonial-item">
+                <img src="img/testimonial-1.jpg" class="testimonial-img" alt="">
+                <h3>Vineet Peety</h3>
+                <h4>Director, SRJ Group</h4>
+                <p>
+                  Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
+                </p>
+              </div>
+
+              <div class="testimonial-item">
                 <img src="img/testimonial-3.jpg" class="testimonial-img" alt="">
-                <h3>Jena Karlis</h3>
-                <h4>Store Owner</h4>
+                <h3>Karan Goyal</h3>
+                <h4>Director, Route Pipes</h4>
                 <p>
                   Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
                 </p>
@@ -855,8 +892,17 @@
 
               <div class="testimonial-item">
                 <img src="img/testimonial-4.jpg" class="testimonial-img" alt="">
-                <h3>Matt Brandon</h3>
-                <h4>Freelancer</h4>
+                <h3>Yash Mittal</h3>
+                <h4>Director, Bindra Steels</h4>
+                <p>
+                  Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
+                </p>
+              </div>
+
+              <div class="testimonial-item">
+                <img src="img/testimonial-4.jpg" class="testimonial-img" alt="">
+                <h3>Harsh Sao</h3>
+                <h4>Director, Vastram</h4>
                 <p>
                   Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
                 </p>
@@ -965,6 +1011,7 @@
       <!--==========================
       Clients Section
     ============================-->
+      <!-- todo: planning to do marquee -->
       <!-- <section id="clients" class="wow fadeInUp">
       <div class="container">
 
@@ -1265,9 +1312,9 @@
                     <h4>Contact Us</h4>
                     <p>
                       The Navlakha Brothers <br>
-                      Anand Plaza <br>
-                      Bharatnagar <br>
-                      Jalna, Maharashtra 431203 <br>
+                      Mahyco Colony <br>
+                      Shivaji Putala <br>
+                      Jalna, Maharashtra - 431203 <br>
                       India <br>
                       <strong>Phone:</strong> <a href="tel:+918275269688">+91 8275269688</a><br>
                       <strong>Email:</strong> <a href="mailto:nnautatva@gmail.com">nnautatva@gmail.com</a><br>
@@ -1339,11 +1386,11 @@
             margin-bottom: 0;
           }
         </style>
-        <div class="copyright">
+        <!-- <div class="copyright">
           <p class="logo-text">theNB Solutions</p>
           <strong>Your digital partner</strong>
           <p>Mumbai</p>
-        </div>
+        </div> -->
 
         <div class="credits" style="font-size: 0.1px">
           <!--
