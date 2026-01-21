@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to WhatsApp...</title>
+    <script>
+        // Backend mapping: Name to WhatsApp number
+        const nameToWhatsApp = {
+            'nautatva': '8275269688',
+            'mahaveer': '9404065828',
+            'shivam': '8789835655',
+            'anzar': '8318247745'
+            // Add more mappings as needed:
+            // 'name1': '1234567890',
+            // 'name2': '0987654321',
+        };
+        
+        // Get parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name');
+        
+        let targetNumber = 8275269688;
+        
+        // Priority: name parameter first, then whatsapp parameter
+        if (name) {
+            // Check if name exists in mapping
+            const mappedNumber = nameToWhatsApp[name.toLowerCase()];
+            if (mappedNumber) {
+                targetNumber = mappedNumber;
+            }
+        }
+        
+        // Redirect to WhatsApp if we have a valid number
+        window.location.href = `https://wa.me/${targetNumber}`;
+    </script>
+</head>
+<body>
+    <p>Redirecting to WhatsApp...</p>
+</body>
+</html>
