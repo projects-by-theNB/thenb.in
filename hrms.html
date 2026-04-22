@@ -432,6 +432,9 @@
         <span class="section-label">Pricing</span>
         <h2 class="section-title">Simple, Transparent Pricing</h2>
         <p class="section-subtitle">Pay only for what you use — billed per employee, per month. No hidden charges.</p>
+        <p class="pricing-region-line">
+          Showing prices for: <span id="pricing-region-badge" class="pricing-region-badge">Detecting location…</span>
+        </p>
       </div>
 
       <div class="pricing-grid">
@@ -686,5 +689,71 @@
   <script src="lib/waypoints/waypoints.min.js"></script>
   <script src="lib/counterup/counterup.min.js"></script>
   <script src="lib/custom/js/index.js"></script>
+
+  <!-- ======== GEO-BASED PRICING ======== -->
+  <script>
+  (function () {
+    'use strict';
+
+    /* --- Pricing tiers: [Starter, Professional, Enterprise] --- */
+    var TIERS = {
+      IN:      { symbol: '₹', prices: [20, 30, 45],  label: 'India (INR ₹)' },
+      US:      { symbol: '$', prices: [2,  3,  5],   label: 'United States (USD $)' },
+      EU:      { symbol: '€', prices: [2,  3,  5],   label: 'Europe (EUR €)' },
+      DEFAULT: { symbol: '$', prices: [2,  3,  5],   label: 'International (USD $)' }
+    };
+
+    /* Comprehensive European country codes */
+    var EU_CODES = [
+      'AT','BE','BG','CY','CZ','DE','DK','EE','ES','FI','FR','GR','HR',
+      'HU','IE','IT','LT','LU','LV','MT','NL','PL','PT','RO','SE','SI',
+      'SK','NO','CH','GB','IS','LI','AL','BA','MK','ME','RS','MD','UA',
+      'BY','RU','GE','AM','AZ','TR','XK'
+    ];
+
+    function getTier(countryCode) {
+      if (countryCode === 'IN') return TIERS.IN;
+      if (countryCode === 'US') return TIERS.US;
+      if (EU_CODES.indexOf(countryCode) !== -1) return TIERS.EU;
+      return TIERS.DEFAULT;
+    }
+
+    function applyPricing(tier) {
+      /* Update currency symbols */
+      var symbols = document.querySelectorAll('.pricing-currency');
+      for (var i = 0; i < symbols.length; i++) {
+        symbols[i].textContent = tier.symbol;
+      }
+
+      /* Update prices */
+      var numbers = document.querySelectorAll('.pricing-number');
+      for (var j = 0; j < numbers.length; j++) {
+        if (tier.prices[j] !== undefined) {
+          numbers[j].textContent = tier.prices[j];
+        }
+      }
+
+      /* Update region badge */
+      var badge = document.getElementById('pricing-region-badge');
+      if (badge) {
+        badge.textContent = tier.label;
+        badge.classList.add('pricing-region-badge--loaded');
+      }
+    }
+
+    /* Fetch geo from ipapi.co — free, no API key needed */
+    fetch('https://ipapi.co/json/')
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var tier = getTier((data.country_code || '').toUpperCase());
+        applyPricing(tier);
+      })
+      .catch(function () {
+        /* On any failure show defaults (India pricing already in HTML) */
+        var badge = document.getElementById('pricing-region-badge');
+        if (badge) badge.textContent = 'India (INR ₹)';
+      });
+  }());
+  </script>
 </body>
 </html>
