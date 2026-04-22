@@ -7,49 +7,37 @@
 
 <url>
   <loc>https://www.navlakha.tech/</loc>
-  <lastmod>2025-03-31</lastmod>
+  <lastmod>2026-04-23</lastmod>
   <changefreq>weekly</changefreq>
   <priority>1.00</priority>
 </url>
 <url>
   <loc>https://www.navlakha.tech/hrms</loc>
-  <lastmod>2025-03-31</lastmod>
+  <lastmod>2026-04-23</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.90</priority>
 </url>
 <url>
   <loc>https://www.navlakha.tech/inventory</loc>
-  <lastmod>2025-03-31</lastmod>
+  <lastmod>2026-04-23</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.90</priority>
 </url>
 <url>
   <loc>https://www.navlakha.tech/crm</loc>
-  <lastmod>2025-03-31</lastmod>
+  <lastmod>2026-04-23</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.90</priority>
 </url>
 <url>
   <loc>https://www.navlakha.tech/custom</loc>
-  <lastmod>2025-03-31</lastmod>
+  <lastmod>2026-04-23</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.85</priority>
 </url>
 <url>
-  <loc>https://www.navlakha.tech/gatepass</loc>
-  <lastmod>2025-03-31</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://www.navlakha.tech/safechat</loc>
-  <lastmod>2025-03-31</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.70</priority>
-</url>
-<url>
   <loc>https://www.navlakha.tech/privacy</loc>
-  <lastmod>2025-03-31</lastmod>
+  <lastmod>2026-04-23</lastmod>
   <changefreq>yearly</changefreq>
   <priority>0.30</priority>
 </url>
