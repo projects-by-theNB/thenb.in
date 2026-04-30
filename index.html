@@ -239,9 +239,34 @@ Some of our clients –
     Author: BootstrapMade.com
     License: https://bootstrapmade.com/license/
   ======================================================= -->
+
+  <!-- ===== Google Analytics 4 (Visitor Tracking) ===== -->
+  <!-- SETUP: Replace G-XXXXXXXXXX with your GA4 Measurement ID from analytics.google.com -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <!-- ===== End Analytics ===== -->
+
+  <!-- Google Identity Services (One Tap sign-in for lead capture) -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
 
   <body>
+
+  <!-- Google One Tap container — auto-shows sign-in prompt on page load -->
+  <!-- SETUP: Replace data-client_id with your Google OAuth Client ID from Google Cloud Console -->
+  <div id="g_id_onload"
+       data-client_id="REPLACE_WITH_YOUR_GOOGLE_CLIENT_ID"
+       data-callback="handleGoogleLead"
+       data-auto_prompt="true"
+       data-cancel_on_tap_outside="false"
+       data-itp_support="true"
+       data-use_fedcm_for_prompt="true">
+  </div>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1XPJ432D61"></script>
     <script>
@@ -2174,5 +2199,121 @@ Some of our clients –
     <!-- JavaScript Libraries -->
 
     <script src="js/index.js"></script>
+
+    <!-- ===== Google One Tap Lead Capture ===== -->
+    <!-- SETUP: Replace the URL below with your Google Apps Script Web App URL -->
+    <script>
+      var LEAD_ENDPOINT = 'REPLACE_WITH_YOUR_APPS_SCRIPT_URL';
+      var _leadName = '', _leadEmail = '';
+
+      /* Called by Google One Tap when user approves */
+      function handleGoogleLead(response) {
+        try {
+          var parts = response.credential.split('.');
+          var payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+          _leadName  = payload.name  || '';
+          _leadEmail = payload.email || '';
+
+          // Save name + email immediately (phone still unknown)
+          sendLead(_leadName, _leadEmail, '');
+
+          // Show follow-up card asking for phone number
+          showPhoneCard(_leadName);
+        } catch (e) {}
+      }
+
+      /* Send lead data to Google Sheets via Apps Script */
+      function sendLead(name, email, phone) {
+        if (LEAD_ENDPOINT.indexOf('script.google.com') === -1) return;
+        fetch(LEAD_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: phone,
+            page: window.location.href,
+            timestamp: new Date().toISOString()
+          })
+        }).catch(function() {});
+      }
+
+      /* Show a small floating card asking for phone number */
+      function showPhoneCard(name) {
+        var first = name ? name.split(' ')[0] : '';
+
+        var card = document.createElement('div');
+        card.id = 'nt-phone-card';
+        card.style.cssText = [
+          'position:fixed', 'bottom:24px', 'right:24px',
+          'background:#fff', 'border-radius:12px',
+          'box-shadow:0 6px 32px rgba(0,0,0,0.18)',
+          'padding:20px 22px', 'width:300px', 'z-index:99999',
+          'font-family:inherit', 'animation:ntSlideIn 0.3s ease'
+        ].join(';');
+
+        card.innerHTML = [
+          '<style>',
+          '@keyframes ntSlideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}',
+          '#nt-phone-card input{width:100%;border:1.5px solid #ddd;border-radius:6px;padding:9px 11px;font-size:14px;outline:none;box-sizing:border-box;margin:10px 0 12px;}',
+          '#nt-phone-card input:focus{border-color:#00fd59;}',
+          '#nt-phone-card .nt-btn-row{display:flex;gap:8px;}',
+          '#nt-phone-card .nt-submit{flex:1;background:#00fd59;color:#111;border:none;border-radius:6px;padding:9px;font-weight:700;cursor:pointer;font-size:14px;}',
+          '#nt-phone-card .nt-submit:hover{background:#00e04f;}',
+          '#nt-phone-card .nt-skip{background:none;border:none;color:#888;cursor:pointer;font-size:13px;padding:9px 4px;}',
+          '#nt-phone-card .nt-skip:hover{color:#444;}',
+          '#nt-phone-card .nt-close{position:absolute;top:10px;right:13px;background:none;border:none;font-size:18px;color:#aaa;cursor:pointer;line-height:1;}',
+          '</style>',
+          '<button class="nt-close" onclick="closePhoneCard()" aria-label="Close">&times;</button>',
+          '<p style="margin:0 0 4px;font-weight:700;font-size:15px;color:#111;">',
+            'Thanks' + (first ? ', ' + first : '') + '!',
+          '</p>',
+          '<p style="margin:0;font-size:13px;color:#555;line-height:1.45;">',
+            'One last thing — share your WhatsApp number and we\'ll reach out personally.',
+          '</p>',
+          '<input id="nt-phone-input" type="tel" placeholder="+91 98765 43210" maxlength="15" />',
+          '<div class="nt-btn-row">',
+            '<button class="nt-submit" onclick="submitPhone()">Send</button>',
+            '<button class="nt-skip"  onclick="closePhoneCard()">Skip</button>',
+          '</div>'
+        ].join('');
+
+        document.body.appendChild(card);
+
+        // Allow Enter key to submit
+        var inp = document.getElementById('nt-phone-input');
+        if (inp) inp.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') submitPhone();
+        });
+      }
+
+      function submitPhone() {
+        var inp = document.getElementById('nt-phone-input');
+        var phone = inp ? inp.value.trim() : '';
+        if (phone) sendLead(_leadName, _leadEmail, phone);
+        closePhoneCard();
+        showToast('Got it! We\'ll WhatsApp you soon.');
+      }
+
+      function closePhoneCard() {
+        var card = document.getElementById('nt-phone-card');
+        if (card && card.parentNode) card.parentNode.removeChild(card);
+        showToast('Thanks! We\'ll be in touch soon.');
+      }
+
+      function showToast(msg) {
+        var toast = document.createElement('div');
+        toast.style.cssText = [
+          'position:fixed', 'bottom:28px', 'left:50%', 'transform:translateX(-50%)',
+          'background:#00fd59', 'color:#111', 'padding:13px 28px', 'border-radius:8px',
+          'font-weight:600', 'font-size:15px', 'z-index:99999',
+          'box-shadow:0 4px 20px rgba(0,0,0,0.25)', 'white-space:nowrap'
+        ].join(';');
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 4000);
+      }
+    </script>
+    <!-- ===== End Lead Capture ===== -->
   </body>
 </html>
