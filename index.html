@@ -251,22 +251,33 @@ Some of our clients –
   </script>
   <!-- ===== End Analytics ===== -->
 
+  <!-- App config (must load before Google Identity Services so client_id is available) -->
+  <script src="lib/custom/js/config.js"></script>
+
   <!-- Google Identity Services (One Tap sign-in for lead capture) -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
 
   <body>
 
-  <!-- Google One Tap container — auto-shows sign-in prompt on page load -->
-  <!-- SETUP: Replace data-client_id with your Google OAuth Client ID from Google Cloud Console -->
+  <!-- Google One Tap container — client_id injected at runtime from AppConfig -->
   <div id="g_id_onload"
-       data-client_id="REPLACE_WITH_YOUR_GOOGLE_CLIENT_ID"
        data-callback="handleGoogleLead"
        data-auto_prompt="true"
        data-cancel_on_tap_outside="false"
        data-itp_support="true"
        data-use_fedcm_for_prompt="true">
   </div>
+  <script>
+    (function () {
+      var el = document.getElementById('g_id_onload');
+      if (el && typeof AppConfig !== 'undefined' && AppConfig.googleClientId) {
+        el.setAttribute('data-client_id', AppConfig.googleClientId);
+      } else if (el && el.parentNode) {
+        el.parentNode.removeChild(el);
+      }
+    })();
+  </script>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1XPJ432D61"></script>
     <script>
@@ -304,7 +315,23 @@ Some of our clients –
             <li class="active"><a href="#intro">Home</a></li>
             <li class="drop-down"><a href="#modules">Products</a>
               <ul>
-                <li><a href="hrms.html"><i class="fa fa-id-badge"></i> Attendance &amp; Payroll</a></li>
+                <li class="drop-down"><a href="hrms.html"><i class="fa fa-id-badge"></i> Attendance &amp; Payroll</a>
+                  <ul>
+                    <li><a href="hrms.html"><i class="fa fa-id-badge"></i> Attendance &amp; Payroll</a></li>
+                    <li><a href="contractor-hrms.html"><i class="fa fa-handshake-o"></i> Contract Labour</a></li>
+                    <li><a href="casual-labour-hrms.html"><i class="fa fa-users"></i> Casual Labour</a></li>
+                  </ul>
+                </li>
+                <li class="drop-down"><a href="erp.html"><i class="fa fa-cogs"></i> ERP Suite</a>
+                  <ul>
+                    <li><a href="erp.html"><i class="fa fa-th-large"></i> ERP Overview</a></li>
+                    <li><a href="erp-purchase.html"><i class="fa fa-shopping-cart"></i> Purchase</a></li>
+                    <li><a href="erp-sales.html"><i class="fa fa-line-chart"></i> Sales</a></li>
+                    <li><a href="erp-manufacturing.html"><i class="fa fa-industry"></i> Manufacturing</a></li>
+                    <li><a href="erp-quality-control.html"><i class="fa fa-check-circle-o"></i> Quality Control</a></li>
+                    <li><a href="erp-asset-management.html"><i class="fa fa-cubes"></i> Asset Management</a></li>
+                  </ul>
+                </li>
                 <li><a href="inventory.html"><i class="fa fa-archive"></i> Store &amp; Inventory</a></li>
                 <li><a href="crm.html"><i class="fa fa-map-marker"></i> Sales Tracking &amp; CRM</a></li>
                 <li><a href="custom.html"><i class="fa fa-code"></i> Custom Applications</a></li>
@@ -312,7 +339,12 @@ Some of our clients –
                 <li><a href="safechat.html"><i class="fa fa-commenting"></i> Privacy Chatbox</a></li>
               </ul>
             </li>
-            <li><a href="hrms.html#pricing">Pricing</a></li>
+            <li class="drop-down"><a href="#"><i class="fa fa-tag"></i> Pricing</a>
+              <ul>
+                <li><a href="hrms.html#pricing"><i class="fa fa-id-badge"></i> Attendance &amp; Payroll</a></li>
+                <li><a href="erp.html#pricing"><i class="fa fa-cogs"></i> ERP System</a></li>
+              </ul>
+            </li>
             <li><a href="#why-us">About Us</a></li>
             <li><a href="#contact-us">Contact Us</a></li>
           </ul>
@@ -533,16 +565,58 @@ Some of our clients –
                         <i class="fa fa-id-badge fa-fw"></i>
                     </div>
                     <h3>Attendance &amp; Payroll</h3>
-                    <p>Biometric attendance, casual labour management, automated payroll &amp; full statutory compliance for Indian businesses.</p>
-                    <div class="module-features-preview">
-                        <span class="feature-tag">Biometric Support</span>
-                        <span class="feature-tag">Payroll &amp; PF/ESIC</span>
-                        <span class="feature-tag">Casual Labour</span>
+                    <p>Biometric attendance, automated payroll &amp; full statutory compliance — built for Indian businesses of every type.</p>
+                    <div class="hrms-sub-links">
+                        <a href="hrms.html" class="hrms-sub-link">
+                            <i class="fa fa-id-badge"></i>
+                            <span>Attendance &amp; Payroll</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                        <a href="contractor-hrms.html" class="hrms-sub-link">
+                            <i class="fa fa-handshake-o"></i>
+                            <span>Contract Labour</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                        <a href="casual-labour-hrms.html" class="hrms-sub-link">
+                            <i class="fa fa-users"></i>
+                            <span>Casual Labour</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
                     </div>
-                    <a href="hrms.html" class="arrow-indicator">
-                        <span>Explore HRMS</span>
-                        <i class="fa fa-arrow-right"></i>
-                    </a>
+                </div>
+                <div class="module-card module-card-primary" data-module="erp" color="orange">
+                    <div class="module-icon">
+                        <i class="fa fa-cogs fa-fw"></i>
+                    </div>
+                    <h3>ERP Suite</h3>
+                    <p>Integrated Purchase, Sales, Manufacturing, Quality Control &amp; Asset Management — full operations on one platform.</p>
+                    <div class="erp-sub-links">
+                        <a href="erp-purchase.html" class="erp-sub-item">
+                            <i class="fa fa-shopping-cart"></i>
+                            <span>Purchase</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                        <a href="erp-sales.html" class="erp-sub-item">
+                            <i class="fa fa-line-chart"></i>
+                            <span>Sales</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                        <a href="erp-manufacturing.html" class="erp-sub-item">
+                            <i class="fa fa-industry"></i>
+                            <span>Manufacturing</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                        <a href="erp-quality-control.html" class="erp-sub-item">
+                            <i class="fa fa-check-circle-o"></i>
+                            <span>Quality Control</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                        <a href="erp-asset-management.html" class="erp-sub-item">
+                            <i class="fa fa-cubes"></i>
+                            <span>Asset Management</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
                 <div class="module-card module-card-primary" data-module="inventory" color="green">
                     <div class="module-icon">
@@ -776,6 +850,195 @@ Some of our clients –
             </div>
         </div>
         
+        <div id="details-erp">
+            <div class="module-header">
+                <div class="module-header-icon">
+                    <i class="fa fa-cogs fa-fw"></i>
+                </div>
+                <div class="module-header-content">
+                    <h2>ERP Suite</h2>
+                    <p>A fully integrated ERP covering your entire business cycle — from sourcing raw materials to shipping finished goods. Purchase, Sales, Manufacturing, Quality Control and Asset Management, all connected in one platform.</p>
+                </div>
+            </div>
+
+            <div class="features-grid">
+
+                <!-- Purchase Module -->
+                <div class="feature-category">
+                    <h3><i class="fa fa-shopping-cart"></i> Purchase</h3>
+                    <div class="feature-items">
+                        <div class="erp-flow-label">Internal Fulfilment</div>
+                        <div class="erp-flow">
+                            <span class="erp-flow-step">Requirement</span>
+                            <span class="erp-flow-arrow">&#8594;</span>
+                            <span class="erp-flow-step">Material Issue</span>
+                        </div>
+                        <div class="erp-flow-label" style="margin-top:14px;">External Procurement</div>
+                        <div class="erp-flow">
+                            <span class="erp-flow-step">Requirement</span>
+                            <span class="erp-flow-arrow">&#8594;</span>
+                            <span class="erp-flow-step">Indent</span>
+                            <span class="erp-flow-arrow">&#8594;</span>
+                            <span class="erp-flow-step">RFQ</span>
+                            <span class="erp-flow-arrow">&#8594;</span>
+                            <span class="erp-flow-step">Quotation Comparison</span>
+                            <span class="erp-flow-arrow">&#8594;</span>
+                            <span class="erp-flow-step">Purchase Order</span>
+                            <span class="erp-flow-arrow">&#8594;</span>
+                            <span class="erp-flow-step">Purchase Receipt</span>
+                            <span class="erp-flow-arrow">&#8594;</span>
+                            <span class="erp-flow-step">Purchase Invoice</span>
+                        </div>
+                        <div class="feature-item" style="margin-top:12px;">
+                            <i class="fa fa-check"></i>
+                            <span>Multi-vendor RFQ with auto quotation comparison</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Approval workflows for indent &amp; purchase orders</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>GRN-linked invoice matching &amp; payment tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Vendor performance &amp; lead-time analytics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sales Module -->
+                <div class="feature-category">
+                    <h3><i class="fa fa-line-chart"></i> Sales</h3>
+                    <div class="feature-items">
+                        <div class="erp-flow-label">Sales Cycle</div>
+                        <div class="erp-flow">
+                            <span class="erp-flow-step">Quotation</span>
+                            <span class="erp-flow-arrow">&#8594;</span>
+                            <span class="erp-flow-step">Sales Order</span>
+                            <span class="erp-flow-arrow">&#8594;</span>
+                            <span class="erp-flow-step">Sales Invoice</span>
+                        </div>
+                        <div class="feature-item" style="margin-top:12px;">
+                            <i class="fa fa-check"></i>
+                            <span>Professional quotation builder with item &amp; tax configuration</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>One-click conversion: Quotation → Sales Order → Invoice</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Customer-wise pricing, discounts &amp; credit limits</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Outstanding receivables &amp; ageing reports</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Sales performance dashboards by rep, region &amp; product</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manufacturing Module -->
+                <div class="feature-category">
+                    <h3><i class="fa fa-industry"></i> Manufacturing</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Bill of Materials (BOM) with multi-level components</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Work Order creation &amp; shop floor scheduling</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Material consumption tracking per production run</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Machine &amp; workstation utilisation monitoring</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Finished goods receipt &amp; scrap/waste recording</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Production cost analysis &amp; efficiency reports</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quality Control Module -->
+                <div class="feature-category">
+                    <h3><i class="fa fa-check-circle-o"></i> Quality Control</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Configurable inspection checklists per item &amp; process stage</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Incoming, in-process &amp; outgoing QC gates</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Non-Conformance Reports (NCR) with root-cause tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Batch-wise rejection analysis &amp; defect classification</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Certificate of Analysis (CoA) generation</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Supplier quality scorecards &amp; trend dashboards</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Asset Management Module -->
+                <div class="feature-category">
+                    <h3><i class="fa fa-cubes"></i> Asset Management</h3>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Centralised asset register with QR/barcode tagging</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Automated depreciation (SLM &amp; WDV methods)</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Preventive maintenance schedules &amp; service reminders</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>AMC &amp; warranty expiry tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Asset allocation, transfer &amp; disposal lifecycle</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa fa-check"></i>
+                            <span>Maintenance cost history &amp; downtime analysis</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <div id="details-crm">
             <div class="module-header">
                 <div class="module-header-icon">
@@ -2201,57 +2464,123 @@ Some of our clients –
     <script src="js/index.js"></script>
 
     <!-- ===== Google One Tap Lead Capture ===== -->
-    <!-- SETUP: Replace the URL below with your Google Apps Script Web App URL -->
-    <script>
-      var LEAD_ENDPOINT = 'REPLACE_WITH_YOUR_APPS_SCRIPT_URL';
-      var _leadName = '', _leadEmail = '';
+    <!--
+      SETUP REQUIRED (2 steps):
+      1. Replace REPLACE_WITH_YOUR_GOOGLE_CLIENT_ID above (line ~276) with your OAuth Client ID
+         → console.cloud.google.com → APIs & Services → Credentials → Create OAuth 2.0 Client ID
+         → Type: Web application → Authorised JS origins: https://www.navlakha.tech
 
-      /* Called by Google One Tap when user approves */
+      2. Replace NT_MAILER_KEY below with a dispatch creator secret key from mailer.nbnext.in
+         → Create a wildcard dispatch creator (no fixed "to" address)
+         → Paste its secret key as NT_MAILER_KEY
+         → Add https://www.navlakha.tech to ALLOWED_ORIGINS in the mailer's .env
+    -->
+    <script>
+      var NT_MAILER_URL = 'https://mailer.nbnext.in/api/v1/mail/send';
+      var NT_MAILER_KEY = 'REPLACE_WITH_YOUR_MAILER_SECRET_KEY';
+      var NT_NOTIFY     = ['mahavirnn@gmail.com', 'nnautatva@gmail.com'];
+
+      var _leadName = '', _leadEmail = '', _leadSent = false;
+
+      /* Called by Google One Tap when user clicks their Google account */
       function handleGoogleLead(response) {
         try {
           var parts = response.credential.split('.');
           var payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
           _leadName  = payload.name  || '';
           _leadEmail = payload.email || '';
-
-          // Save name + email immediately (phone still unknown)
-          sendLead(_leadName, _leadEmail, '');
-
-          // Show follow-up card asking for phone number
+          localStorage.setItem('nt_lead_captured', '1');
           showPhoneCard(_leadName);
         } catch (e) {}
       }
 
-      /* Send lead data to Google Sheets via Apps Script */
+      /* Fires exactly once — one email per address in NT_NOTIFY */
       function sendLead(name, email, phone) {
-        if (LEAD_ENDPOINT.indexOf('script.google.com') === -1) return;
-        fetch(LEAD_ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: name,
-            email: email,
-            phone: phone,
-            page: window.location.href,
-            timestamp: new Date().toISOString()
-          })
-        }).catch(function() {});
+        if (_leadSent) return;
+        _leadSent = true;
+        if (!NT_MAILER_KEY || NT_MAILER_KEY.indexOf('REPLACE') !== -1) return;
+
+        var subject = '\uD83D\uDD14 New Visitor: ' + name + ' \u2014 navlakha.tech';
+        var content = ntBuildEmail(name, email, phone, window.location.href);
+
+        NT_NOTIFY.forEach(function(toEmail) {
+          fetch(NT_MAILER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              subject: subject,
+              content: content,
+              email_secret_key: NT_MAILER_KEY,
+              to_email: toEmail
+            })
+          }).catch(function() {});
+        });
       }
 
-      /* Show a small floating card asking for phone number */
+      /* HTML email template — same table-based style used across NB Next apps */
+      function ntBuildEmail(name, email, phone, page) {
+        var e = ntEncode;
+        return [
+          '<!DOCTYPE html><html><head><meta charset="UTF-8"></head>',
+          '<body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,sans-serif;">',
+          '<table width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:32px 0;">',
+          '<tr><td align="center">',
+          '<table width="560" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);">',
+
+          /* Header */
+          '<tr><td style="background:#1a1a2e;padding:22px 32px;">',
+          '<p style="margin:0;font-size:11px;color:#00fd59;letter-spacing:1px;text-transform:uppercase;">Landing Page · navlakha.tech</p>',
+          '<h1 style="margin:6px 0 0;font-size:19px;color:#fff;">New Visitor Signed In</h1>',
+          '</td></tr>',
+
+          /* Body */
+          '<tr><td style="padding:28px 32px;">',
+          '<table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:6px;overflow:hidden;font-size:14px;">',
+
+          '<tr style="background:#f9fafb;">',
+          '<td style="padding:10px 16px;color:#6b7280;width:36%;border-bottom:1px solid #e5e7eb;">Name</td>',
+          '<td style="padding:10px 16px;font-weight:600;color:#111827;border-bottom:1px solid #e5e7eb;">' + e(name) + '</td></tr>',
+
+          '<tr>',
+          '<td style="padding:10px 16px;color:#6b7280;border-bottom:1px solid #e5e7eb;">Email</td>',
+          '<td style="padding:10px 16px;border-bottom:1px solid #e5e7eb;"><a href="mailto:' + e(email) + '" style="color:#0f766e;">' + e(email) + '</a></td></tr>',
+
+          '<tr style="background:#f9fafb;">',
+          '<td style="padding:10px 16px;color:#6b7280;border-bottom:1px solid #e5e7eb;">WhatsApp</td>',
+          '<td style="padding:10px 16px;font-weight:600;color:#111827;border-bottom:1px solid #e5e7eb;">' + e(phone || '(not shared)') + '</td></tr>',
+
+          '<tr>',
+          '<td style="padding:10px 16px;color:#6b7280;">Page</td>',
+          '<td style="padding:10px 16px;font-size:12px;color:#374151;">' + e(page) + '</td></tr>',
+
+          '</table></td></tr>',
+
+          /* Footer */
+          '<tr><td style="background:#f9fafb;border-top:1px solid #e5e7eb;padding:16px 32px;text-align:center;">',
+          '<p style="margin:0;font-size:12px;color:#9ca3af;">Automated notification · Navlakha Technologies · navlakha.tech</p>',
+          '</td></tr>',
+
+          '</table></td></tr></table>',
+          '</body></html>'
+        ].join('');
+      }
+
+      function ntEncode(s) {
+        return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+      /* Small floating card asking for WhatsApp number after Google sign-in */
       function showPhoneCard(name) {
         var first = name ? name.split(' ')[0] : '';
-
         var card = document.createElement('div');
         card.id = 'nt-phone-card';
         card.style.cssText = [
-          'position:fixed', 'bottom:24px', 'right:24px',
-          'background:#fff', 'border-radius:12px',
+          'position:fixed','bottom:24px','right:24px',
+          'background:#fff','border-radius:12px',
           'box-shadow:0 6px 32px rgba(0,0,0,0.18)',
-          'padding:20px 22px', 'width:300px', 'z-index:99999',
-          'font-family:inherit', 'animation:ntSlideIn 0.3s ease'
+          'padding:20px 22px','width:300px','z-index:99999',
+          'font-family:inherit','animation:ntSlideIn 0.3s ease'
         ].join(';');
-
         card.innerHTML = [
           '<style>',
           '@keyframes ntSlideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}',
@@ -2264,56 +2593,104 @@ Some of our clients –
           '#nt-phone-card .nt-skip:hover{color:#444;}',
           '#nt-phone-card .nt-close{position:absolute;top:10px;right:13px;background:none;border:none;font-size:18px;color:#aaa;cursor:pointer;line-height:1;}',
           '</style>',
-          '<button class="nt-close" onclick="closePhoneCard()" aria-label="Close">&times;</button>',
-          '<p style="margin:0 0 4px;font-weight:700;font-size:15px;color:#111;">',
-            'Thanks' + (first ? ', ' + first : '') + '!',
-          '</p>',
-          '<p style="margin:0;font-size:13px;color:#555;line-height:1.45;">',
-            'One last thing — share your WhatsApp number and we\'ll reach out personally.',
-          '</p>',
+          '<button class="nt-close" onclick="ntCloseCard(false)" aria-label="Close">&times;</button>',
+          '<p style="margin:0 0 4px;font-weight:700;font-size:15px;color:#111;">Thanks' + (first ? ', ' + first : '') + '!</p>',
+          '<p style="margin:0;font-size:13px;color:#555;line-height:1.45;">Share your WhatsApp number and we\'ll reach out personally.</p>',
           '<input id="nt-phone-input" type="tel" placeholder="+91 98765 43210" maxlength="15" />',
           '<div class="nt-btn-row">',
-            '<button class="nt-submit" onclick="submitPhone()">Send</button>',
-            '<button class="nt-skip"  onclick="closePhoneCard()">Skip</button>',
+            '<button class="nt-submit" onclick="ntSubmitPhone()">Send</button>',
+            '<button class="nt-skip" onclick="ntCloseCard(false)">Skip</button>',
           '</div>'
         ].join('');
-
         document.body.appendChild(card);
-
-        // Allow Enter key to submit
         var inp = document.getElementById('nt-phone-input');
-        if (inp) inp.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter') submitPhone();
-        });
+        if (inp) inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') ntSubmitPhone(); });
       }
 
-      function submitPhone() {
-        var inp = document.getElementById('nt-phone-input');
-        var phone = inp ? inp.value.trim() : '';
-        if (phone) sendLead(_leadName, _leadEmail, phone);
-        closePhoneCard();
-        showToast('Got it! We\'ll WhatsApp you soon.');
+      function ntSubmitPhone() {
+        var phone = (document.getElementById('nt-phone-input') || {}).value || '';
+        sendLead(_leadName, _leadEmail, phone.trim());
+        ntCloseCard(true);
       }
 
-      function closePhoneCard() {
+      function ntCloseCard(withPhone) {
+        sendLead(_leadName, _leadEmail, ''); // no-op if already sent
         var card = document.getElementById('nt-phone-card');
         if (card && card.parentNode) card.parentNode.removeChild(card);
-        showToast('Thanks! We\'ll be in touch soon.');
+        ntShowToast(withPhone ? "Got it! We'll WhatsApp you soon." : "Thanks! We'll be in touch.");
       }
 
-      function showToast(msg) {
-        var toast = document.createElement('div');
-        toast.style.cssText = [
-          'position:fixed', 'bottom:28px', 'left:50%', 'transform:translateX(-50%)',
-          'background:#00fd59', 'color:#111', 'padding:13px 28px', 'border-radius:8px',
-          'font-weight:600', 'font-size:15px', 'z-index:99999',
-          'box-shadow:0 4px 20px rgba(0,0,0,0.25)', 'white-space:nowrap'
-        ].join(';');
-        toast.textContent = msg;
-        document.body.appendChild(toast);
-        setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 4000);
+      function ntShowToast(msg) {
+        var t = document.createElement('div');
+        t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#00fd59;color:#111;padding:13px 28px;border-radius:8px;font-weight:600;font-size:15px;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.25);white-space:nowrap';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 4000);
       }
     </script>
     <!-- ===== End Lead Capture ===== -->
+
+    <!-- Signup Popup Component -->
+    <script src="lib/custom/js/config.js"></script>
+    <script src="lib/custom/js/signup-popup.js"></script>
+    <script>
+      // Initialize popup after page loads - uses GoogleClientId from config.js
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          SignupPopup.init(AppConfig);
+        });
+      } else {
+        SignupPopup.init(AppConfig);
+      }
+    </script>
+    <!-- ===== Click Tracking (GA4 Custom Events) ===== -->
+    <script>
+      (function () {
+        // Map of CSS selector → {event name, label} sent to GA4
+        var TRACK = [
+          // Hero CTAs
+          { sel: '.hero-btn-primary',            ev: 'cta_click',      lb: 'hero_book_demo_wa' },
+          { sel: '.hero-btn-secondary',           ev: 'cta_click',      lb: 'hero_see_products' },
+
+          // Product clicks — covers both nav dropdown AND card arrows
+          { sel: 'a[href="hrms.html"]',           ev: 'product_click',  lb: 'hrms' },
+          { sel: 'a[href="inventory.html"]',       ev: 'product_click',  lb: 'inventory' },
+          { sel: 'a[href="crm.html"]',             ev: 'product_click',  lb: 'crm' },
+          { sel: 'a[href="custom.html"]',          ev: 'product_click',  lb: 'custom_dev' },
+          { sel: 'a[href="gatepass.html"]',        ev: 'product_click',  lb: 'gatepass' },
+          { sel: 'a[href="safechat.html"]',        ev: 'product_click',  lb: 'safechat' },
+          { sel: 'a[href="hrms.html#pricing"]',    ev: 'product_click',  lb: 'hrms_pricing' },
+          { sel: 'a[href="nbnext.html"]',          ev: 'product_click',  lb: 'nbnext_platform' },
+
+          // WhatsApp touchpoints (by location class / parent)
+          { sel: '.nt-wa-btn',                     ev: 'whatsapp_click', lb: 'sticky_float' },
+          { sel: '.cta-btn',                       ev: 'whatsapp_click', lb: 'cta_section' },
+
+          // Contact actions
+          { sel: 'a[href^="tel:"]',                ev: 'contact_click',  lb: 'phone' },
+          { sel: 'a[href^="mailto:"]',             ev: 'contact_click',  lb: 'email' },
+
+          // Social links
+          { sel: 'a.linkedin',                     ev: 'social_click',   lb: 'linkedin' },
+          { sel: 'a.instagram',                    ev: 'social_click',   lb: 'instagram' },
+        ];
+
+        function track(ev, lb) {
+          if (typeof gtag === 'function') {
+            gtag('event', ev, { event_category: 'engagement', event_label: lb });
+          }
+        }
+
+        // Attach after DOM is ready
+        document.addEventListener('DOMContentLoaded', function () {
+          TRACK.forEach(function (rule) {
+            document.querySelectorAll(rule.sel).forEach(function (el) {
+              el.addEventListener('click', function () { track(rule.ev, rule.lb); });
+            });
+          });
+        });
+      })();
+    </script>
+    <!-- ===== End Click Tracking ===== -->
   </body>
 </html>
