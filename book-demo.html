@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
 <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+<script>if (/(^|\.)navlakha\.tech$/i.test(location.hostname)) {
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KBSL779S');</script>
+})(window,document,'script','dataLayer','GTM-KBSL779S');
+}</script>
 <!-- End Google Tag Manager -->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -35,7 +37,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="theme-color" content="#2f5597" />
 
   <link rel="preconnect" href="https://fonts.gstatic.com" />
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,500,600,700,700i|Montserrat:300,400,500,600,700,800" rel="stylesheet" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,500,600,700,700i|Montserrat:300,400,500,600,700,800&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/pages.css">
 
@@ -254,7 +258,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return ok;
   }
 
-  function buildEmail(data) {
+  function getAttribution() {
+    try {
+      if (window.NTAttribution && typeof window.NTAttribution.get === 'function') {
+        return window.NTAttribution.get();
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  function buildEmail(data, attr) {
     function e(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
     var rows = [
       ['Name', data.name],
@@ -267,6 +280,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       ['Use Case', data.usecase || '—'],
       ['Page', location.href]
     ];
+    if (attr) {
+      if (attr.utm_source)       rows.push(['Source',           attr.utm_source]);
+      if (attr.utm_medium)       rows.push(['Medium',           attr.utm_medium]);
+      if (attr.utm_campaign)     rows.push(['Campaign',         attr.utm_campaign]);
+      if (attr.utm_term)         rows.push(['Term',             attr.utm_term]);
+      if (attr.utm_content)      rows.push(['Content',          attr.utm_content]);
+      if (attr.gclid)            rows.push(['gclid',            attr.gclid]);
+      if (attr.fbclid)           rows.push(['fbclid',           attr.fbclid]);
+      if (attr.landing_page)     rows.push(['Landing page',     attr.landing_page]);
+      if (attr.landing_referrer) rows.push(['Landing referrer', attr.landing_referrer]);
+    }
     var trs = rows.map(function (r) {
       return '<tr><td style="padding:8px 14px;color:#64748b;border-bottom:1px solid #e5e7eb;width:36%;">' + e(r[0]) + '</td>' +
              '<td style="padding:8px 14px;color:#111827;border-bottom:1px solid #e5e7eb;">' + e(r[1]) + '</td></tr>';
@@ -280,14 +304,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
            trs + '</table></td></tr></table></body></html>';
   }
 
-  function postLead(data) {
+  function postLead(data, attr) {
     var cfg = window.AppConfig || {};
     if (!cfg.mailerUrl || !cfg.mailerSecretKey) {
       return Promise.reject(new Error('Mailer not configured'));
     }
     var recipients = [cfg.supportEmail || 'support@navlakha.tech', 'nnautatva@gmail.com', 'mahavirnn@gmail.com'];
-    var subject = '🔔 Demo Request: ' + data.name + ' (' + data.company + ')';
-    var content = buildEmail(data);
+    var sourceTag = attr && attr.utm_source ? ' [' + attr.utm_source + ']' : '';
+    var subject = '🔔 Demo Request' + sourceTag + ': ' + data.name + ' (' + data.company + ')';
+    var content = buildEmail(data, attr);
 
     return Promise.all(recipients.map(function (to) {
       return fetch(cfg.mailerUrl, {
@@ -313,21 +338,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     submitBtn.disabled = true;
     submitBtn.innerHTML = 'Sending…';
 
+    var attr = getAttribution();
+
     window.dataLayer.push({
       event: 'lead_submit',
       form_name: 'book_demo',
       product_interest: data.product_interest || null,
-      page_path: location.pathname
+      page_path: location.pathname,
+      utm_source:   attr && attr.utm_source   || null,
+      utm_medium:   attr && attr.utm_medium   || null,
+      utm_campaign: attr && attr.utm_campaign || null,
+      gclid:        attr && attr.gclid        || null
     });
 
-    postLead(data).then(function () {
+    postLead(data, attr).then(function () {
       try {
         sessionStorage.setItem('nt_lead_payload', JSON.stringify({
           name: data.name,
           email: data.email,
           phone: data.phone,
           company: data.company,
-          product_interest: data.product_interest || null
+          product_interest: data.product_interest || null,
+          utm_source:   attr && attr.utm_source   || null,
+          utm_medium:   attr && attr.utm_medium   || null,
+          utm_campaign: attr && attr.utm_campaign || null,
+          gclid:        attr && attr.gclid        || null
         }));
       } catch (e) {}
       location.href = 'thank-you.html';

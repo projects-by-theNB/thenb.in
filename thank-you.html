@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
 <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+<script>if (/(^|\.)navlakha\.tech$/i.test(location.hostname)) {
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KBSL779S');</script>
+})(window,document,'script','dataLayer','GTM-KBSL779S');
+}</script>
 <!-- End Google Tag Manager -->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -25,7 +27,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="theme-color" content="#2f5597" />
 
   <link rel="preconnect" href="https://fonts.gstatic.com" />
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Montserrat:400,600,700,800" rel="stylesheet" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Montserrat:400,600,700,800&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/pages.css">
 
@@ -119,6 +123,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   };
   if (payload) {
     evt.product_interest = payload.product_interest || null;
+    evt.utm_source   = payload.utm_source   || null;
+    evt.utm_medium   = payload.utm_medium   || null;
+    evt.utm_campaign = payload.utm_campaign || null;
+    evt.gclid        = payload.gclid        || null;
     evt.user_data = {
       email: payload.email || null,
       phone_number: payload.phone || null

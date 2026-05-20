@@ -7,43 +7,107 @@
 
 <url>
   <loc>https://www.navlakha.tech/</loc>
-  <lastmod>2026-04-23</lastmod>
+  <lastmod>2026-05-20</lastmod>
   <changefreq>weekly</changefreq>
   <priority>1.00</priority>
 </url>
-<url>
-  <loc>https://www.navlakha.tech/hrms</loc>
-  <lastmod>2026-04-23</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.90</priority>
-</url>
-<url>
-  <loc>https://www.navlakha.tech/inventory</loc>
-  <lastmod>2026-04-23</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.90</priority>
-</url>
-<url>
-  <loc>https://www.navlakha.tech/crm</loc>
-  <lastmod>2026-04-23</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.90</priority>
-</url>
-<url>
-  <loc>https://www.navlakha.tech/custom</loc>
-  <lastmod>2026-04-23</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.85</priority>
-</url>
+
+<!-- Primary conversion page -->
 <url>
   <loc>https://www.navlakha.tech/book-demo</loc>
   <lastmod>2026-05-20</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.95</priority>
 </url>
+
+<!-- HRMS / Attendance & Payroll cluster -->
+<url>
+  <loc>https://www.navlakha.tech/hrms</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/contractor-hrms</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/casual-labour-hrms</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+
+<!-- ERP cluster -->
+<url>
+  <loc>https://www.navlakha.tech/erp</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/erp-purchase</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.75</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/erp-sales</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.75</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/erp-manufacturing</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.75</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/erp-quality-control</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.75</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/erp-asset-management</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.75</priority>
+</url>
+
+<!-- Other products -->
+<url>
+  <loc>https://www.navlakha.tech/inventory</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/crm</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/custom</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.85</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/nbnext</loc>
+  <lastmod>2026-05-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+
+<!-- Policy -->
 <url>
   <loc>https://www.navlakha.tech/privacy</loc>
-  <lastmod>2026-04-23</lastmod>
+  <lastmod>2026-05-20</lastmod>
   <changefreq>yearly</changefreq>
   <priority>0.30</priority>
 </url>

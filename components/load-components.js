@@ -105,6 +105,7 @@
     loadHtml('header-placeholder', COMPONENTS + 'header.html', initHeader);
     loadHtml('footer-placeholder', COMPONENTS + 'footer.html', initFooter);
     loadHtml('module-details-placeholder', 'sections/module-details.html');
+    loadScript('js/attribution.js');
     loadScript('js/click-tracking.js');
   }
 
