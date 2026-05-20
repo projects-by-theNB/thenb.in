@@ -20,9 +20,14 @@
   window.__ntChatbotMounted = true;
 
   var STORAGE_KEY = 'nt_chat_state_v1';
-  var WA_NUMBER = '918275269688';
 
-  var STEPS = ['phone', 'interests', 'team_size', 'mail', 'name', 'requirements'];
+  // ─── Config-driven values (lib/custom/js/config.js) ─────────────────────
+  // Each one falls back to the hardcoded default if config.js failed to
+  // load, so the chatbot still works in dev / on standalone pages.
+  var CFG       = (window.AppConfig && AppConfig.chatbot) || {};
+  var WA_NUMBER = (window.AppConfig && AppConfig.whatsappPrimary) || '918275269688';
+
+  var STEPS = CFG.steps || ['phone', 'interests', 'team_size', 'mail', 'name', 'requirements'];
   var TOTAL_STEPS = STEPS.length;
 
   /**
@@ -32,12 +37,9 @@
    *   - send_mail : if true, sendStageEmail() fires a backend email at this
    *                 step. If false/missing, the step is silent (state is
    *                 still saved and profile is still updated).
+   * Edit in config.js → chatbot.stepMeta.
    */
-  var STEP_META = {
-    // Phone is the ignition — the moment we have it, the profile is "live"
-    // and the first email goes out. Every subsequent step is an UPDATE email
-    // carrying the full profile snapshot. Toggle send_mail off here only if
-    // you want that step to be silent.
+  var STEP_META = CFG.stepMeta || {
     phone:        { icon: '📞', label: 'phone',        send_mail: true },
     interests:    { icon: '🎯', label: 'interests',    send_mail: true },
     team_size:    { icon: '👥', label: 'team size',    send_mail: true },
@@ -49,7 +51,7 @@
   function stepNumberOf(stepName) { return STEPS.indexOf(stepName) + 1; }
   function isFinalStage(stageNum) { return stageNum === STEPS.length; }
 
-  var INTERESTS = [
+  var INTERESTS = CFG.interests || [
     { key: 'attendance_payroll', label: 'Attendance & Payroll (HRMS)' },
     { key: 'erp',                label: 'ERP Suite' },
     { key: 'inventory',          label: 'Store & Inventory' },
@@ -59,7 +61,7 @@
     { key: 'safechat',           label: 'Privacy Chatbox' }
   ];
 
-  var TEAM_SIZES = ['1 – 10', '11 – 50', '51 – 200', '201 – 1,000', '1,000+'];
+  var TEAM_SIZES = CFG.teamSizes || ['1 – 10', '11 – 50', '51 – 200', '201 – 1,000', '1,000+'];
 
   /** Returns the interest key for the current page, or null. */
   function detectProductInterest() {
@@ -192,7 +194,7 @@
 
     dom.launcher = el('button', {
       class: 'nt-chat-launcher',
-      'aria-label': 'Open chat to book a free demo',
+      'aria-label': 'Open chat to schedule a callback',
       type: 'button',
       onclick: open
     }, [
@@ -201,7 +203,7 @@
       ]),
       el('span', { class: 'nt-chat-launcher-text' }, [
         el('span', { class: 'nt-chat-launcher-title' }, 'Chat with us'),
-        el('span', { class: 'nt-chat-launcher-sub' }, 'Book a free demo')
+        el('span', { class: 'nt-chat-launcher-sub' }, 'Schedule a callback')
       ])
     ]);
 
@@ -286,7 +288,7 @@
   function renderPanel() {
     if (dom.panel && dom.panel.parentNode) dom.panel.parentNode.removeChild(dom.panel);
 
-    dom.panel = el('div', { class: 'nt-chat-panel', role: 'dialog', 'aria-label': 'Demo chat' });
+    dom.panel = el('div', { class: 'nt-chat-panel', role: 'dialog', 'aria-label': 'Callback chat' });
 
     // Stop clicks on header action buttons from bubbling to the header itself
     // (which is wired to minimize the chat).
@@ -338,12 +340,28 @@
       if (firstName) {
         sayBot('Welcome back, ' + firstName + '! 👋');
       } else {
-        sayBot("Hi! I'm here to set up your free demo — should take under a minute.");
+        sayBot("Hi! I'm here to schedule a callback for you — should take under a minute.");
       }
-      if (profile && profile.phone) {
-        sayBot("Confirm the phone number we have, or update it below.");
+
+      // Wording must match what renderPhoneStep actually shows:
+      //   - Google button hidden  when email is already verified
+      //   - Skip button   shown   when we already have an email on file
+      var verified = !!(state.data.email_verified);
+      var hasEmail = !!(state.data.email);
+
+      if (verified) {
+        // We already have a verified email — only phone + skip on screen.
+        sayBot("Share your phone for the fastest reply, or skip — we have your verified email on file.");
+      } else if (hasEmail) {
+        // Email captured (unverified) — phone + Google + skip all visible.
+        sayBot("Share your phone or WhatsApp number, verify via Google, or skip — we already have your email.");
+      } else if (profile && profile.phone) {
+        // Phone on file but no email — phone (pre-filled) + Google only.
+        sayBot("Confirm the phone number we have, or sign in with Google to add your email.");
       } else {
-        sayBot("What's your phone or WhatsApp number? We'll reach out within an hour.");
+        // Brand-new visitor — phone + Google. No skip, since skipping would
+        // leave us with no contact info.
+        sayBot("Share your phone or WhatsApp number, or sign in with Google to get started.");
       }
     }
     renderStep();
@@ -402,7 +420,26 @@
   }
 
   /* ---------- Step: phone ------------------------------------------------ */
+  /**
+   * Step 1 — primary identification.
+   * Three paths to creating a profile, all visible at once:
+   *   1. Phone input + Send (existing primary flow)
+   *   2. "Continue with Google" — captures email + name → profile created
+   *   3. Skip — advance the chat without contact (no profile yet; later
+   *      steps will get another shot at email/name)
+   */
   function renderPhoneStep() {
+    // Visibility rules for the extra controls at step 1:
+    //   - "Continue with Google" — always shown UNLESS we already have a
+    //     verified email (i.e. user has done Google sign-in before; asking
+    //     again is noise).
+    //   - "Skip for now" — only when we already have the user's email.
+    //     Without an email, skipping leaves the profile empty (no contact
+    //     to follow up on), so we force them to either type phone or use
+    //     Google.
+    var hasVerifiedEmail = !!state.data.email_verified;
+    var hasEmail         = !!state.data.email;
+
     var input = el('input', {
       class: 'nt-chat-input', type: 'tel', inputmode: 'numeric',
       autocomplete: 'tel', placeholder: '+91 98765 43210',
@@ -429,12 +466,41 @@
       if (e.key === 'Enter') { e.preventDefault(); submit(); }
     });
 
-    var btn = el('button', {
+    var sendBtn = el('button', {
       class: 'nt-chat-send', type: 'button', onclick: submit
     }, [el('i', { class: 'fa fa-paper-plane', 'aria-hidden': 'true' }), ' Send']);
 
-    dom.foot.appendChild(el('div', { class: 'nt-chat-input-row' }, [input, btn]));
+    dom.foot.appendChild(el('div', { class: 'nt-chat-input-row' }, [input, sendBtn]));
     dom.foot.appendChild(errBox);
+
+    // Google sign-in — render only if we don't already have a verified email.
+    if (!hasVerifiedEmail) {
+      var divider = el('div', { class: 'nt-chat-divider' }, [el('span', null, 'or')]);
+      var googleSlot = el('div', {
+        class: 'nt-chat-google-slot',
+        id: 'nt-chat-google-slot-phone'
+      });
+      googleSlot.textContent = 'Loading Google sign-in…';
+      dom.foot.appendChild(divider);
+      dom.foot.appendChild(googleSlot);
+      // On success Google's callback advances from 'phone' — same as a
+      // manual phone submit — but with email + name captured instead.
+      initGoogleSlot(googleSlot, 'phone');
+    }
+
+    // Skip — render only if we already have the user's email, so the
+    // profile remains contactable after the skip.
+    if (hasEmail) {
+      var skipBtn = el('button', {
+        class: 'nt-chat-skip', type: 'button',
+        onclick: function () {
+          sayUser('(skipped — will share later)');
+          advance('phone');
+        }
+      }, 'Skip for now →');
+      dom.foot.appendChild(el('div', { style: 'text-align:center;margin-top:6px;' }, [skipBtn]));
+    }
+
     setTimeout(function () { input.focus(); }, 60);
   }
 
@@ -596,10 +662,16 @@
 
     setTimeout(function () { input.focus(); }, 60);
 
-    initGoogleSlot(googleSlot);
+    initGoogleSlot(googleSlot, 'mail');
   }
 
-  function initGoogleSlot(slot) {
+  /**
+   * Renders Google's official sign-in button into `slot`. On a successful
+   * credential, captures email (+ name) into state.data and advances from
+   * `advanceFromStep` — so the same helper powers the phone step (where
+   * Google login is an alternative to phone entry) and the mail step.
+   */
+  function initGoogleSlot(slot, advanceFromStep) {
     var cfg = window.AppConfig || {};
     if (!cfg.googleClientId) {
       slot.textContent = 'Google sign-in unavailable (missing client ID).';
@@ -616,7 +688,7 @@
       try {
         google.accounts.id.initialize({
           client_id: cfg.googleClientId,
-          callback: function (response) { onGoogleCredential(response); },
+          callback: function (response) { onGoogleCredential(response, advanceFromStep); },
           ux_mode: 'popup',
           auto_select: false,
           context: 'signin'
@@ -638,7 +710,7 @@
     });
   }
 
-  function onGoogleCredential(response) {
+  function onGoogleCredential(response, advanceFromStep) {
     if (!response || !response.credential) return;
     var claims = decodeJwt(response.credential);
     if (!claims || !claims.email) return;
@@ -650,8 +722,8 @@
     // backfill it. Saves them retyping later.
     if (claims.name && !state.data.name) state.data.name = claims.name;
 
-    sayUser(claims.email + ' ✓ verified');
-    advance('mail');
+    sayUser(claims.email + ' ✓ verified via Google');
+    advance(advanceFromStep || 'mail');
   }
 
   /* ---------- Step: requirements (free text, skippable) ------------------ */
@@ -753,9 +825,9 @@
         var existingName = (state.data.name || '').split(' ')[0];
         sayBot(existingName
           ? ('Almost done — confirm your name is "' + state.data.name + '", or update it below.')
-          : 'Almost done — what should we call you?');
+          : 'Almost done — what should we call you - Your good name?');
       }
-      else if (nextStep === 'requirements') sayBot("Last one — anything specific we should know before the demo? (Optional — press Skip if nothing comes to mind.)");
+      else if (nextStep === 'requirements') sayBot("Last one — anything specific we should know before the callback? (Optional — press Skip if nothing comes to mind.)");
       else                                  sayBot('All set!');
       renderStep();
     }, 600);
@@ -813,7 +885,7 @@
     if (interestLabels) lines.push('Interests: '    + interestLabels);
     if (d.team_size)    lines.push('Team size: '    + d.team_size);
     if (d.requirements) lines.push('Requirements: ' + d.requirements);
-    lines.push('', 'Looking forward to the demo.');
+    lines.push('', 'Looking forward to the callback.');
 
     return 'https://wa.me/' + WA_NUMBER + '/?text=' + encodeURIComponent(lines.join('\n'));
   }
@@ -861,6 +933,11 @@
     var meta = STEP_META[stageName] || {};
     if (!meta.send_mail) return;
 
+    // "Profile" = phone OR email. Without either we have no lead-worthy
+    // identity, so we never send. (Skipping step 1 with no Google login
+    // and no phone is the realistic case this guards.)
+    if (!state.data.phone && !state.data.email) return;
+
     var cfg = window.AppConfig || {};
     if (!cfg.mailerUrl || !cfg.mailerSecretKey) return;
 
@@ -878,11 +955,10 @@
 
     var subject = subjectFor(stageNum, stageName, state.data, attr, newInterests, isReturning, mailNum);
     var content = buildEmailBody(stageNum, stageName, state.data, attr, newInterests, isReturning, profile, mailNum);
-    var recipients = [
-      cfg.supportEmail || 'support@navlakha.tech',
-      'nnautatva@gmail.com',
-      'mahavirnn@gmail.com'
-    ];
+    // Recipients list lives in lib/custom/js/config.js → recipients.
+    var recipients = (cfg.recipients && cfg.recipients.length)
+      ? cfg.recipients
+      : [cfg.supportEmail || 'support@navlakha.tech', 'nnautatva@gmail.com', 'mahavirnn@gmail.com'];
 
     recipients.forEach(function (to) {
       fetch(cfg.mailerUrl, {
@@ -1227,8 +1303,8 @@
     /* ------ Header + envelope -------------------------------------------- */
 
     var headerLabel = isFinalStage(stageNum)
-      ? 'Demo Request — Complete'
-      : 'Demo Chat — Mail #' + mailNum;
+      ? 'Callback Request — Complete'
+      : 'Callback Chat — Mail #' + mailNum;
     var subHeader = 'Stage ' + stageNum + '/' + STEPS.length + ' · ' + stageName;
 
     return [

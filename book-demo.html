@@ -17,15 +17,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="format-detection" content="telephone=yes" />
   <meta name="HandheldFriendly" content="true" />
 
-  <title>Book a Free Demo | Navlakha Technologies</title>
-  <meta name="description" content="Book a free, no-obligation demo with the Navlakha Technologies team. HRMS, payroll, inventory, CRM & custom software for Indian businesses." />
+  <title>Schedule a Callback | Navlakha Technologies</title>
+  <meta name="description" content="Schedule a free, no-obligation callback with the Navlakha Technologies team. HRMS, payroll, inventory, CRM & custom software for Indian businesses." />
   <link rel="canonical" href="https://www.navlakha.tech/book-demo" />
   <meta name="robots" content="index, follow" />
 
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.navlakha.tech/book-demo" />
-  <meta property="og:title" content="Book a Free Demo | Navlakha Technologies" />
-  <meta property="og:description" content="Tell us about your business and we'll show you exactly how our software can help. Demos are usually scheduled within 24 hours." />
+  <meta property="og:title" content="Schedule a Callback | Navlakha Technologies" />
+  <meta property="og:description" content="Tell us about your business and we'll show you exactly how our software can help. Calls are usually scheduled within 24 hours." />
   <meta property="og:image" content="https://www.navlakha.tech/img/NT_new_logo.png" />
   <meta property="og:site_name" content="Navlakha Technologies" />
 
@@ -57,13 +57,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <main class="nt-demo-wrap">
   <div class="nt-demo-grid">
     <div class="nt-demo-info">
-      <h1>Book a Free Demo</h1>
-      <p class="nt-lead">Tell us a little about your business. We'll set up a 30-minute walk-through with one of our founders — no slides, just the actual product running on real data.</p>
+      <h1>Schedule a Callback</h1>
+      <p class="nt-lead">Tell us a little about your business. We'll set up a quick call with one of our founders — usually 30 minutes, no slides, just the actual product on a screen-share with real data.</p>
 
       <ul class="nt-bullets">
-        <li>See attendance, payroll, inventory, CRM, or custom software live</li>
+        <li>See attendance, payroll, inventory, CRM, or custom software in action</li>
         <li>Get a tailored quote based on your team size &amp; industry</li>
-        <li>Demos usually scheduled within 24 hours</li>
+        <li>Calls usually scheduled within 24 hours</li>
         <li>No sales pressure — talk to engineers, not SDRs</li>
       </ul>
 
@@ -75,7 +75,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <div class="nt-demo-card">
-      <h2>Schedule your demo</h2>
+      <h2>Schedule your callback</h2>
       <p class="nt-sub">We'll WhatsApp or email you within one business day.</p>
 
       <form id="nt-book-demo-form" novalidate>
@@ -153,7 +153,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
 
         <button type="submit" class="nt-submit-btn" id="bd-submit">
-          <i class="fa fa-calendar-check-o"></i> &nbsp; Request My Demo
+          <i class="fa fa-calendar-check-o"></i> &nbsp; Request My Callback
         </button>
 
         <div class="nt-form-error" id="bd-error">Sorry — something went wrong sending your request. Please WhatsApp us at <a href="https://wa.me/918275269688">+91 8275269688</a>.</div>
@@ -263,7 +263,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (!cfg.mailerUrl || !cfg.mailerSecretKey) {
       return Promise.reject(new Error('Mailer not configured'));
     }
-    var recipients = [cfg.supportEmail || 'support@navlakha.tech', 'nnautatva@gmail.com', 'mahavirnn@gmail.com'];
+    // Recipients live in lib/custom/js/config.js → recipients.
+    var recipients = (cfg.recipients && cfg.recipients.length)
+      ? cfg.recipients
+      : [cfg.supportEmail || 'support@navlakha.tech', 'nnautatva@gmail.com', 'mahavirnn@gmail.com'];
     var sourceTag = attr && attr.utm_source ? ' [' + attr.utm_source + ']' : '';
     var subject = '🔔 Demo Request' + sourceTag + ': ' + data.name + ' (' + data.company + ')';
     var content = buildEmail(data, attr);
@@ -322,7 +325,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       location.href = 'thank-you.html';
     }).catch(function () {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fa fa-calendar-check-o"></i> &nbsp; Request My Demo';
+      submitBtn.innerHTML = '<i class="fa fa-calendar-check-o"></i> &nbsp; Request My Callback';
       errorBox.style.display = 'block';
     });
   });

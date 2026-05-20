@@ -19,10 +19,16 @@
   'use strict';
 
   var STORAGE_KEY = 'nt_profile_v1';
-  var TTL_MS = 365 * 24 * 60 * 60 * 1000;
+  // Config-driven (lib/custom/js/config.js → profileTtlDays). Falls back
+  // to 365 days if config didn't load.
+  var TTL_MS = ((window.AppConfig && AppConfig.profileTtlDays) || 365) * 24 * 60 * 60 * 1000;
 
-  /** filename → interest key (matches demo-chatbot INTERESTS list). */
-  var PRODUCT_BY_PAGE = {
+  /**
+   * Filename → interest key. Single source of truth lives in
+   * lib/custom/js/config.js → productByPage. The hardcoded fallback below
+   * is used only if config.js failed to load.
+   */
+  var PRODUCT_BY_PAGE = (window.AppConfig && AppConfig.productByPage) || {
     'hrms.html':                'attendance_payroll',
     'contractor-hrms.html':     'attendance_payroll',
     'casual-labour-hrms.html':  'attendance_payroll',
@@ -115,7 +121,9 @@
       chat_open_count: 0,
       // How many emails have been sent to the team about this lead.
       // Bumped by NTProfile.bumpEmailsSentCount() right before each send.
-      emails_sent_count: 0
+      emails_sent_count: 0,
+      // Activity-email rate-limit state. Updated by the activity-emailer.
+      activity_email_log: [] // [{ at: ms, kind: 'session' | 'pricing' | ... }]
     };
   }
 
@@ -147,6 +155,7 @@
   if (typeof profile.total_time_on_site_ms !== 'number') profile.total_time_on_site_ms = 0;
   if (typeof profile.chat_open_count !== 'number')      profile.chat_open_count = 0;
   if (typeof profile.emails_sent_count !== 'number')    profile.emails_sent_count = 0;
+  if (!Array.isArray(profile.activity_email_log))       profile.activity_email_log = [];
   if (!profile.page_views_by_path || typeof profile.page_views_by_path !== 'object') profile.page_views_by_path = {};
   if (typeof profile.client_context === 'undefined')    profile.client_context = null;
 
@@ -324,6 +333,37 @@
       profile.last_activity_at = Date.now();
       persist();
       return profile.emails_sent_count;
+    },
+
+    /**
+     * Rate-limit gate for activity emails (passive notifications that fire
+     * outside the chatbot). Returns true if we should send right now.
+     *   - max 1 email per `cooldownMs` (default 30 min)
+     *   - max `dailyMax` per rolling 24h window (default 3)
+     *   - de-dupes on `kind` — same kind won't fire twice in 6h
+     */
+    canSendActivityEmail: function (kind, opts) {
+      opts = opts || {};
+      var cooldownMs = opts.cooldownMs || 30 * 60 * 1000;
+      var dailyMax   = opts.dailyMax   || 3;
+      var kindCooldownMs = opts.kindCooldownMs || 6 * 60 * 60 * 1000;
+      var now = Date.now();
+      var log = profile.activity_email_log || [];
+      // prune entries older than 24h
+      log = log.filter(function (e) { return now - e.at < 24 * 60 * 60 * 1000; });
+      profile.activity_email_log = log;
+
+      if (log.length > 0 && now - log[log.length - 1].at < cooldownMs) return false;
+      if (log.length >= dailyMax) return false;
+      var lastOfKind = log.filter(function (e) { return e.kind === kind; }).pop();
+      if (lastOfKind && now - lastOfKind.at < kindCooldownMs) return false;
+      return true;
+    },
+
+    /** Record that an activity email of `kind` was just sent. */
+    recordActivityEmail: function (kind) {
+      profile.activity_email_log.push({ at: Date.now(), kind: kind });
+      persist();
     },
 
     /** Wipe everything — useful for QA and "Forget me" actions. */

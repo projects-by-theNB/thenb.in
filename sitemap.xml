@@ -15,10 +15,14 @@
 <!-- Primary conversion page -->
 <url>
   <loc>https://www.navlakha.tech/book-demo</loc>
-  <lastmod>2026-05-20</lastmod>
+  <lastmod>2026-05-21</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.95</priority>
 </url>
+
+<!-- High-intent order form (10% off) — noindex in HTML; intentionally
+     omitted from sitemap so it stays out of organic search. -->
+
 
 <!-- HRMS / Attendance & Payroll cluster -->
 <url>

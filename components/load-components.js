@@ -115,6 +115,10 @@
     loadScript('js/client-context.js');
     loadScript('js/click-tracking.js');
     loadScript('js/demo-chatbot.js');
+    // Sends mails when a known profile (phone OR email) keeps interacting
+    // with the site outside the chatbot — session returns, pricing views,
+    // deep scrolls, repeat product visits. Rate-limited inside.
+    loadScript('js/activity-emailer.js');
   }
 
   if (document.readyState === 'loading') {

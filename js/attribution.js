@@ -20,7 +20,9 @@
   'use strict';
 
   var STORAGE_KEY = 'nt_attribution_v1';
-  var TTL_DAYS = 90;
+  // Config-driven TTL (lib/custom/js/config.js → attributionTtlDays).
+  // Falls back to 90 days if config didn't load.
+  var TTL_DAYS = (window.AppConfig && AppConfig.attributionTtlDays) || 90;
   var TTL_MS = TTL_DAYS * 24 * 60 * 60 * 1000;
 
   var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
