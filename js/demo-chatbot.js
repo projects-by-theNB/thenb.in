@@ -83,6 +83,10 @@
       stageEmailed: 0,
       resetCount: 0,
       autoTaggedFrom: null,
+      // True once we've auto-expanded the panel for this session. Prevents
+      // re-popping on every subsequent page nav, while still allowing the
+      // user to manually re-open via the launcher.
+      autoExpanded: false,
       data: {
         phone: '', interests: [], team_size: '',
         email: '', email_verified: false,
@@ -145,6 +149,7 @@
   var state = loadState() || initialState();
   if (state.resetCount == null) state.resetCount = 0;
   if (typeof state.autoTaggedFrom === 'undefined') state.autoTaggedFrom = null;
+  if (typeof state.autoExpanded === 'undefined') state.autoExpanded = false;
   applyProfileToState();
 
   var dom = {};
@@ -335,36 +340,14 @@
     state.messages.forEach(function (m) { renderMessage(m.who, m.text, false); });
 
     if (state.messages.length === 0) {
-      var profile = getProfile();
-      var firstName = profile && profile.name ? profile.name.split(' ')[0] : '';
-      if (firstName) {
-        sayBot('Welcome back, ' + firstName + '! 👋');
-      } else {
-        sayBot("Hi! I'm here to schedule a callback for you — should take under a minute.");
-      }
-
-      // Wording must match what renderPhoneStep actually shows:
-      //   - Google button hidden  when email is already verified
-      //   - Skip button   shown   when we already have an email on file
-      var verified = !!(state.data.email_verified);
-      var hasEmail = !!(state.data.email);
-
-      if (verified) {
-        // We already have a verified email — only phone + skip on screen.
-        sayBot("Share your phone for the fastest reply, or skip — we have your verified email on file.");
-      } else if (hasEmail) {
-        // Email captured (unverified) — phone + Google + skip all visible.
-        sayBot("Share your phone or WhatsApp number, verify via Google, or skip — we already have your email.");
-      } else if (profile && profile.phone) {
-        // Phone on file but no email — phone (pre-filled) + Google only.
-        sayBot("Confirm the phone number we have, or sign in with Google to add your email.");
-      } else {
-        // Brand-new visitor — phone + Google. No skip, since skipping would
-        // leave us with no contact info.
-        sayBot("Share your phone or WhatsApp number, or sign in with Google to get started.");
-      }
+      // First-time open: reveal intro messages with a typing indicator
+      // between each — mimics a real human chatting on the other side.
+      // renderStep() is deferred until the bot has "finished typing".
+      playIntroSequence();
+    } else {
+      // Returning to an existing conversation — show the input immediately.
+      renderStep();
     }
-    renderStep();
   }
 
   function renderMessage(who, text, animate) {
@@ -835,6 +818,7 @@
 
   var typingNode = null;
   function showTyping() {
+    if (!dom.body) return;
     typingNode = el('div', { class: 'nt-chat-typing', 'aria-label': 'Typing' }, [
       el('span'), el('span'), el('span')
     ]);
@@ -844,6 +828,52 @@
   function hideTyping() {
     if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
     typingNode = null;
+  }
+
+  /**
+   * Reveal the chat's intro messages one at a time, with a typing
+   * indicator between each. Defers renderStep() until the bot has
+   * "finished talking" so the input doesn't pop up before the question.
+   * Bails gracefully if the panel gets closed mid-sequence.
+   */
+  function playIntroSequence() {
+    var profile = getProfile();
+    var firstName = profile && profile.name ? profile.name.split(' ')[0] : '';
+    var verified  = !!state.data.email_verified;
+    var hasEmail  = !!state.data.email;
+
+    var msgs = [];
+    msgs.push(firstName
+      ? 'Welcome back, ' + firstName + '! 👋'
+      : "Hi! I'm here to schedule a callback for you — should take under a minute.");
+
+    if (verified) {
+      msgs.push("Share your phone for the fastest reply, or skip — we have your verified email on file.");
+    } else if (hasEmail) {
+      msgs.push("Share your phone or WhatsApp number, verify via Google, or skip — we already have your email.");
+    } else if (profile && profile.phone) {
+      msgs.push("Confirm the phone number we have, or sign in with Google to add your email.");
+    } else {
+      msgs.push("Share your phone or WhatsApp number, or sign in with Google to get started.");
+    }
+
+    revealIntroNext(msgs, 0);
+  }
+
+  function revealIntroNext(msgs, idx) {
+    if (!state.open || !dom.body) return;        // panel closed mid-flight
+    if (idx >= msgs.length) { renderStep(); return; }
+
+    showTyping();
+    // First message comes a touch quicker so the panel doesn't feel inert
+    // when it auto-opens; subsequent messages get a longer "thinking" beat.
+    var typingFor = idx === 0 ? 650 : 950;
+    setTimeout(function () {
+      if (!state.open || !dom.body) return;
+      hideTyping();
+      sayBot(msgs[idx]);
+      setTimeout(function () { revealIntroNext(msgs, idx + 1); }, 250);
+    }, typingFor);
   }
 
   /* ---------- Success screen ---------------------------------------------- */
@@ -1333,6 +1363,28 @@
   }
 
   /* ---------- Boot -------------------------------------------------------- */
+  // Pages where we don't want to nag the visitor with an auto-expand —
+  // they already have a form / a thank-you / a policy in front of them.
+  var AUTO_EXPAND_BLOCKED_PATHS = /book-demo|thank-you|order|privacy|reach|meet/i;
+
+  function shouldAutoExpand() {
+    if (state.open) return false;                                 // already open (resumed session)
+    if (state.autoExpanded) return false;                         // already tried this session
+    if (state.stageEmailed >= STEPS.length) return false;         // chat already completed
+    if (AUTO_EXPAND_BLOCKED_PATHS.test(location.pathname)) return false;
+    return true;
+  }
+
+  function maybeAutoExpand() {
+    if (!shouldAutoExpand()) return;
+    state.autoExpanded = true;
+    saveState();
+    // Re-check just before opening — the user might have clicked the
+    // launcher in the 1 s grace window.
+    if (state.open) return;
+    open();
+  }
+
   function boot() {
     if (!document.getElementById('nt-chatbot-root')) {
       var div = document.createElement('div');
@@ -1340,6 +1392,9 @@
       document.body.appendChild(div);
     }
     mount();
+    // 1-second grace before the panel pops up so the page can finish
+    // settling visually — matches Intercom / Drift defaults.
+    setTimeout(maybeAutoExpand, 1000);
   }
 
   if (document.readyState === 'loading') {
