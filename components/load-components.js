@@ -105,8 +105,16 @@
     loadHtml('header-placeholder', COMPONENTS + 'header.html', initHeader);
     loadHtml('footer-placeholder', COMPONENTS + 'footer.html', initFooter);
     loadHtml('module-details-placeholder', 'sections/module-details.html');
+    // config.js exposes window.AppConfig (mailer creds + Google client ID)
+    // — load it first so chatbot + Google sign-in can use it on every page.
+    loadScript('lib/custom/js/config.js');
     loadScript('js/attribution.js');
+    loadScript('js/profile.js');
+    // Passive context (device, browser, scroll depth, sessions, page views)
+    // — depends on NTProfile so loads after it.
+    loadScript('js/client-context.js');
     loadScript('js/click-tracking.js');
+    loadScript('js/demo-chatbot.js');
   }
 
   if (document.readyState === 'loading') {

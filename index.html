@@ -199,6 +199,24 @@ Some of our clients –
     }
     </script>
 
+    <!-- JSON-LD: SiteNavigationElement — hints to Google what our primary nav looks like.
+         Helps sitelinks selection and breadcrumb generation on branded queries. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Navlakha Technologies — Primary Navigation",
+      "itemListElement": [
+        {"@type": "SiteNavigationElement", "position": 1, "name": "Attendance & Payroll (HRMS)", "url": "https://www.navlakha.tech/hrms"},
+        {"@type": "SiteNavigationElement", "position": 2, "name": "ERP Suite",                   "url": "https://www.navlakha.tech/erp"},
+        {"@type": "SiteNavigationElement", "position": 3, "name": "Store & Inventory",           "url": "https://www.navlakha.tech/inventory"},
+        {"@type": "SiteNavigationElement", "position": 4, "name": "Sales Tracking & CRM",        "url": "https://www.navlakha.tech/crm"},
+        {"@type": "SiteNavigationElement", "position": 5, "name": "Custom Software",             "url": "https://www.navlakha.tech/custom"},
+        {"@type": "SiteNavigationElement", "position": 6, "name": "Book a Free Demo",            "url": "https://www.navlakha.tech/book-demo"}
+      ]
+    }
+    </script>
+
     <!-- Favicons -->
     <!-- https://realfavicongenerator.net/favicon_result?file_id=p1fghp7a4b1gkrbn91c1a1041f0j6#.YVDNSjFBw2x -->
     <link
@@ -275,9 +293,26 @@ Some of our clients –
   <script>
     (function () {
       var el = document.getElementById('g_id_onload');
-      if (el && typeof AppConfig !== 'undefined' && AppConfig.googleClientId) {
+      if (!el) return;
+
+      // Skip Google One Tap entirely if the chatbot has already captured
+      // contact info (phone / name / email) for this visitor — no point
+      // asking them to identify again.
+      try {
+        var raw = localStorage.getItem('nt_profile_v1');
+        if (raw) {
+          var p = JSON.parse(raw);
+          if (p && (p.phone || p.name || p.email)) {
+            console.info('[NT] Discount modal suppressed — chatbot profile present (Google One Tap skipped)');
+            el.parentNode && el.parentNode.removeChild(el);
+            return;
+          }
+        }
+      } catch (e) {}
+
+      if (typeof AppConfig !== 'undefined' && AppConfig.googleClientId) {
         el.setAttribute('data-client_id', AppConfig.googleClientId);
-      } else if (el && el.parentNode) {
+      } else if (el.parentNode) {
         el.parentNode.removeChild(el);
       }
     })();
@@ -302,7 +337,7 @@ Some of our clients –
         </h1>
 
         <p class="hero-subtext">
-          Attendance &amp; Payroll &nbsp;·&nbsp; Attendance &nbsp;·&nbsp; Store Inventory &nbsp;·&nbsp; Sales Tracking &nbsp;·&nbsp; Custom Apps
+          Attendance &nbsp;·&nbsp; Payroll &nbsp;·&nbsp; Store Inventory &nbsp;·&nbsp; Sales Tracking &nbsp;·&nbsp; Custom Apps
         </p>
 
         <p class="hero-desc">
