@@ -1,0 +1,149 @@
+/* =========================================================
+   Book a Demo page — paired with book-demo.html.
+   ========================================================= */
+
+.nt-demo-wrap { padding: 80px 0 60px; background: #f8fafc; }
+
+.nt-demo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+@media (max-width: 900px) {
+  .nt-demo-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+
+.nt-demo-info h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+  margin: 0 0 14px;
+}
+.nt-demo-info p.nt-lead {
+  font-size: 16px;
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.nt-demo-info ul.nt-bullets { list-style: none; padding: 0; margin: 0 0 24px; }
+.nt-demo-info ul.nt-bullets li {
+  padding: 8px 0 8px 28px;
+  position: relative;
+  font-size: 14px;
+  color: #1e293b;
+}
+.nt-demo-info ul.nt-bullets li:before {
+  content: "\f00c";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 0;
+  top: 9px;
+  color: #16a34a;
+  font-size: 14px;
+}
+
+.nt-demo-trust {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-top: 18px;
+  border-top: 1px solid #e2e8f0;
+}
+.nt-demo-trust .nt-trust-stat { font-size: 13px; color: #64748b; }
+.nt-demo-trust .nt-trust-stat strong { display: block; font-size: 22px; color: #0f172a; }
+
+.nt-demo-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 6px 32px rgba(15, 23, 42, 0.08);
+}
+.nt-demo-card h2 { font-size: 22px; font-weight: 700; color: #0f172a; margin: 0 0 6px; }
+.nt-demo-card p.nt-sub { font-size: 14px; color: #64748b; margin-bottom: 22px; }
+
+.nt-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 600px) {
+  .nt-form-row { grid-template-columns: 1fr; }
+}
+
+.nt-field { margin-bottom: 14px; }
+.nt-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+}
+.nt-field label .nt-req { color: #dc2626; }
+.nt-field input,
+.nt-field select,
+.nt-field textarea {
+  width: 100%;
+  padding: 11px 13px;
+  font-size: 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  color: #0f172a;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color .15s ease;
+}
+.nt-field textarea { min-height: 92px; resize: vertical; }
+.nt-field input:focus,
+.nt-field select:focus,
+.nt-field textarea:focus { border-color: #2f5597; }
+.nt-field .nt-err {
+  font-size: 12px;
+  color: #dc2626;
+  margin-top: 4px;
+  display: none;
+}
+.nt-field.is-invalid input,
+.nt-field.is-invalid select { border-color: #dc2626; }
+.nt-field.is-invalid .nt-err { display: block; }
+
+.nt-submit-btn {
+  width: 100%;
+  padding: 14px 22px;
+  background: #2f5597;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s ease;
+  margin-top: 8px;
+}
+.nt-submit-btn:hover { background: #244476; }
+.nt-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+
+.nt-form-foot {
+  font-size: 12px;
+  color: #64748b;
+  text-align: center;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+.nt-form-foot a { color: #2f5597; }
+
+.nt-form-error {
+  display: none;
+  background: #fef2f2;
+  color: #991b1b;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-top: 12px;
+}

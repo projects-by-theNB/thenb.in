@@ -1,0 +1,86 @@
+/* =========================================================
+   Thank You / lead-success page — paired with thank-you.html.
+   ========================================================= */
+
+.nt-thanks-wrap {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background: #f8fafc;
+}
+
+.nt-thanks-card {
+  max-width: 560px;
+  width: 100%;
+  background: #fff;
+  border-radius: 14px;
+  padding: 44px 36px;
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+  text-align: center;
+}
+
+.nt-thanks-ico {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.nt-thanks-card h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 12px;
+}
+.nt-thanks-card p {
+  font-size: 15px;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0 0 8px;
+}
+
+.nt-thanks-next {
+  margin-top: 28px;
+  padding: 18px 20px;
+  background: #f1f5f9;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1e293b;
+  text-align: left;
+}
+.nt-thanks-next strong { display: block; margin-bottom: 6px; }
+
+.nt-thanks-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.nt-thanks-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+.nt-thanks-btn.primary { background: #25d366; color: #fff; }
+.nt-thanks-btn.primary:hover { background: #1faf52; color: #fff; }
+.nt-thanks-btn.secondary {
+  background: #fff;
+  color: #2f5597;
+  border: 1.5px solid #2f5597;
+}
+.nt-thanks-btn.secondary:hover { background: #f1f5f9; }

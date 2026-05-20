@@ -1,0 +1,230 @@
+/* =========================================================
+   Place Order page — paired with order.html.
+   Premium conversion path for hot leads (10% straight off).
+   ========================================================= */
+
+.nt-order-wrap { padding: 60px 0 80px; background: #f8fafc; }
+
+.nt-order-banner {
+  max-width: 1100px;
+  margin: 0 auto 28px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #2f5597, #244476);
+  color: #fff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 8px 24px rgba(47, 85, 151, 0.25);
+}
+.nt-order-banner-badge {
+  font-size: 28px;
+  font-weight: 800;
+  background: #00fd59;
+  color: #0f172a;
+  padding: 8px 16px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  letter-spacing: -1px;
+}
+.nt-order-banner-text { flex: 1; }
+.nt-order-banner-text h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+.nt-order-banner-text p {
+  margin: 0;
+  font-size: 13px;
+  opacity: .88;
+  line-height: 1.5;
+}
+
+.nt-order-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1.4fr;
+  gap: 36px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+@media (max-width: 900px) {
+  .nt-order-grid { grid-template-columns: 1fr; gap: 28px; }
+}
+
+.nt-order-info h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+  margin: 0 0 14px;
+}
+.nt-order-info p.nt-lead {
+  font-size: 15px;
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.nt-order-pricing-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+.nt-order-pricing-card strong {
+  display: block;
+  font-size: 13px;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.nt-order-pricing-card ul { list-style: none; padding: 0; margin: 0; }
+.nt-order-pricing-card li {
+  padding: 6px 0 6px 24px;
+  position: relative;
+  font-size: 13px;
+  color: #1e293b;
+  line-height: 1.5;
+}
+.nt-order-pricing-card li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.nt-order-trust {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  padding-top: 18px;
+  border-top: 1px solid #e2e8f0;
+}
+.nt-order-trust-stat { font-size: 13px; color: #64748b; }
+.nt-order-trust-stat strong { display: block; font-size: 22px; color: #0f172a; }
+
+.nt-order-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 6px 32px rgba(15, 23, 42, 0.08);
+}
+
+.nt-order-section {
+  margin-bottom: 26px;
+  padding-bottom: 22px;
+  border-bottom: 1px dashed #e2e8f0;
+}
+.nt-order-section:last-of-type { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+.nt-order-section h3 {
+  margin: 0 0 14px;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #0f172a;
+  font-weight: 700;
+  padding-left: 10px;
+  border-left: 4px solid #2f5597;
+}
+
+.nt-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 600px) {
+  .nt-form-row { grid-template-columns: 1fr; }
+}
+
+.nt-field { margin-bottom: 12px; }
+.nt-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 5px;
+}
+.nt-field label .nt-req { color: #dc2626; }
+.nt-field label .nt-opt { color: #94a3b8; font-weight: 500; font-size: 11px; margin-left: 4px; }
+.nt-field input,
+.nt-field select,
+.nt-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  color: #0f172a;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color .15s ease;
+}
+.nt-field textarea { min-height: 80px; resize: vertical; }
+.nt-field input:focus,
+.nt-field select:focus,
+.nt-field textarea:focus { border-color: #2f5597; }
+.nt-field .nt-err {
+  font-size: 12px;
+  color: #dc2626;
+  margin-top: 4px;
+  display: none;
+}
+.nt-field.is-invalid input,
+.nt-field.is-invalid select { border-color: #dc2626; }
+.nt-field.is-invalid .nt-err { display: block; }
+
+.nt-submit-btn {
+  width: 100%;
+  padding: 16px 22px;
+  background: #2f5597;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s ease;
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.nt-submit-btn:hover { background: #244476; }
+.nt-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+.nt-submit-btn .nt-pill {
+  background: #00fd59;
+  color: #0f172a;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: .5px;
+}
+
+.nt-form-foot {
+  font-size: 12px;
+  color: #64748b;
+  text-align: center;
+  margin-top: 14px;
+  line-height: 1.6;
+}
+.nt-form-foot a { color: #2f5597; }
+
+.nt-form-error {
+  display: none;
+  background: #fef2f2;
+  color: #991b1b;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-top: 12px;
+}

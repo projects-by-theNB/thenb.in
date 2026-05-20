@@ -114,6 +114,8 @@
     // — depends on NTProfile so loads after it.
     loadScript('js/client-context.js');
     loadScript('js/click-tracking.js');
+    // No-op on pages without [data-track-form]; safe to load globally.
+    loadScript('js/form-tracking.js');
     loadScript('js/demo-chatbot.js');
     // Sends mails when a known profile (phone OR email) keeps interacting
     // with the site outside the chatbot — session returns, pricing views,

@@ -1,0 +1,472 @@
+/* =========================================================
+   Demo chatbot widget — paired with js/demo-chatbot.js.
+   Mount point: <div id="nt-chatbot-root"></div> (in footer.html).
+   ========================================================= */
+
+/* ----- Launcher pill (bottom-right) -------------------------------------- */
+.nt-chat-launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 99998;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px 12px 14px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 999px;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.nt-chat-launcher:hover {
+  transform: translateY(-1px);
+  background: #f8fafc;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+}
+
+.nt-chat-launcher-ico {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #2f5597;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.nt-chat-launcher-ico i {
+  font-size: 15px;
+  line-height: 1;
+  color: #ffffff;
+}
+
+.nt-chat-launcher-text {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+}
+.nt-chat-launcher-title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .1px;
+  color: #0f172a;
+}
+.nt-chat-launcher-sub {
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.nt-chat-launcher-sub::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #16a34a;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(22, 163, 74, .55);
+  animation: nt-chat-pulse 2s infinite;
+}
+@keyframes nt-chat-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(22, 163, 74, .55); }
+  70%  { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+}
+
+/* ----- Chat panel -------------------------------------------------------- */
+.nt-chat-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 96px;
+  z-index: 99999;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  /* Content-sized: starts compact at step 1 (just two bot messages + the
+     phone input) and grows as the conversation accumulates, capped at the
+     original 560px max. */
+  min-height: 280px;
+  max-height: min(560px, calc(100vh - 120px));
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 18px 60px rgba(15, 23, 42, .22);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  transform-origin: bottom right;
+  animation: nt-chat-in .25s ease-out;
+}
+.nt-chat-panel.is-leaving {
+  animation: nt-chat-out .22s ease-in forwards;
+  pointer-events: none;
+}
+@keyframes nt-chat-in {
+  from { opacity: 0; transform: translateY(12px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes nt-chat-out {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(16px) scale(.94); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nt-chat-panel, .nt-chat-panel.is-leaving { animation: none; }
+}
+
+.nt-chat-head {
+  background: #2f5597;
+  color: #fff;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s ease;
+}
+.nt-chat-head:hover  { background: #2a4d89; }
+.nt-chat-head:focus-visible { outline: 2px solid #00fd59; outline-offset: -2px; }
+.nt-chat-head-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #00fd59;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.nt-chat-head-text { flex: 1; min-width: 0; }
+.nt-chat-head-title { font-size: 15px; font-weight: 700; line-height: 1.2; margin: 0; }
+.nt-chat-head-sub {
+  font-size: 12px;
+  opacity: .85;
+  line-height: 1.3;
+  margin: 2px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nt-chat-head-sub::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #00fd59;
+  border-radius: 50%;
+}
+
+.nt-chat-head-actions { display: inline-flex; gap: 4px; align-items: center; }
+.nt-chat-head-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  opacity: .85;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
+  transition: opacity .15s ease, background .15s ease;
+}
+.nt-chat-head-btn:hover:not(:disabled) { opacity: 1; background: rgba(255,255,255,.12); }
+.nt-chat-head-btn:disabled { opacity: .35; cursor: not-allowed; background: transparent; }
+.nt-chat-head-btn.close { font-size: 20px; }
+
+/* ----- Inline reset confirmation card ------------------------------------ */
+.nt-chat-confirm {
+  align-self: center;
+  max-width: 90%;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .06);
+}
+.nt-chat-confirm p { margin: 0 0 12px; font-size: 13px; color: #0f172a; line-height: 1.5; }
+.nt-chat-confirm .actions { display: flex; gap: 8px; justify-content: center; }
+.nt-chat-confirm button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.nt-chat-confirm .yes { background: #dc2626; color: #fff; }
+.nt-chat-confirm .yes:hover { background: #b91c1c; }
+.nt-chat-confirm .no { background: #fff; color: #0f172a; border: 1px solid #cbd5e1; }
+.nt-chat-confirm .no:hover { background: #f1f5f9; }
+
+/* ----- Messages list ----------------------------------------------------- */
+.nt-chat-body {
+  /* flex:1 1 auto + min-height:0 lets the body grow with content but
+     also shrink + scroll once the panel hits its max-height. Without
+     min-height:0 the body refuses to shrink below its content size,
+     and the panel ignores its max-height. */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px;
+  background: #f7f9fc;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-behavior: smooth;
+}
+.nt-chat-msg {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.45;
+  animation: nt-msg-in .2s ease-out;
+}
+@keyframes nt-msg-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+.nt-chat-msg.bot {
+  background: #fff;
+  color: #0f172a;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .06);
+}
+.nt-chat-msg.user {
+  background: #2f5597;
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.nt-chat-typing {
+  align-self: flex-start;
+  padding: 10px 14px;
+  background: #fff;
+  border-radius: 14px;
+  border-bottom-left-radius: 4px;
+  display: inline-flex;
+  gap: 4px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .06);
+}
+.nt-chat-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #94a3b8;
+  animation: nt-typing 1.2s infinite ease-in-out;
+}
+.nt-chat-typing span:nth-child(2) { animation-delay: .15s; }
+.nt-chat-typing span:nth-child(3) { animation-delay: .3s; }
+@keyframes nt-typing {
+  0%, 80%, 100% { opacity: .3; transform: translateY(0); }
+  40%           { opacity: 1; transform: translateY(-3px); }
+}
+
+/* ----- Input footer ------------------------------------------------------ */
+.nt-chat-foot { padding: 12px 14px; border-top: 1px solid #e2e8f0; background: #fff; }
+.nt-chat-input-row { display: flex; gap: 8px; align-items: flex-end; }
+.nt-chat-input,
+.nt-chat-textarea {
+  flex: 1;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #0f172a;
+  outline: none;
+  background: #fff;
+  transition: border-color .15s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+.nt-chat-textarea { resize: none; min-height: 40px; max-height: 120px; line-height: 1.4; }
+.nt-chat-input:focus,
+.nt-chat-textarea:focus { border-color: #2f5597; }
+.nt-chat-send {
+  background: #2f5597;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.nt-chat-send:hover { background: #244476; }
+.nt-chat-send:disabled { background: #94a3b8; cursor: not-allowed; }
+.nt-chat-skip {
+  background: transparent;
+  color: #64748b;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 6px 10px;
+  margin-left: 4px;
+}
+.nt-chat-skip:hover { color: #0f172a; text-decoration: underline; }
+.nt-chat-error { color: #dc2626; font-size: 12px; margin: 4px 0 0 4px; }
+
+/* ----- Email step: "or" divider + Google sign-in slot -------------------- */
+.nt-chat-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 8px;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+}
+.nt-chat-divider::before,
+.nt-chat-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e2e8f0;
+}
+
+.nt-chat-google-slot {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #64748b;
+}
+.nt-chat-google-slot.is-unavailable {
+  color: #94a3b8;
+  font-style: italic;
+}
+/* Google's rendered button comes inside its own iframe — give it room. */
+.nt-chat-google-slot > div { max-width: 100%; }
+
+/* ----- Interest chips (multi-select) ------------------------------------- */
+.nt-chat-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.nt-chat-chip {
+  background: #fff;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .15s ease;
+  font-family: inherit;
+}
+.nt-chat-chip:hover { border-color: #2f5597; }
+.nt-chat-chip.selected { background: #2f5597; border-color: #2f5597; color: #fff; }
+.nt-chat-chip.selected::before { content: "✓ "; font-weight: 700; }
+
+/* ----- Team size quick-replies ------------------------------------------ */
+.nt-chat-quick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.nt-chat-quick-btn {
+  background: #fff;
+  border: 1.5px solid #2f5597;
+  color: #2f5597;
+  padding: 9px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s ease;
+  font-family: inherit;
+}
+.nt-chat-quick-btn:hover { background: #2f5597; color: #fff; }
+
+/* ----- Success screen ---------------------------------------------------- */
+.nt-chat-success { text-align: center; padding: 12px 8px; }
+.nt-chat-success-ico {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #15803d;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+.nt-chat-success h4 { font-size: 16px; color: #0f172a; margin: 0 0 6px; font-weight: 700; }
+.nt-chat-success p  { font-size: 13px; color: #475569; margin: 0 0 14px; line-height: 1.5; }
+.nt-chat-success a.wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #25d366;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.nt-chat-success a.wa:hover { background: #1faf52; color: #fff; }
+
+/* Push the existing floating WhatsApp button above the chatbot launcher. */
+.nt-wa-btn { bottom: 96px !important; right: 24px !important; }
+
+/* ----- Mobile ------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .nt-chat-launcher {
+    right: 16px;
+    bottom: 16px;
+    padding: 10px 14px 10px 12px;
+    gap: 9px;
+  }
+  .nt-chat-launcher-ico { width: 26px; height: 26px; }
+  .nt-chat-launcher-ico i { font-size: 13px; }
+  .nt-chat-launcher-title { font-size: 13px; }
+  .nt-chat-launcher-sub   { font-size: 10.5px; }
+
+  .nt-chat-panel {
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    /* Content-sized bottom sheet: starts at ~half the viewport (enough
+       for the first question + keyboard) and grows up to 90vh. */
+    min-height: 50vh;
+    max-height: 90vh;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .nt-wa-btn {
+    bottom: 74px !important;
+    right: 16px !important;
+    width: 44px !important;
+    height: 44px !important;
+    display: flex !important;
+  }
+  .nt-wa-btn .fa-whatsapp { font-size: 21px !important; }
+  .nt-wa-btn .nt-wa-tooltip { display: none; }
+}
