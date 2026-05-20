@@ -19,7 +19,7 @@ Some of our clients –
   })(window,document,'script','dataLayer','GTM-KBSL779S');</script>
   <!-- End Google Tag Manager -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta name="format-detection" content="telephone=yes" />
     <meta name="HandheldFriendly" content="true" />
@@ -247,17 +247,6 @@ Some of our clients –
     License: https://bootstrapmade.com/license/
   ======================================================= -->
 
-  <!-- ===== Google Analytics 4 (Visitor Tracking) ===== -->
-  <!-- SETUP: Replace G-XXXXXXXXXX with your GA4 Measurement ID from analytics.google.com -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
-  </script>
-  <!-- ===== End Analytics ===== -->
-
   <!-- App config (must load before Google Identity Services so client_id is available) -->
   <script src="lib/custom/js/config.js"></script>
 
@@ -289,14 +278,6 @@ Some of our clients –
       }
     })();
   </script>
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1XPJ432D61"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag("js", new Date());
-      gtag("config", "G-1XPJ432D61");
-    </script>
     <div id="header-placeholder"></div>
 
     <!--==========================
@@ -325,10 +306,10 @@ Some of our clients –
         </p>
 
         <div class="hero-ctas">
-          <a href="https://wa.me/918275269688/?text=Hi, I want a free demo!" target="_blank" rel="noopener noreferrer" class="hero-btn-primary">
-            <i class="fa fa-whatsapp"></i> Book a Free Demo
+          <a href="book-demo.html" class="hero-btn-primary" data-cta-type="book_demo" data-cta-location="hero">
+            <i class="fa fa-calendar-check-o"></i> Book a Free Demo
           </a>
-          <a href="#modules" class="hero-btn-secondary scrollto">
+          <a href="#modules" class="hero-btn-secondary scrollto" data-cta-type="explore_products" data-cta-location="hero">
             Explore Products &nbsp;<i class="fa fa-arrow-right"></i>
           </a>
         </div>

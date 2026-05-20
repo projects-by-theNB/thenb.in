@@ -37,7 +37,40 @@
   </div>
 </footer>
 <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
-<a href="https://wa.me/919404065828/?text=Hi!%20I'd%20like%20to%20know%20more%20about%20Navlakha%20Technologies%20and%20your%20solutions." class="nt-wa-btn" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
+<a href="https://wa.me/919404065828/?text=Hi!%20I'd%20like%20to%20know%20more%20about%20Navlakha%20Technologies%20and%20your%20solutions." class="nt-wa-btn" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp" data-cta-type="whatsapp" data-cta-location="sticky">
   <i class="fa fa-whatsapp"></i>
   <span class="nt-wa-tooltip">Chat with us</span>
 </a>
+
+<!-- Sticky mobile CTA bar -->
+<div class="nt-sticky-cta" role="navigation" aria-label="Quick actions">
+  <a href="book-demo.html" class="nt-sticky-cta-btn nt-sticky-cta-btn--demo" data-cta-type="book_demo" data-cta-location="sticky">
+    <i class="fa fa-calendar-check-o"></i> Book Demo
+  </a>
+  <a href="https://wa.me/918275269688/?text=Hi! I'd like to know more about Navlakha Technologies." target="_blank" rel="noopener noreferrer" class="nt-sticky-cta-btn nt-sticky-cta-btn--wa" data-cta-type="whatsapp" data-cta-location="sticky">
+    <i class="fa fa-whatsapp"></i> WhatsApp
+  </a>
+</div>
+<style>
+  .nt-sticky-cta { display: none; }
+  @media (max-width: 767px) {
+    .nt-sticky-cta {
+      display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 9998;
+      background: #fff; border-top: 1px solid #e2e8f0;
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom)); gap: 8px;
+      box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.08);
+    }
+    .nt-sticky-cta-btn {
+      flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 14px; border-radius: 8px; font-weight: 700; font-size: 14px;
+      text-decoration: none; line-height: 1;
+    }
+    .nt-sticky-cta-btn--demo { background: #2f5597; color: #fff; }
+    .nt-sticky-cta-btn--demo:hover, .nt-sticky-cta-btn--demo:focus { background: #244476; color: #fff; }
+    .nt-sticky-cta-btn--wa { background: #25d366; color: #fff; }
+    .nt-sticky-cta-btn--wa:hover, .nt-sticky-cta-btn--wa:focus { background: #1faf52; color: #fff; }
+    body { padding-bottom: 72px; }
+    .nt-wa-btn { display: none !important; }
+    .back-to-top { bottom: 80px !important; }
+  }
+</style>

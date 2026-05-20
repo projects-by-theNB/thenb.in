@@ -93,10 +93,19 @@
     }
   }
 
+  function loadScript(src) {
+    if (document.querySelector('script[src="' + src + '"]')) return;
+    var s = document.createElement('script');
+    s.src = src;
+    s.defer = true;
+    document.head.appendChild(s);
+  }
+
   function init() {
     loadHtml('header-placeholder', COMPONENTS + 'header.html', initHeader);
     loadHtml('footer-placeholder', COMPONENTS + 'footer.html', initFooter);
     loadHtml('module-details-placeholder', 'sections/module-details.html');
+    loadScript('js/click-tracking.js');
   }
 
   if (document.readyState === 'loading') {
