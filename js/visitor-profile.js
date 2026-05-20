@@ -13,7 +13,7 @@
  *     the team can see at a glance that this is an upsell signal,
  *     not a duplicate lead.
  *
- * Exposed via window.NTProfile.
+ * Exposed via window.NTVisitorProfile.
  */
 (function () {
   'use strict';
@@ -89,7 +89,7 @@
       //     submitted via the chat interests step — `interests` is then a
       //     verbatim mirror of their chat selection. New page visits do NOT
       //     re-append to `interests` (they still go to `visited_products`).
-      // Flipped to true by NTProfile.setInterests().
+      // Flipped to true by NTVisitorProfile.setInterests().
       interests: [],
       interests_owned_by_user: false,
       // baseline of interests that have already been sent to the team email.
@@ -103,7 +103,7 @@
 
       /* ---------- passive context (no user input required) -------------- */
       // Stable device/browser/OS fingerprint captured on first visit.
-      // Set by NTProfile.setClientContext() — only writes once.
+      // Set by NTVisitorProfile.setClientContext() — only writes once.
       client_context: null,
       // Number of distinct sessions (30-min activity window). Bumped on
       // each pageload where Date.now() - last_activity_at > 30 min.
@@ -120,7 +120,7 @@
       // Cumulative count of times the chatbot panel was opened.
       chat_open_count: 0,
       // How many emails have been sent to the team about this lead.
-      // Bumped by NTProfile.bumpEmailsSentCount() right before each send.
+      // Bumped by NTVisitorProfile.bumpEmailsSentCount() right before each send.
       emails_sent_count: 0,
       // Activity-email rate-limit state. Updated by the activity-emailer.
       activity_email_log: [] // [{ at: ms, kind: 'session' | 'pricing' | ... }]
@@ -178,7 +178,7 @@
   })();
 
   /* ---------- public surface --------------------------------------------- */
-  window.NTProfile = {
+  window.NTVisitorProfile = {
     PRODUCT_BY_PAGE: PRODUCT_BY_PAGE,
 
     /** Snapshot of the persisted profile (caller-safe copy). */

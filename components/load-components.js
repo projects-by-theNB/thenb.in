@@ -109,11 +109,11 @@
     // — load it first so chatbot + Google sign-in can use it on every page.
     loadScript('lib/custom/js/config.js');
     loadScript('js/attribution.js');
-    loadScript('js/profile.js');
+    loadScript('js/visitor-profile.js');
     // Passive context (device, browser, scroll depth, sessions, page views)
-    // — depends on NTProfile so loads after it.
+    // — depends on NTVisitorProfile so loads after it.
     loadScript('js/client-context.js');
-    loadScript('js/click-tracking.js');
+    loadScript('js/cta-tracking.js');
     // No-op on pages without [data-track-form]; safe to load globally.
     loadScript('js/form-tracking.js');
     loadScript('js/demo-chatbot.js');

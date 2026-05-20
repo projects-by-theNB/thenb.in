@@ -65,15 +65,15 @@
 
   /** Returns the interest key for the current page, or null. */
   function detectProductInterest() {
-    if (window.NTProfile && typeof window.NTProfile.getCurrentProduct === 'function') {
-      return window.NTProfile.getCurrentProduct();
+    if (window.NTVisitorProfile && typeof window.NTVisitorProfile.getCurrentProduct === 'function') {
+      return window.NTVisitorProfile.getCurrentProduct();
     }
     return null;
   }
 
   function getProfile() {
-    return (window.NTProfile && typeof window.NTProfile.get === 'function')
-      ? window.NTProfile.get() : null;
+    return (window.NTVisitorProfile && typeof window.NTVisitorProfile.get === 'function')
+      ? window.NTVisitorProfile.get() : null;
   }
 
   function initialState() {
@@ -98,7 +98,7 @@
 
   /**
    * Pre-fill the chat with everything we already know about the visitor:
-   *   1. Every product page they've ever visited (from NTProfile) becomes
+   *   1. Every product page they've ever visited (from NTVisitorProfile) becomes
    *      a pre-ticked interest.
    *   2. The current page (if a product) is also pre-ticked and noted as
    *      the auto-tag source so the bot can mention it by name.
@@ -221,8 +221,8 @@
     state.open = true;
     saveState();
     pushEvent('chat_open');
-    if (window.NTProfile && window.NTProfile.bumpChatOpenCount) {
-      window.NTProfile.bumpChatOpenCount();
+    if (window.NTVisitorProfile && window.NTVisitorProfile.bumpChatOpenCount) {
+      window.NTVisitorProfile.bumpChatOpenCount();
     }
     renderPanel();
   }
@@ -527,8 +527,8 @@
         // Persist this as a deliberate user choice — replaces the profile's
         // `interests` array verbatim and prevents future page visits from
         // re-appending unticked products via auto-tracking.
-        if (window.NTProfile && window.NTProfile.setInterests) {
-          window.NTProfile.setInterests(selected);
+        if (window.NTVisitorProfile && window.NTVisitorProfile.setInterests) {
+          window.NTVisitorProfile.setInterests(selected);
         }
 
         var labels = INTERESTS
@@ -921,10 +921,10 @@
   }
 
   /* ---------- Email sending ----------------------------------------------- */
-  /** Snapshot the chatbot answers into the persistent NTProfile. */
+  /** Snapshot the chatbot answers into the persistent NTVisitorProfile. */
   function persistToProfile(stageNum) {
-    if (!window.NTProfile || !window.NTProfile.update) return;
-    window.NTProfile.update({
+    if (!window.NTVisitorProfile || !window.NTVisitorProfile.update) return;
+    window.NTVisitorProfile.update({
       phone:        state.data.phone,
       name:         state.data.name,
       team_size:    state.data.team_size,
@@ -938,8 +938,8 @@
 
   /** Returns interest keys that haven't been emailed to the team yet. */
   function computeNewInterests() {
-    if (window.NTProfile && window.NTProfile.getNewInterests) {
-      return window.NTProfile.getNewInterests(state.data.interests || []);
+    if (window.NTVisitorProfile && window.NTVisitorProfile.getNewInterests) {
+      return window.NTVisitorProfile.getNewInterests(state.data.interests || []);
     }
     return (state.data.interests || []).slice();
   }
@@ -979,8 +979,8 @@
     // Bump the lifetime mail counter BEFORE the network call so the email
     // can include its own sequence number, and so a delivery failure still
     // increments (treating "count" as "attempted").
-    var mailNum = (window.NTProfile && window.NTProfile.bumpEmailsSentCount)
-      ? window.NTProfile.bumpEmailsSentCount()
+    var mailNum = (window.NTVisitorProfile && window.NTVisitorProfile.bumpEmailsSentCount)
+      ? window.NTVisitorProfile.bumpEmailsSentCount()
       : (stageNum); // graceful fallback
 
     var subject = subjectFor(stageNum, stageName, state.data, attr, newInterests, isReturning, mailNum);
@@ -1004,8 +1004,8 @@
 
     // After interests email goes out, baseline them in the profile so the
     // next chat session knows what's "already known" vs genuinely new.
-    if (stageName === 'interests' && window.NTProfile && window.NTProfile.markInterestsEmailed) {
-      window.NTProfile.markInterestsEmailed(state.data.interests || []);
+    if (stageName === 'interests' && window.NTVisitorProfile && window.NTVisitorProfile.markInterestsEmailed) {
+      window.NTVisitorProfile.markInterestsEmailed(state.data.interests || []);
     }
 
     if (isFinalStage(stageNum)) {

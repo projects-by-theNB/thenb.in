@@ -278,9 +278,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     'o-product', 'o-tier', 'o-billing-cycle', 'o-employees', 'o-timeline'
   ];
 
-  // Pre-fill from NTProfile if available (returning visitor).
-  if (window.NTProfile && window.NTProfile.get) {
-    var profile = window.NTProfile.get();
+  // Pre-fill from NTVisitorProfile if available (returning visitor).
+  if (window.NTVisitorProfile && window.NTVisitorProfile.get) {
+    var profile = window.NTVisitorProfile.get();
     if (profile) {
       if (profile.name)  document.getElementById('o-name').value  = profile.name;
       if (profile.phone) document.getElementById('o-phone').value = profile.phone;
@@ -430,9 +430,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Submitting…';
 
-    // Sync into NTProfile so any subsequent emails carry this richer data.
-    if (window.NTProfile && window.NTProfile.update) {
-      window.NTProfile.update({
+    // Sync into NTVisitorProfile so any subsequent emails carry this richer data.
+    if (window.NTVisitorProfile && window.NTVisitorProfile.update) {
+      window.NTVisitorProfile.update({
         name:  data.name,
         phone: data.phone,
         email: data.email,

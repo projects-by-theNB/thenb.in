@@ -15,7 +15,7 @@
  *   - Max scroll depth (% of document height ever reached)
  *   - Total visible time on site (page visibility API)
  *
- * Everything is persisted into NTProfile via its helper methods.
+ * Everything is persisted into NTVisitorProfile via its helper methods.
  * Exposes window.NTClientContext.get() for a live snapshot.
  */
 (function () {
@@ -151,8 +151,8 @@
       var pct = currentScrollPct();
       if (pct > pageMaxScrollPct) {
         pageMaxScrollPct = pct;
-        if (window.NTProfile && window.NTProfile.recordScrollDepth) {
-          window.NTProfile.recordScrollDepth(pct);
+        if (window.NTVisitorProfile && window.NTVisitorProfile.recordScrollDepth) {
+          window.NTVisitorProfile.recordScrollDepth(pct);
         }
       }
     });
@@ -167,8 +167,8 @@
     var delta = Date.now() - visibleSince;
     if (delta > 0) {
       unflushedMs += delta;
-      if (unflushedMs >= 1000 && window.NTProfile && window.NTProfile.addTimeOnSite) {
-        window.NTProfile.addTimeOnSite(unflushedMs);
+      if (unflushedMs >= 1000 && window.NTVisitorProfile && window.NTVisitorProfile.addTimeOnSite) {
+        window.NTVisitorProfile.addTimeOnSite(unflushedMs);
         unflushedMs = 0;
       }
     }
@@ -186,15 +186,15 @@
 
   function onPageHide() {
     flushVisibleTime();
-    if (unflushedMs > 0 && window.NTProfile && window.NTProfile.addTimeOnSite) {
-      window.NTProfile.addTimeOnSite(unflushedMs);
+    if (unflushedMs > 0 && window.NTVisitorProfile && window.NTVisitorProfile.addTimeOnSite) {
+      window.NTVisitorProfile.addTimeOnSite(unflushedMs);
       unflushedMs = 0;
     }
   }
 
   /* ---------- boot ------------------------------------------------------- */
   function boot() {
-    var profile = window.NTProfile;
+    var profile = window.NTVisitorProfile;
     if (!profile) {
       // Profile module hasn't loaded yet — defer one tick. (Both scripts
       // are injected by load-components.js; profile.js comes first, but
@@ -221,7 +221,7 @@
   // Public snapshot for any later consumer (e.g. the chatbot email builder).
   window.NTClientContext = {
     get: function () {
-      var ctx = window.NTProfile && window.NTProfile.get && window.NTProfile.get();
+      var ctx = window.NTVisitorProfile && window.NTVisitorProfile.get && window.NTVisitorProfile.get();
       if (!ctx) return null;
       return {
         client_context:        ctx.client_context || null,

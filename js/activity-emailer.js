@@ -2,13 +2,13 @@
  * Activity emailer — sends background mails to the team for passive visitor
  * behaviour, *only* once we have a profile (= phone OR email captured).
  *
- * Triggers (each gated by rate-limit in NTProfile.canSendActivityEmail):
+ * Triggers (each gated by rate-limit in NTVisitorProfile.canSendActivityEmail):
  *   - 'session'         : a returning visit after a > 30 min gap
  *   - 'pricing'         : the visitor lands on the pricing section of any page
  *   - 'deep_scroll'     : reaches ≥ 80% scroll on a product page
  *   - 'repeat_product'  : 3rd visit to the same product page
  *
- * Hard caps (configurable via NTProfile.canSendActivityEmail opts):
+ * Hard caps (configurable via NTVisitorProfile.canSendActivityEmail opts):
  *   - 1 email per 30 min
  *   - 3 emails per 24h rolling window
  *   - 1 email per "kind" per 6h
@@ -30,13 +30,13 @@
   /* ---------- helpers ----------------------------------------------------- */
 
   function hasProfile() {
-    if (!window.NTProfile || !window.NTProfile.get) return false;
-    var p = window.NTProfile.get();
+    if (!window.NTVisitorProfile || !window.NTVisitorProfile.get) return false;
+    var p = window.NTVisitorProfile.get();
     return Boolean(p && (p.phone || p.email));
   }
 
   function getProfile() {
-    return (window.NTProfile && window.NTProfile.get) ? window.NTProfile.get() : null;
+    return (window.NTVisitorProfile && window.NTVisitorProfile.get) ? window.NTVisitorProfile.get() : null;
   }
 
   function getAttribution() {
@@ -44,7 +44,7 @@
   }
 
   function isProductPage() {
-    return Boolean(window.NTProfile && window.NTProfile.getCurrentProduct && window.NTProfile.getCurrentProduct());
+    return Boolean(window.NTVisitorProfile && window.NTVisitorProfile.getCurrentProduct && window.NTVisitorProfile.getCurrentProduct());
   }
 
   function isPricingContext() {
@@ -152,8 +152,8 @@
 
   function sendActivityEmail(kind, headline, detail) {
     if (!hasProfile()) return;
-    // Pass config-driven rate limits through to NTProfile.canSendActivityEmail
-    if (!window.NTProfile.canSendActivityEmail(kind, {
+    // Pass config-driven rate limits through to NTVisitorProfile.canSendActivityEmail
+    if (!window.NTVisitorProfile.canSendActivityEmail(kind, {
       cooldownMs:     ACTIVITY_CFG.cooldownMs,
       dailyMax:       ACTIVITY_CFG.dailyMax,
       kindCooldownMs: ACTIVITY_CFG.kindCooldownMs
@@ -182,7 +182,7 @@
       }).catch(function () {});
     });
 
-    window.NTProfile.recordActivityEmail(kind);
+    window.NTVisitorProfile.recordActivityEmail(kind);
     if (window.dataLayer) {
       window.dataLayer.push({
         event: 'activity_email_sent',
@@ -222,7 +222,7 @@
   function checkRepeatProductTrigger() {
     var p = getProfile();
     if (!p) return;
-    var current = window.NTProfile.getCurrentProduct && window.NTProfile.getCurrentProduct();
+    var current = window.NTVisitorProfile.getCurrentProduct && window.NTVisitorProfile.getCurrentProduct();
     if (!current) return;
     var path = location.pathname;
     var visits = (p.page_views_by_path && p.page_views_by_path[path]) || 0;
