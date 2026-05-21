@@ -1392,9 +1392,9 @@
       document.body.appendChild(div);
     }
     mount();
-    // 1-second grace before the panel pops up so the page can finish
-    // settling visually — matches Intercom / Drift defaults.
-    setTimeout(maybeAutoExpand, 1000);
+    var cfg = (window.AppConfig && window.AppConfig.chatbot) || {};
+    var autoExpandDelayMs = typeof cfg.autoExpandDelayMs === 'number' ? cfg.autoExpandDelayMs : 1000;
+    setTimeout(maybeAutoExpand, autoExpandDelayMs);
   }
 
   if (document.readyState === 'loading') {
