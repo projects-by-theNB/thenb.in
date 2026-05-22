@@ -73,6 +73,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="nt-sub">We'll WhatsApp or email you within one business day.</p>
 
       <form id="nt-book-demo-form" data-track-form="book_demo" novalidate>
+        <div class="nt-prefill-notice" id="bd-prefill-notice" hidden>
+          We've prefilled a few fields from your earlier visit.
+          <button type="button" class="nt-prefill-clear" id="bd-prefill-clear">Clear them</button>
+        </div>
+
         <div class="nt-form-row">
           <div class="nt-field">
             <label for="bd-name">Your Name <span class="nt-req">*</span></label>
@@ -89,7 +94,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="nt-form-row">
           <div class="nt-field">
             <label for="bd-phone">Phone / WhatsApp <span class="nt-req">*</span></label>
-            <input type="tel" id="bd-phone" name="phone" autocomplete="tel" inputmode="numeric" pattern="[+0-9 ()-]{7,20}" required />
+            <div class="nt-phone-row">
+              <select id="bd-dial" name="dial_code" aria-label="Country code"></select>
+              <input type="tel" id="bd-phone" name="phone" autocomplete="tel" inputmode="numeric" pattern="[0-9 ()-]{7,20}" required />
+            </div>
             <div class="nt-err">Please share a reachable phone number.</div>
           </div>
           <div class="nt-field">
@@ -146,9 +154,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <textarea id="bd-usecase" name="usecase" placeholder="e.g. We have 220 employees across 3 plants and our payroll is run in Excel — taking 5 days every month."></textarea>
         </div>
 
-        <button type="submit" class="nt-submit-btn" id="bd-submit">
-          <i class="fa fa-calendar-check-o"></i> &nbsp; Request My Callback
-        </button>
+        <div class="nt-form-actions">
+          <button type="submit" class="nt-submit-btn" id="bd-submit">
+            <i class="fa fa-calendar-check-o"></i> &nbsp; Request My Callback
+          </button>
+          <button type="button" class="nt-clear-btn" id="bd-clear" aria-label="Clear all fields">
+            Clear form
+          </button>
+        </div>
 
         <div class="nt-form-error" id="bd-error">Sorry — something went wrong sending your request. Please WhatsApp us at <a href="https://wa.me/918275269688">+91 8275269688</a>.</div>
 
@@ -174,7 +187,141 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   var form = document.getElementById('nt-book-demo-form');
   var submitBtn = document.getElementById('bd-submit');
+  var clearBtn = document.getElementById('bd-clear');
   var errorBox = document.getElementById('bd-error');
+  var dialSel = document.getElementById('bd-dial');
+  var phoneInput = document.getElementById('bd-phone');
+  var prefillNotice = document.getElementById('bd-prefill-notice');
+  var prefillClear = document.getElementById('bd-prefill-clear');
+
+  // Maps chatbot team-size labels ("11 – 50") to this form's option values
+  // ("11-50"). Tolerates en-dash, em-dash, regular spaces, and commas.
+  function normaliseTeamSize(s) {
+    if (!s) return '';
+    return String(s).replace(/[–—]/g, '-').replace(/[\s,]/g, '');
+  }
+
+  // Splits "+91 98765 43210" → ["+91", "98765 43210"]. Falls back to ["", v].
+  function splitPhone(v) {
+    if (!v) return ['', ''];
+    var m = String(v).match(/^\s*(\+\d{1,4})\s*(.*)$/);
+    return m ? [m[1], m[2]] : ['', String(v)];
+  }
+
+  // Populate the dial-code <select> with every country and select the one
+  // implied by the visitor's saved phone, the IP location, or fall back to
+  // "+91" so the form is usable even before NTIPLocation finishes loading.
+  function populateDialCodes(preferredDial) {
+    if (!dialSel || dialSel.options.length > 1) return;
+    var list = (window.NTIPLocation && window.NTIPLocation.getAllDialCodes)
+      ? window.NTIPLocation.getAllDialCodes() : [];
+    var ipDial = (window.NTIPLocation && window.NTIPLocation.getDialCode)
+      ? window.NTIPLocation.getDialCode() : null;
+    var chosen = preferredDial || ipDial || '+91';
+    dialSel.innerHTML = '';
+    var hasChosen = list.some(function (c) { return c.dial === chosen; });
+    if (!hasChosen && chosen) {
+      var opt = document.createElement('option');
+      opt.value = chosen; opt.textContent = chosen; opt.selected = true;
+      dialSel.appendChild(opt);
+    }
+    list.forEach(function (c) {
+      var o = document.createElement('option');
+      o.value = c.dial;
+      o.textContent = c.name + ' (' + c.dial + ')';
+      if (c.dial === chosen) o.selected = true;
+      dialSel.appendChild(o);
+    });
+  }
+
+  // Pull every overlapping field out of NTVisitorProfile and write it to the
+  // form. Shows the small "we've prefilled…" notice if anything was applied.
+  // Polls briefly because NTVisitorProfile loads via load-components.js and
+  // may not be ready when the inline <script> first executes.
+  function prefillFromProfile(retries) {
+    if (typeof retries !== 'number') retries = 20;
+    var profile = (window.NTVisitorProfile && window.NTVisitorProfile.get)
+      ? window.NTVisitorProfile.get() : null;
+    if (!profile) {
+      if (retries > 0) return setTimeout(function () { prefillFromProfile(retries - 1); }, 150);
+      // Still populate the dial-code select even with no profile — IP is enough.
+      populateDialCodes(null);
+      return;
+    }
+
+    var applied = false;
+    function set(id, val) {
+      if (!val) return;
+      var el = document.getElementById(id);
+      if (!el || el.value) return; // don't clobber what the user already typed
+      el.value = val;
+      applied = true;
+    }
+
+    set('bd-name',  profile.name);
+    set('bd-email', profile.email);
+    set('bd-usecase', profile.requirements);
+
+    if (profile.team_size) {
+      var teamVal = normaliseTeamSize(profile.team_size);
+      var teamEl = document.getElementById('bd-employees');
+      if (teamEl && !teamEl.value) {
+        var has = Array.prototype.some.call(teamEl.options, function (o) { return o.value === teamVal; });
+        if (has) { teamEl.value = teamVal; applied = true; }
+      }
+    }
+
+    if (profile.interests && profile.interests.length) {
+      var productEl = document.getElementById('bd-product');
+      if (productEl && !productEl.value) {
+        var match = profile.interests.find ? profile.interests.find(function (k) {
+          return Array.prototype.some.call(productEl.options, function (o) { return o.value === k; });
+        }) : null;
+        if (match) { productEl.value = match; applied = true; }
+      }
+    }
+
+    var parts = splitPhone(profile.phone);
+    var preferredDial = parts[0] || null;
+    populateDialCodes(preferredDial);
+    if (phoneInput && !phoneInput.value && parts[1]) {
+      phoneInput.value = parts[1];
+      applied = true;
+    } else if (phoneInput && !phoneInput.value && profile.phone && !parts[0]) {
+      // Phone without a recognisable dial-code prefix — drop it in as-is.
+      phoneInput.value = profile.phone;
+      applied = true;
+    }
+
+    if (applied && prefillNotice) prefillNotice.hidden = false;
+  }
+
+  function clearForm() {
+    // Preserve the currently-selected country dial code across the reset —
+    // it's IP-derived / user-confirmed, not really a "prefilled" answer in
+    // the same sense as name/email, and resetting it just makes the user
+    // re-pick something they already had right.
+    var keptDial = dialSel ? dialSel.value : null;
+    form.reset();
+    if (dialSel && keptDial) dialSel.value = keptDial;
+    if (prefillNotice) prefillNotice.hidden = true;
+    Array.prototype.forEach.call(form.querySelectorAll('.nt-field.is-invalid'), function (f) {
+      f.classList.remove('is-invalid');
+    });
+    if (errorBox) errorBox.style.display = 'none';
+    var nameEl = document.getElementById('bd-name');
+    if (nameEl) nameEl.focus();
+  }
+
+  if (clearBtn)      clearBtn.addEventListener('click',      clearForm);
+  if (prefillClear)  prefillClear.addEventListener('click',  clearForm);
+
+  // Kick off prefill (and dial-code list population) as soon as the DOM is ready.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { prefillFromProfile(); });
+  } else {
+    prefillFromProfile();
+  }
 
   function setInvalid(field, invalid) {
     var wrap = field.closest('.nt-field');
@@ -185,6 +332,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   }
 
+  // Book-demo "11-50" → chatbot's "11 – 50" label so the team-size cell in
+  // the email looks identical whether the lead came in via chat or form.
+  var TEAM_SIZE_TO_CHAT = {
+    '1-10':     '1 – 10',
+    '11-50':    '11 – 50',
+    '51-200':   '51 – 200',
+    '201-1000': '201 – 1,000',
+    '1000+':    '1,000+'
+  };
+  // Industry select values → human label for the email body.
+  var INDUSTRY_LABELS = {
+    manufacturing: 'Manufacturing',
+    retail:        'Retail / Distribution',
+    services:      'Services',
+    construction:  'Construction / Infra',
+    logistics:     'Logistics / Warehousing',
+    agri:          'Agriculture / Agri-business',
+    healthcare:    'Healthcare',
+    education:     'Education',
+    other:         'Other'
+  };
+
   function readForm() {
     var fd = new FormData(form);
     var obj = {};
@@ -192,147 +361,91 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return obj;
   }
 
-  function validate(data) {
+  function validate(raw) {
+    // raw.phone here is just digits (no dial code) — that's what the user
+    // typed. We validate that on its own, the same way the chatbot does.
     var ok = true;
-    var name = document.getElementById('bd-name');
+    var name    = document.getElementById('bd-name');
     var company = document.getElementById('bd-company');
-    var phone = document.getElementById('bd-phone');
-    var email = document.getElementById('bd-email');
+    var phone   = document.getElementById('bd-phone');
+    var email   = document.getElementById('bd-email');
 
-    if (!data.name) { setInvalid(name, true); ok = false; } else setInvalid(name, false);
-    if (!data.company) { setInvalid(company, true); ok = false; } else setInvalid(company, false);
-    if (!data.phone || data.phone.replace(/\D/g, '').length < 7) { setInvalid(phone, true); ok = false; } else setInvalid(phone, false);
-    if (!emailLooksValid(data.email)) { setInvalid(email, true); ok = false; } else setInvalid(email, false);
+    if (!raw.name)                                                  { setInvalid(name, true);    ok = false; } else setInvalid(name, false);
+    if (!raw.company)                                               { setInvalid(company, true); ok = false; } else setInvalid(company, false);
+    if (!raw.phone || raw.phone.replace(/\D/g, '').length < 7)      { setInvalid(phone, true);   ok = false; } else setInvalid(phone, false);
+    if (!emailLooksValid(raw.email))                                { setInvalid(email, true);   ok = false; } else setInvalid(email, false);
     return ok;
   }
 
-  function getAttribution() {
-    try {
-      if (window.NTAttribution && typeof window.NTAttribution.get === 'function') {
-        return window.NTAttribution.get();
-      }
-    } catch (e) {}
-    return null;
-  }
-
-  function buildEmail(data, attr) {
-    function e(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-    var rows = [
-      ['Name', data.name],
-      ['Company', data.company],
-      ['Phone / WhatsApp', data.phone],
-      ['Email', data.email],
-      ['Team Size', data.employees || '—'],
-      ['Industry', data.industry || '—'],
-      ['Interested In', data.product_interest || '—'],
-      ['Use Case', data.usecase || '—'],
-      ['Page', location.href]
-    ];
-    if (attr) {
-      if (attr.utm_source)       rows.push(['Source',           attr.utm_source]);
-      if (attr.utm_medium)       rows.push(['Medium',           attr.utm_medium]);
-      if (attr.utm_campaign)     rows.push(['Campaign',         attr.utm_campaign]);
-      if (attr.utm_term)         rows.push(['Term',             attr.utm_term]);
-      if (attr.utm_content)      rows.push(['Content',          attr.utm_content]);
-      if (attr.gclid)            rows.push(['gclid',            attr.gclid]);
-      if (attr.fbclid)           rows.push(['fbclid',           attr.fbclid]);
-      if (attr.landing_page)     rows.push(['Landing page',     attr.landing_page]);
-      if (attr.landing_referrer) rows.push(['Landing referrer', attr.landing_referrer]);
-    }
-    var ipl = (window.NTIPLocation && window.NTIPLocation.get && window.NTIPLocation.get()) || null;
-    if (ipl && ipl.ip) {
-      var ipBits = [ipl.ip];
-      if (ipl.isp) ipBits.push(ipl.isp);
-      rows.push(['Public IP', ipBits.join(' · ')]);
-      var locBits = [];
-      if (ipl.city)    locBits.push(ipl.city);
-      if (ipl.region)  locBits.push(ipl.region);
-      if (ipl.country) locBits.push(ipl.country);
-      if (locBits.length) rows.push(['Location (IP)', locBits.join(', ')]);
-    }
-    var trs = rows.map(function (r) {
-      return '<tr><td style="padding:8px 14px;color:#64748b;border-bottom:1px solid #e5e7eb;width:36%;">' + e(r[0]) + '</td>' +
-             '<td style="padding:8px 14px;color:#111827;border-bottom:1px solid #e5e7eb;">' + e(r[1]) + '</td></tr>';
-    }).join('');
-    return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;background:#f3f4f6;padding:32px 0;">' +
-           '<table width="600" align="center" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:8px;overflow:hidden;">' +
-           '<tr><td style="background:#0f172a;color:#fff;padding:22px 32px;">' +
-           '<p style="margin:0;font-size:11px;color:#00fd59;letter-spacing:1px;text-transform:uppercase;">Demo Request · navlakha.tech</p>' +
-           '<h1 style="margin:6px 0 0;font-size:20px;">New Demo Request</h1></td></tr>' +
-           '<tr><td style="padding:24px 32px;"><table width="100%" style="border:1px solid #e5e7eb;border-radius:6px;font-size:14px;">' +
-           trs + '</table></td></tr></table></body></html>';
-  }
-
-  function postLead(data, attr) {
-    var cfg = window.AppConfig || {};
-    if (!cfg.mailerUrl || !cfg.mailerSecretKey) {
-      return Promise.reject(new Error('Mailer not configured'));
-    }
-    // Recipients live in lib/custom/js/config.js → recipients.
-    var recipients = (cfg.recipients && cfg.recipients.length)
-      ? cfg.recipients
-      : [cfg.supportEmail || 'support@navlakha.tech', 'nnautatva@gmail.com', 'mahavirnn@gmail.com'];
-    var sourceTag = attr && attr.utm_source ? ' [' + attr.utm_source + ']' : '';
-    var subject = '🔔 Demo Request' + sourceTag + ': ' + data.name + ' (' + data.company + ')';
-    var content = buildEmail(data, attr);
-
-    return Promise.all(recipients.map(function (to) {
-      return fetch(cfg.mailerUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          subject: subject,
-          content: content,
-          email_secret_key: cfg.mailerSecretKey,
-          to_email: to
-        })
-      });
-    }));
+  // Wait briefly for the chatbot script to finish loading (it's deferred via
+  // load-components.js) so we can route the submission through its email
+  // pipeline. After ~3 s we give up and reject — the catch handler shows the
+  // "something went wrong" toast with a WhatsApp fallback link.
+  function waitForChatbot(timeoutMs) {
+    var deadline = Date.now() + (typeof timeoutMs === 'number' ? timeoutMs : 3000);
+    return new Promise(function (resolve, reject) {
+      (function poll() {
+        if (window.NTChatbot && typeof window.NTChatbot.submitFullLead === 'function') {
+          return resolve(window.NTChatbot);
+        }
+        if (Date.now() >= deadline) return reject(new Error('NTChatbot unavailable'));
+        setTimeout(poll, 100);
+      })();
+    });
   }
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     errorBox.style.display = 'none';
 
-    var data = readForm();
-    if (!validate(data)) return;
+    var raw = readForm();
+    if (!validate(raw)) return;
 
     submitBtn.disabled = true;
     submitBtn.innerHTML = 'Sending…';
 
-    var attr = getAttribution();
+    var dial          = (raw.dial_code || '').trim();
+    var combinedPhone = (dial ? dial + ' ' : '') + raw.phone;
 
-    window.dataLayer.push({
-      event: 'lead_submit',
-      form_name: 'book_demo',
-      product_interest: data.product_interest || null,
-      page_path: location.pathname,
-      utm_source:   attr && attr.utm_source   || null,
-      utm_medium:   attr && attr.utm_medium   || null,
-      utm_campaign: attr && attr.utm_campaign || null,
-      gclid:        attr && attr.gclid        || null
-    });
+    var interests = [];
+    // 'not_sure' is a book-demo-only sentinel — skip it so the email
+    // doesn't render a raw key.
+    if (raw.product_interest && raw.product_interest !== 'not_sure') {
+      interests = [raw.product_interest];
+    }
 
-    postLead(data, attr).then(function () {
-      try {
-        sessionStorage.setItem('nt_lead_payload', JSON.stringify({
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          company: data.company,
-          product_interest: data.product_interest || null,
-          utm_source:   attr && attr.utm_source   || null,
-          utm_medium:   attr && attr.utm_medium   || null,
-          utm_campaign: attr && attr.utm_campaign || null,
-          gclid:        attr && attr.gclid        || null
-        }));
-      } catch (e) {}
-      location.href = 'thank-you.html';
-    }).catch(function () {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fa fa-calendar-check-o"></i> &nbsp; Request My Callback';
-      errorBox.style.display = 'block';
-    });
+    var payload = {
+      name:         raw.name,
+      phone:        combinedPhone,
+      dial_code:    dial || null,
+      email:        raw.email,
+      interests:    interests,
+      team_size:    TEAM_SIZE_TO_CHAT[raw.employees] || raw.employees || '',
+      requirements: raw.usecase || '',
+      company:      raw.company,
+      industry:     INDUSTRY_LABELS[raw.industry] || raw.industry || '',
+      source:       'book_demo'
+    };
+
+    waitForChatbot()
+      .then(function (api) { return api.submitFullLead(payload); })
+      .then(function () {
+        try {
+          sessionStorage.setItem('nt_lead_payload', JSON.stringify({
+            name:    payload.name,
+            email:   payload.email,
+            phone:   payload.phone,
+            company: payload.company,
+            product_interest: raw.product_interest || null
+          }));
+        } catch (e) {}
+        location.href = 'thank-you.html';
+      })
+      .catch(function () {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa fa-calendar-check-o"></i> &nbsp; Request My Callback';
+        errorBox.style.display = 'block';
+      });
   });
 
   window.dataLayer.push({

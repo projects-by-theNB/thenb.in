@@ -87,6 +87,10 @@
       // re-popping on every subsequent page nav, while still allowing the
       // user to manually re-open via the launcher.
       autoExpanded: false,
+      // True when the user opened the chat via the launcher button — we
+      // render the panel as a centered modal with a dimmed backdrop so the
+      // conversation is in focus. Auto-expand keeps the compact dock.
+      focused: false,
       data: {
         phone: '', interests: [], team_size: '',
         email: '', email_verified: false,
@@ -150,6 +154,8 @@
   if (state.resetCount == null) state.resetCount = 0;
   if (typeof state.autoTaggedFrom === 'undefined') state.autoTaggedFrom = null;
   if (typeof state.autoExpanded === 'undefined') state.autoExpanded = false;
+  if (typeof state.focused === 'undefined') state.focused = !!state.fullscreen;
+  delete state.fullscreen;
   applyProfileToState();
 
   var dom = {};
@@ -201,7 +207,7 @@
       class: 'nt-chat-launcher',
       'aria-label': 'Open chat to schedule a callback',
       type: 'button',
-      onclick: open
+      onclick: function () { open({ focused: false }); }
     }, [
       el('span', { class: 'nt-chat-launcher-ico', 'aria-hidden': 'true' }, [
         el('i', { class: 'fa fa-comments' })
@@ -217,19 +223,70 @@
     if (state.open) renderPanel();
   }
 
-  function open() {
+  function open(opts) {
     state.open = true;
+    state.focused = !!(opts && opts.focused);
     saveState();
-    pushEvent('chat_open');
+    pushEvent('chat_open', { focused: state.focused });
     if (window.NTVisitorProfile && window.NTVisitorProfile.bumpChatOpenCount) {
       window.NTVisitorProfile.bumpChatOpenCount();
     }
     renderPanel();
   }
 
+  function mountBackdrop() {
+    if (dom.backdrop) return;
+    dom.backdrop = el('div', {
+      class: 'nt-chat-backdrop',
+      'aria-hidden': 'true',
+      // Click outside the panel = exit focus mode (drop to compact dock,
+      // don't close the conversation entirely).
+      onclick: function () { if (state.focused) toggleFocused(); }
+    });
+    (document.getElementById('nt-chatbot-root') || document.body).insertBefore(
+      dom.backdrop, dom.panel || null
+    );
+  }
+
+  function unmountBackdrop() {
+    var bd = dom.backdrop;
+    dom.backdrop = null;
+    if (!bd || !bd.parentNode) return;
+    bd.classList.add('is-leaving');
+    var removed = false;
+    var remove = function () {
+      if (removed) return;
+      removed = true;
+      if (bd.parentNode) bd.parentNode.removeChild(bd);
+    };
+    bd.addEventListener('animationend', remove, { once: true });
+    setTimeout(remove, 300);
+  }
+
+  function applyFocusedDom() {
+    if (!dom.panel) return;
+    dom.panel.classList.toggle('is-focused', state.focused);
+    if (state.focused) mountBackdrop(); else unmountBackdrop();
+    if (dom.focusBtn) {
+      var ico = dom.focusBtn.querySelector('i');
+      if (ico) ico.className = 'fa ' + (state.focused ? 'fa-compress' : 'fa-expand');
+      var label = state.focused ? 'Dock to corner' : 'Focus mode';
+      dom.focusBtn.setAttribute('aria-label', label);
+      dom.focusBtn.setAttribute('title',      label);
+    }
+  }
+
+  function toggleFocused() {
+    state.focused = !state.focused;
+    saveState();
+    applyFocusedDom();
+  }
+
   function close() {
     state.open = false;
+    state.focused = false;
     saveState();
+    unmountBackdrop();
     var panel = dom.panel;
     dom.panel = null;
     if (!panel || !panel.parentNode) return;
@@ -293,7 +350,10 @@
   function renderPanel() {
     if (dom.panel && dom.panel.parentNode) dom.panel.parentNode.removeChild(dom.panel);
 
-    dom.panel = el('div', { class: 'nt-chat-panel', role: 'dialog', 'aria-label': 'Callback chat' });
+    dom.panel = el('div', {
+      class: 'nt-chat-panel' + (state.focused ? ' is-focused' : ''),
+      role: 'dialog', 'aria-label': 'Callback chat'
+    });
 
     // Stop clicks on header action buttons from bubbling to the header itself
     // (which is wired to minimize the chat).
@@ -322,6 +382,12 @@
       ]),
       el('div', { class: 'nt-chat-head-actions' }, [
         el('button', resetBtnAttrs, [el('i', { class: 'fa fa-refresh', 'aria-hidden': 'true' })]),
+        (dom.focusBtn = el('button', {
+          class: 'nt-chat-head-btn', type: 'button',
+          'aria-label': state.focused ? 'Dock to corner' : 'Focus mode',
+          title: state.focused ? 'Dock to corner' : 'Focus mode',
+          onclick: stopAndCall(toggleFocused)
+        }, [el('i', { class: 'fa ' + (state.focused ? 'fa-compress' : 'fa-expand'), 'aria-hidden': 'true' })])),
         el('button', {
           class: 'nt-chat-head-btn close', type: 'button',
           'aria-label': 'Close chat', onclick: stopAndCall(close)
@@ -335,7 +401,10 @@
     dom.panel.appendChild(head);
     dom.panel.appendChild(dom.body);
     dom.panel.appendChild(dom.foot);
-    (document.getElementById('nt-chatbot-root') || document.body).appendChild(dom.panel);
+    var root = document.getElementById('nt-chatbot-root') || document.body;
+    root.appendChild(dom.panel);
+    // Keep backdrop presence in sync with focused state, every re-render.
+    if (state.focused) mountBackdrop(); else unmountBackdrop();
 
     state.messages.forEach(function (m) { renderMessage(m.who, m.text, false); });
 
@@ -423,25 +492,63 @@
     var hasVerifiedEmail = !!state.data.email_verified;
     var hasEmail         = !!state.data.email;
 
+    // Default dial code from the visitor's IP country (e.g. "+91" for India).
+    // Used as the initial value of the country-code <select> below.
+    var ipDialCode = (window.NTIPLocation && window.NTIPLocation.getDialCode)
+      ? window.NTIPLocation.getDialCode() : null;
+    var allDialCodes = (window.NTIPLocation && window.NTIPLocation.getAllDialCodes)
+      ? window.NTIPLocation.getAllDialCodes() : [];
+
+    // Split any saved phone into "+XX" (for the select) and the rest (for
+    // the input). Falls back to the IP-derived dial code when nothing saved.
+    var savedPhone = state.data.phone || '';
+    var savedDial  = state.data.dial_code || '';
+    var savedRest  = savedPhone;
+    if (!savedDial && savedPhone) {
+      var m = savedPhone.match(/^\s*(\+\d{1,4})\s*(.*)$/);
+      if (m) { savedDial = m[1]; savedRest = m[2]; }
+    } else if (savedDial && savedPhone.indexOf(savedDial) === 0) {
+      savedRest = savedPhone.slice(savedDial.length).replace(/^\s+/, '');
+    }
+    var initialDial = savedDial || ipDialCode || '+91';
+
+    var dialSelect = el('select', {
+      class: 'nt-chat-dial', 'aria-label': 'Country code'
+    });
+    // If the chosen dial code isn't in our list (very old session, hand-typed
+    // unusual code), still surface it as a selectable option up top.
+    var hasInitial = allDialCodes.some(function (c) { return c.dial === initialDial; });
+    if (!hasInitial && initialDial) {
+      dialSelect.appendChild(el('option', { value: initialDial, selected: 'selected' }, initialDial));
+    }
+    allDialCodes.forEach(function (c) {
+      var attrs = { value: c.dial };
+      if (c.dial === initialDial) attrs.selected = 'selected';
+      dialSelect.appendChild(el('option', attrs, c.name + ' (' + c.dial + ')'));
+    });
+
     var input = el('input', {
       class: 'nt-chat-input', type: 'tel', inputmode: 'numeric',
-      autocomplete: 'tel', placeholder: '+91 98765 43210',
+      autocomplete: 'tel', placeholder: '98765 43210',
       'aria-label': 'Phone or WhatsApp number'
     });
-    input.value = state.data.phone || '';
+    input.value = savedRest || '';
 
     var errBox = el('div', { class: 'nt-chat-error' });
 
     var submit = function () {
-      var v = (input.value || '').trim();
-      if (v.replace(/\D/g, '').length < 7) {
+      var dial = dialSelect.value || '';
+      var rest = (input.value || '').trim();
+      var combined = (dial ? dial + ' ' : '') + rest;
+      if (rest.replace(/\D/g, '').length < 7) {
         errBox.textContent = 'Please enter a valid phone number.';
         input.focus();
         return;
       }
       errBox.textContent = '';
-      state.data.phone = v;
-      sayUser(v);
+      state.data.phone = combined.trim();
+      if (dial) state.data.dial_code = dial;
+      sayUser(combined.trim());
       advance('phone');
     };
 
@@ -453,7 +560,7 @@
       class: 'nt-chat-send', type: 'button', onclick: submit
     }, [el('i', { class: 'fa fa-paper-plane', 'aria-hidden': 'true' }), ' Send']);
 
-    dom.foot.appendChild(el('div', { class: 'nt-chat-input-row' }, [input, sendBtn]));
+    dom.foot.appendChild(el('div', { class: 'nt-chat-input-row' }, [dialSelect, input, sendBtn]));
     dom.foot.appendChild(errBox);
 
     // Google sign-in — render only if we don't already have a verified email.
@@ -932,6 +1039,10 @@
       interests:    state.data.interests,
       email:        state.data.email,
       email_verified: !!state.data.email_verified,
+      // Book-demo specific fields — persisted so a follow-up chat session
+      // sees them and the email pipeline can include them in future mails.
+      company:      state.data.company,
+      industry:     state.data.industry,
       max_stage_reached: stageNum
     });
   }
@@ -1010,7 +1121,7 @@
 
     if (isFinalStage(stageNum)) {
       pushEvent('lead_submit', {
-        form_name: 'chat_demo',
+        form_name: state.data.source === 'book_demo' ? 'book_demo' : 'chat_demo',
         product_interest: (state.data.interests && state.data.interests[0]) || null,
         utm_source:   attr && attr.utm_source   || null,
         utm_medium:   attr && attr.utm_medium   || null,
@@ -1019,6 +1130,66 @@
         is_returning: isReturning
       });
     }
+  }
+
+  /**
+   * Public API — submit a fully-populated lead (e.g. from the book-demo
+   * form) through the chatbot's email pipeline. The resulting email is
+   * byte-for-byte identical to a chat completion email: same sections,
+   * same subject style, same mail counter, same NTVisitorProfile snapshot.
+   *
+   * Accepted fields (all optional; phone OR email is required):
+   *   name, phone, dial_code, email, email_verified,
+   *   interests (array of keys), team_size (chatbot label form),
+   *   requirements, company, industry, source (e.g. 'book_demo')
+   *
+   * Returns Promise<void>. Rejects only on hard config errors
+   * (mailer URL/secret missing, no contactable identity).
+   */
+  function submitFullLead(data, opts) {
+    data = data || {};
+    opts = opts || {};
+
+    var cfg = window.AppConfig || {};
+    if (!cfg.mailerUrl || !cfg.mailerSecretKey) {
+      return Promise.reject(new Error('Mailer not configured'));
+    }
+    var phoneIn = data.phone || state.data.phone;
+    var emailIn = data.email || state.data.email;
+    if (!phoneIn && !emailIn) {
+      return Promise.reject(new Error('No phone or email provided'));
+    }
+
+    // Merge incoming fields into state.data — undefined / empty values
+    // never clobber what the chat already collected.
+    ['name', 'phone', 'dial_code', 'email', 'team_size', 'requirements',
+     'company', 'industry', 'source'].forEach(function (k) {
+      if (data[k] != null && data[k] !== '') state.data[k] = data[k];
+    });
+    if (data.email_verified) state.data.email_verified = true;
+    if (Array.isArray(data.interests) && data.interests.length) {
+      state.data.interests = data.interests.slice();
+    }
+
+    // Force the email gate open so the final-stage mail goes out even if
+    // the chat had previously sent intermediate ones for this lead.
+    var finalStage     = STEPS.length;
+    var finalStageName = STEPS[STEPS.length - 1];
+    if (state.stageEmailed >= finalStage) state.stageEmailed = finalStage - 1;
+    state.step = finalStage;
+    saveState();
+
+    // Route through the same pipeline the chatbot's last step uses —
+    // identical subject, body, profile updates, recipients, events.
+    sendStageEmail(finalStage, finalStageName);
+
+    pushEvent('lead_success', {
+      form_name: data.source || 'chat_demo',
+      product_interest: (state.data.interests && state.data.interests[0]) || null,
+      user_data: { phone_number: state.data.phone, email: state.data.email || null }
+    });
+
+    return Promise.resolve();
   }
 
   function subjectFor(stageNum, stageName, d, attr, newInterests, isReturning, mailNum) {
@@ -1111,6 +1282,26 @@
 
     /* ------ Section builders ----------------------------------------------- */
 
+    // Country / dial code. Prefers what the visitor effectively used at the
+    // phone step (d.dial_code), falls back to a fresh lookup from the IP
+    // country so even early-stage emails (before the phone step) carry it.
+    var ipl = (profile && profile.ip_location) || null;
+    var liveDial = (window.NTIPLocation && window.NTIPLocation.getDialCode)
+      ? window.NTIPLocation.getDialCode() : null;
+    var dial = d.dial_code || liveDial;
+    var countryCell = null;
+    if (dial || (ipl && ipl.country_code)) {
+      var parts = [];
+      if (dial) parts.push(esc(dial));
+      if (ipl && ipl.country) {
+        var iso = ipl.country_code ? ' · ' + esc(ipl.country_code) : '';
+        parts.push(esc(ipl.country) + iso);
+      } else if (ipl && ipl.country_code) {
+        parts.push(esc(ipl.country_code));
+      }
+      countryCell = parts.join(' — ');
+    }
+
     // SECTION 1 — LEAD (core identity, always shown; missing = "—")
     var leadSection = {
       title: 'Lead',
@@ -1118,14 +1309,19 @@
       rows: [
         ['Name',  d.name  || '—'],
         ['Phone', d.phone || '—'],
+        { label: 'Country', html: countryCell || '—' },
         { label: 'Email', html: emailCell || '—' }
       ]
     };
+    // Company shown only when present — the chat doesn't ask for it, but
+    // the book-demo form does, and both flows feed the same email pipeline.
+    if (d.company) leadSection.rows.push(['Company', d.company]);
 
     // SECTION 2 — INTEREST SIGNAL
     var interestRows = [
       { label: 'Interests', html: interestCell || '—' },
       ['Team size',    d.team_size],
+      ['Industry',     d.industry],
       ['Requirements', d.requirements]
     ];
     if (productsViewedCell) {
@@ -1274,6 +1470,7 @@
     // SECTION 6 — META (housekeeping)
     var metaRows = [];
     metaRows.push(['Mail #',          mailNum + ' (lifetime count for this lead)']);
+    metaRows.push(['Submission via',  d.source === 'book_demo' ? 'book-demo form' : 'chatbot']);
     metaRows.push(['Stage reached',   stageNum + ' of ' + STEPS.length + ' — ' + stageName]);
     if (profile && profile.first_seen) {
       var days = Math.max(0, Math.round((Date.now() - profile.first_seen) / 86400000));
@@ -1414,8 +1611,50 @@
     // Re-check just before opening — the user might have clicked the
     // launcher in the 1 s grace window.
     if (state.open) return;
-    open();
+    open({ focused: false });
   }
+
+  /**
+   * Intercept clicks on "Schedule a Callback" links (anything ending in
+   * /book-demo or /book-demo.html) and open the chat in focused mode
+   * instead. The anchor's href stays intact so visitors without JS — or
+   * those who middle/cmd/ctrl-click for a new tab — still land on the
+   * book-demo form. That's the no-JS fallback the user asked for.
+   */
+  var BOOK_DEMO_HREF_RE = /(?:^|\/)book-demo(?:\.html)?(?:[?#].*)?$/i;
+  function isPlainLeftClick(e) {
+    return e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && !e.defaultPrevented;
+  }
+  function bookDemoAnchorFor(target) {
+    if (!target || !target.closest) return null;
+    var a = target.closest('a[href]');
+    if (!a) return null;
+    if (a.target && a.target !== '' && a.target !== '_self') return null;
+    if (a.hasAttribute('download')) return null;
+    var href = (a.getAttribute('href') || '').trim();
+    if (!href || href.charAt(0) === '#') return null;
+    return BOOK_DEMO_HREF_RE.test(href.split('?')[0].split('#')[0]) ? a : null;
+  }
+  function installBookDemoInterceptor() {
+    if (window.__ntBookDemoIntercepted) return;
+    window.__ntBookDemoIntercepted = true;
+    document.addEventListener('click', function (e) {
+      if (!isPlainLeftClick(e)) return;
+      var a = bookDemoAnchorFor(e.target);
+      if (!a) return;
+      e.preventDefault();
+      open({ focused: true });
+    });
+  }
+
+  // Public API for anything else on the page that wants to programmatically
+  // open the chat (e.g. a hand-written CTA without a book-demo href) or
+  // funnel a full lead through the same email pipeline.
+  window.NTChatbot = {
+    open:           function (opts) { open(opts || {}); },
+    openFocused:    function ()     { open({ focused: true }); },
+    submitFullLead: submitFullLead
+  };
 
   function boot() {
     if (!document.getElementById('nt-chatbot-root')) {
@@ -1424,6 +1663,7 @@
       document.body.appendChild(div);
     }
     mount();
+    installBookDemoInterceptor();
     var cfg = (window.AppConfig && window.AppConfig.chatbot) || {};
     var autoExpandDelayMs = typeof cfg.autoExpandDelayMs === 'number' ? cfg.autoExpandDelayMs : 1000;
     setTimeout(maybeAutoExpand, autoExpandDelayMs);

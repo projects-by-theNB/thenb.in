@@ -113,8 +113,52 @@
 .nt-field.is-invalid select { border-color: #dc2626; }
 .nt-field.is-invalid .nt-err { display: block; }
 
+/* Country-code <select> + phone input pair — visually one control. */
+.nt-phone-row { display: flex; gap: 8px; align-items: stretch; }
+.nt-phone-row select {
+  flex: 0 0 auto;
+  max-width: 110px;
+  width: auto;
+  /* Inherits .nt-field select styling above (border, padding, radius). */
+}
+.nt-phone-row input { flex: 1 1 auto; }
+
+/* "We've prefilled some fields" banner shown when NTVisitorProfile had data. */
+.nt-prefill-notice {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.nt-prefill-notice[hidden] { display: none; }
+.nt-prefill-clear {
+  background: none;
+  border: none;
+  color: #1e40af;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font-family: inherit;
+}
+.nt-prefill-clear:hover { color: #1e3a8a; }
+
+.nt-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  align-items: stretch;
+}
 .nt-submit-btn {
-  width: 100%;
+  flex: 1 1 auto;
   padding: 14px 22px;
   background: #2f5597;
   color: #fff;
@@ -124,10 +168,23 @@
   font-weight: 700;
   cursor: pointer;
   transition: background .15s ease;
-  margin-top: 8px;
 }
 .nt-submit-btn:hover { background: #244476; }
 .nt-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+.nt-clear-btn {
+  flex: 0 0 auto;
+  padding: 14px 18px;
+  background: #fff;
+  color: #475569;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+  font-family: inherit;
+}
+.nt-clear-btn:hover { background: #f8fafc; color: #0f172a; border-color: #cbd5e1; }
 
 .nt-form-foot {
   font-size: 12px;

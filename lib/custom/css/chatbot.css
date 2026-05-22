@@ -124,6 +124,54 @@
   .nt-chat-panel, .nt-chat-panel.is-leaving { animation: none; }
 }
 
+/* Focus-mode variant — applied when the visitor opens the chat via the
+   bottom-right "Schedule a callback" launcher. The panel becomes a centered
+   modal with a dimmed backdrop so the conversation has the visitor's full
+   attention. The auto-expand path keeps the compact dock so we don't
+   ambush passive readers. */
+.nt-chat-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, .55);
+  z-index: 99998;
+  animation: nt-chat-backdrop-in .2s ease-out;
+  cursor: pointer;
+}
+@keyframes nt-chat-backdrop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.nt-chat-backdrop.is-leaving { animation: nt-chat-backdrop-out .18s ease-in forwards; }
+@keyframes nt-chat-backdrop-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+.nt-chat-panel.is-focused {
+  right: auto;
+  bottom: auto;
+  top: 50%;
+  left: 50%;
+  width: min(560px, calc(100vw - 32px));
+  max-width: min(560px, calc(100vw - 32px));
+  height: min(720px, calc(100vh - 64px));
+  max-height: calc(100vh - 64px);
+  min-height: min(420px, calc(100vh - 64px));
+  border-radius: 16px;
+  transform-origin: center center;
+  animation: nt-chat-in-focused .22s ease-out;
+}
+@keyframes nt-chat-in-focused {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(.96); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+/* Static transform once the entry animation is over, otherwise the
+   element snaps back to no-transform and ends up off-centre. */
+.nt-chat-panel.is-focused { transform: translate(-50%, -50%); }
+@media (prefers-reduced-motion: reduce) {
+  .nt-chat-panel.is-focused, .nt-chat-backdrop { animation: none; }
+}
+
 .nt-chat-head {
   background: #2f5597;
   color: #fff;
@@ -286,7 +334,22 @@
 
 /* ----- Input footer ------------------------------------------------------ */
 .nt-chat-foot { padding: 12px 14px; border-top: 1px solid #e2e8f0; background: #fff; }
-.nt-chat-input-row { display: flex; gap: 8px; align-items: flex-end; }
+.nt-chat-input-row { display: flex; gap: 8px; align-items: stretch; }
+.nt-chat-dial {
+  flex: 0 0 auto;
+  max-width: 110px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #0f172a;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color .15s ease;
+}
+.nt-chat-dial:focus { border-color: #2f5597; }
 .nt-chat-input,
 .nt-chat-textarea {
   flex: 1;
