@@ -538,7 +538,7 @@
       var dial = getDial() || '';
       var rest = (input.value || '').trim();
       var combined = (dial ? dial + ' ' : '') + rest;
-      if (!window.NTValidators || !window.NTValidators.isValidPhoneDigits(rest)) {
+      if (!window.NTValidators || !window.NTValidators.isValidPhoneDigits(rest, dial)) {
         errBox.textContent = 'Please enter a valid phone number.';
         input.focus();
         return;

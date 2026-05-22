@@ -367,10 +367,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var email   = document.getElementById('bd-email');
 
     var V = window.NTValidators || {};
-    if (!raw.name)                            { setInvalid(name, true);    ok = false; } else setInvalid(name, false);
-    if (!raw.company)                         { setInvalid(company, true); ok = false; } else setInvalid(company, false);
-    if (!V.isValidPhoneDigits || !V.isValidPhoneDigits(raw.phone)) { setInvalid(phone, true); ok = false; } else setInvalid(phone, false);
-    if (!V.isValidEmail       || !V.isValidEmail(raw.email))       { setInvalid(email, true); ok = false; } else setInvalid(email, false);
+    var dial = getDialValue() || '';
+    if (!raw.name)                                                       { setInvalid(name, true);    ok = false; } else setInvalid(name, false);
+    if (!raw.company)                                                    { setInvalid(company, true); ok = false; } else setInvalid(company, false);
+    if (!V.isValidPhoneDigits || !V.isValidPhoneDigits(raw.phone, dial)) { setInvalid(phone, true);   ok = false; } else setInvalid(phone, false);
+    if (!V.isValidEmail       || !V.isValidEmail(raw.email))             { setInvalid(email, true);   ok = false; } else setInvalid(email, false);
     return ok;
   }
 

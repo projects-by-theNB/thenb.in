@@ -311,8 +311,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       else setInvalid(el, false);
     });
     var V = window.NTValidators || {};
+    var ipDial = (window.NTIPLocation && window.NTIPLocation.getDialCode)
+      ? window.NTIPLocation.getDialCode() : '';
     var phone = document.getElementById('o-phone');
-    if (!V.isValidPhoneDigits || !V.isValidPhoneDigits(phone.value)) { setInvalid(phone, true); ok = false; }
+    if (!V.isValidPhoneDigits || !V.isValidPhoneDigits(phone.value, ipDial)) { setInvalid(phone, true); ok = false; }
     var email = document.getElementById('o-email');
     if (!V.isValidEmail || !V.isValidEmail(email.value)) { setInvalid(email, true); ok = false; }
     var pin = document.getElementById('o-pincode');
