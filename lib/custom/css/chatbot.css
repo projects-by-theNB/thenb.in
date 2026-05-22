@@ -335,21 +335,20 @@
 /* ----- Input footer ------------------------------------------------------ */
 .nt-chat-foot { padding: 12px 14px; border-top: 1px solid #e2e8f0; background: #fff; }
 .nt-chat-input-row { display: flex; gap: 8px; align-items: stretch; }
+/* Fallback dial-code <select> — only renders if NTDialPicker isn't on
+   window yet when the phone step builds. Kept small to mimic the real
+   picker's button. */
 .nt-chat-dial {
   flex: 0 0 auto;
-  max-width: 110px;
   border: 1.5px solid #e2e8f0;
   border-radius: 10px;
   padding: 10px 8px;
+  font: inherit;
   font-size: 14px;
-  font-family: inherit;
   color: #0f172a;
   background: #fff;
-  outline: none;
   cursor: pointer;
-  transition: border-color .15s ease;
 }
-.nt-chat-dial:focus { border-color: #2f5597; }
 .nt-chat-input,
 .nt-chat-textarea {
   flex: 1;

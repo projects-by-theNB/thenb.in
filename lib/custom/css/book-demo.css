@@ -113,14 +113,9 @@
 .nt-field.is-invalid select { border-color: #dc2626; }
 .nt-field.is-invalid .nt-err { display: block; }
 
-/* Country-code <select> + phone input pair — visually one control. */
+/* Country-code picker + phone input pair — visually one control.
+   The picker itself comes from NTDialPicker (renders its own button). */
 .nt-phone-row { display: flex; gap: 8px; align-items: stretch; }
-.nt-phone-row select {
-  flex: 0 0 auto;
-  max-width: 110px;
-  width: auto;
-  /* Inherits .nt-field select styling above (border, padding, radius). */
-}
 .nt-phone-row input { flex: 1 1 auto; }
 
 /* "We've prefilled some fields" banner shown when NTVisitorProfile had data. */

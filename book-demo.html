@@ -95,7 +95,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="nt-field">
             <label for="bd-phone">Phone / WhatsApp <span class="nt-req">*</span></label>
             <div class="nt-phone-row">
-              <select id="bd-dial" name="dial_code" aria-label="Country code"></select>
+              <span id="bd-dial-mount"></span>
               <input type="tel" id="bd-phone" name="phone" autocomplete="tel" inputmode="numeric" pattern="[0-9 ()-]{7,20}" required />
             </div>
             <div class="nt-err">Please share a reachable phone number.</div>
@@ -189,10 +189,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var submitBtn = document.getElementById('bd-submit');
   var clearBtn = document.getElementById('bd-clear');
   var errorBox = document.getElementById('bd-error');
-  var dialSel = document.getElementById('bd-dial');
+  var dialMount = document.getElementById('bd-dial-mount');
   var phoneInput = document.getElementById('bd-phone');
   var prefillNotice = document.getElementById('bd-prefill-notice');
   var prefillClear = document.getElementById('bd-prefill-clear');
+
+  // Lazily-created NTDialPicker instance (the script loads via defer; the
+  // picker is built on the first call to ensureDialPicker after the helper
+  // has shown up on window).
+  var dialPicker = null;
+  function ensureDialPicker(initial) {
+    if (dialPicker) return dialPicker;
+    if (!window.NTDialPicker || !window.NTDialPicker.create) return null;
+    dialPicker = window.NTDialPicker.create({
+      selected:  initial || null,
+      ariaLabel: 'Country code'
+    });
+    if (dialMount) dialMount.appendChild(dialPicker.element);
+    return dialPicker;
+  }
+  function getDialValue() { return dialPicker ? dialPicker.getValue() : null; }
+  function setDialValue(v) { if (dialPicker && v) dialPicker.setValue(v); }
 
   // Maps chatbot team-size labels ("11 – 50") to this form's option values
   // ("11-50"). Tolerates en-dash, em-dash, regular spaces, and commas.
@@ -208,30 +225,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return m ? [m[1], m[2]] : ['', String(v)];
   }
 
-  // Populate the dial-code <select> with every country and select the one
-  // implied by the visitor's saved phone, the IP location, or fall back to
-  // "+91" so the form is usable even before NTIPLocation finishes loading.
-  function populateDialCodes(preferredDial) {
-    if (!dialSel || dialSel.options.length > 1) return;
-    var list = (window.NTIPLocation && window.NTIPLocation.getAllDialCodes)
-      ? window.NTIPLocation.getAllDialCodes() : [];
+  // Mounts the dial picker with the preferred dial code (saved → IP → +91).
+  // Safe to call repeatedly; only constructs the picker once.
+  function mountDialPicker(preferredDial) {
     var ipDial = (window.NTIPLocation && window.NTIPLocation.getDialCode)
       ? window.NTIPLocation.getDialCode() : null;
     var chosen = preferredDial || ipDial || '+91';
-    dialSel.innerHTML = '';
-    var hasChosen = list.some(function (c) { return c.dial === chosen; });
-    if (!hasChosen && chosen) {
-      var opt = document.createElement('option');
-      opt.value = chosen; opt.textContent = chosen; opt.selected = true;
-      dialSel.appendChild(opt);
-    }
-    list.forEach(function (c) {
-      var o = document.createElement('option');
-      o.value = c.dial;
-      o.textContent = c.name + ' (' + c.dial + ')';
-      if (c.dial === chosen) o.selected = true;
-      dialSel.appendChild(o);
-    });
+    if (ensureDialPicker(chosen)) setDialValue(chosen);
   }
 
   // Pull every overlapping field out of NTVisitorProfile and write it to the
@@ -244,8 +244,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       ? window.NTVisitorProfile.get() : null;
     if (!profile) {
       if (retries > 0) return setTimeout(function () { prefillFromProfile(retries - 1); }, 150);
-      // Still populate the dial-code select even with no profile — IP is enough.
-      populateDialCodes(null);
+      // Still mount the dial-code picker even with no profile — IP is enough.
+      mountDialPicker(null);
       return;
     }
 
@@ -283,7 +283,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     var parts = splitPhone(profile.phone);
     var preferredDial = parts[0] || null;
-    populateDialCodes(preferredDial);
+    mountDialPicker(preferredDial);
     if (phoneInput && !phoneInput.value && parts[1]) {
       phoneInput.value = parts[1];
       applied = true;
@@ -301,9 +301,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // it's IP-derived / user-confirmed, not really a "prefilled" answer in
     // the same sense as name/email, and resetting it just makes the user
     // re-pick something they already had right.
-    var keptDial = dialSel ? dialSel.value : null;
+    var keptDial = getDialValue();
     form.reset();
-    if (dialSel && keptDial) dialSel.value = keptDial;
+    if (keptDial) setDialValue(keptDial);
     if (prefillNotice) prefillNotice.hidden = true;
     Array.prototype.forEach.call(form.querySelectorAll('.nt-field.is-invalid'), function (f) {
       f.classList.remove('is-invalid');
@@ -404,7 +404,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     submitBtn.disabled = true;
     submitBtn.innerHTML = 'Sending…';
 
-    var dial          = (raw.dial_code || '').trim();
+    // Dial code now comes from the custom picker — no <select name="dial_code">
+    // in the form, so FormData doesn't carry it. Fall back to '' so a missing
+    // picker just submits the raw digits.
+    var dial          = (getDialValue() || '').trim();
     var combinedPhone = (dial ? dial + ' ' : '') + raw.phone;
 
     var interests = [];

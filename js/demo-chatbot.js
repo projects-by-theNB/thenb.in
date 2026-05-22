@@ -492,15 +492,10 @@
     var hasVerifiedEmail = !!state.data.email_verified;
     var hasEmail         = !!state.data.email;
 
-    // Default dial code from the visitor's IP country (e.g. "+91" for India).
-    // Used as the initial value of the country-code <select> below.
+    // Split any saved phone into "+XX" (for the picker) and the rest (for
+    // the input). Falls back to the IP-derived dial code when nothing saved.
     var ipDialCode = (window.NTIPLocation && window.NTIPLocation.getDialCode)
       ? window.NTIPLocation.getDialCode() : null;
-    var allDialCodes = (window.NTIPLocation && window.NTIPLocation.getAllDialCodes)
-      ? window.NTIPLocation.getAllDialCodes() : [];
-
-    // Split any saved phone into "+XX" (for the select) and the rest (for
-    // the input). Falls back to the IP-derived dial code when nothing saved.
     var savedPhone = state.data.phone || '';
     var savedDial  = state.data.dial_code || '';
     var savedRest  = savedPhone;
@@ -512,20 +507,23 @@
     }
     var initialDial = savedDial || ipDialCode || '+91';
 
-    var dialSelect = el('select', {
-      class: 'nt-chat-dial', 'aria-label': 'Country code'
-    });
-    // If the chosen dial code isn't in our list (very old session, hand-typed
-    // unusual code), still surface it as a selectable option up top.
-    var hasInitial = allDialCodes.some(function (c) { return c.dial === initialDial; });
-    if (!hasInitial && initialDial) {
-      dialSelect.appendChild(el('option', { value: initialDial, selected: 'selected' }, initialDial));
+    // Compact custom picker (button + searchable popover) so the row stays
+    // tight in the chat panel. Falls back to a tiny inline <select> only
+    // if NTDialPicker hasn't loaded yet — extremely rare in practice.
+    var dialEl, getDial;
+    if (window.NTDialPicker && window.NTDialPicker.create) {
+      var picker = window.NTDialPicker.create({
+        selected:  initialDial,
+        ariaLabel: 'Country code'
+      });
+      dialEl  = picker.element;
+      getDial = picker.getValue;
+    } else {
+      var fallback = el('select', { class: 'nt-chat-dial', 'aria-label': 'Country code' });
+      fallback.appendChild(el('option', { value: initialDial, selected: 'selected' }, initialDial));
+      dialEl  = fallback;
+      getDial = function () { return fallback.value; };
     }
-    allDialCodes.forEach(function (c) {
-      var attrs = { value: c.dial };
-      if (c.dial === initialDial) attrs.selected = 'selected';
-      dialSelect.appendChild(el('option', attrs, c.name + ' (' + c.dial + ')'));
-    });
 
     var input = el('input', {
       class: 'nt-chat-input', type: 'tel', inputmode: 'numeric',
@@ -537,7 +535,7 @@
     var errBox = el('div', { class: 'nt-chat-error' });
 
     var submit = function () {
-      var dial = dialSelect.value || '';
+      var dial = getDial() || '';
       var rest = (input.value || '').trim();
       var combined = (dial ? dial + ' ' : '') + rest;
       if (rest.replace(/\D/g, '').length < 7) {
@@ -560,7 +558,7 @@
       class: 'nt-chat-send', type: 'button', onclick: submit
     }, [el('i', { class: 'fa fa-paper-plane', 'aria-hidden': 'true' }), ' Send']);
 
-    dom.foot.appendChild(el('div', { class: 'nt-chat-input-row' }, [dialSelect, input, sendBtn]));
+    dom.foot.appendChild(el('div', { class: 'nt-chat-input-row' }, [dialEl, input, sendBtn]));
     dom.foot.appendChild(errBox);
 
     // Google sign-in — render only if we don't already have a verified email.

@@ -117,6 +117,9 @@
     // visitor (weekly refresh). Writes into NTVisitorProfile.ip_location so
     // every outbound email can include the network rows.
     loadScript('js/ip-location.js');
+    // Compact country-code picker used by the chatbot phone step and the
+    // book-demo form. Depends on NTIPLocation for the country list.
+    loadScript('js/dial-picker.js');
     loadScript('js/cta-tracking.js');
     // No-op on pages without [data-track-form]; safe to load globally.
     loadScript('js/form-tracking.js');
