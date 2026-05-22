@@ -294,10 +294,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (wrap) wrap.classList.toggle('is-invalid', !!invalid);
   }
 
-  function emailLooksValid(v) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  }
-
   function readForm() {
     var fd = new FormData(form);
     var obj = {};
@@ -314,10 +310,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (!v) { setInvalid(el, true); ok = false; }
       else setInvalid(el, false);
     });
+    var V = window.NTValidators || {};
     var phone = document.getElementById('o-phone');
-    if (phone.value.replace(/\D/g, '').length < 7) { setInvalid(phone, true); ok = false; }
+    if (!V.isValidPhoneDigits || !V.isValidPhoneDigits(phone.value)) { setInvalid(phone, true); ok = false; }
     var email = document.getElementById('o-email');
-    if (!emailLooksValid(email.value)) { setInvalid(email, true); ok = false; }
+    if (!V.isValidEmail || !V.isValidEmail(email.value)) { setInvalid(email, true); ok = false; }
     var pin = document.getElementById('o-pincode');
     if (!/^[0-9]{6}$/.test(pin.value)) { setInvalid(pin, true); ok = false; }
     return ok;

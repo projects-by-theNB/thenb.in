@@ -328,10 +328,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (wrap) wrap.classList.toggle('is-invalid', !!invalid);
   }
 
-  function emailLooksValid(v) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  }
-
   // Book-demo "11-50" → chatbot's "11 – 50" label so the team-size cell in
   // the email looks identical whether the lead came in via chat or form.
   var TEAM_SIZE_TO_CHAT = {
@@ -370,10 +366,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var phone   = document.getElementById('bd-phone');
     var email   = document.getElementById('bd-email');
 
-    if (!raw.name)                                                  { setInvalid(name, true);    ok = false; } else setInvalid(name, false);
-    if (!raw.company)                                               { setInvalid(company, true); ok = false; } else setInvalid(company, false);
-    if (!raw.phone || raw.phone.replace(/\D/g, '').length < 7)      { setInvalid(phone, true);   ok = false; } else setInvalid(phone, false);
-    if (!emailLooksValid(raw.email))                                { setInvalid(email, true);   ok = false; } else setInvalid(email, false);
+    var V = window.NTValidators || {};
+    if (!raw.name)                            { setInvalid(name, true);    ok = false; } else setInvalid(name, false);
+    if (!raw.company)                         { setInvalid(company, true); ok = false; } else setInvalid(company, false);
+    if (!V.isValidPhoneDigits || !V.isValidPhoneDigits(raw.phone)) { setInvalid(phone, true); ok = false; } else setInvalid(phone, false);
+    if (!V.isValidEmail       || !V.isValidEmail(raw.email))       { setInvalid(email, true); ok = false; } else setInvalid(email, false);
     return ok;
   }
 

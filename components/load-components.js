@@ -117,6 +117,10 @@
     // visitor (weekly refresh). Writes into NTVisitorProfile.ip_location so
     // every outbound email can include the network rows.
     loadScript('js/ip-location.js');
+    // Shared form validators (phone, email). Single source of truth used by
+    // chatbot, book-demo, and order forms — load before anything that runs
+    // a submit validation.
+    loadScript('js/validators.js');
     // Compact country-code picker used by the chatbot phone step and the
     // book-demo form. Depends on NTIPLocation for the country list.
     loadScript('js/dial-picker.js');

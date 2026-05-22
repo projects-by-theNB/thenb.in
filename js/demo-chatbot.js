@@ -538,7 +538,7 @@
       var dial = getDial() || '';
       var rest = (input.value || '').trim();
       var combined = (dial ? dial + ' ' : '') + rest;
-      if (rest.replace(/\D/g, '').length < 7) {
+      if (!window.NTValidators || !window.NTValidators.isValidPhoneDigits(rest)) {
         errBox.textContent = 'Please enter a valid phone number.';
         input.focus();
         return;
@@ -696,10 +696,6 @@
     document.head.appendChild(s);
   }
 
-  function looksLikeEmail(v) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  }
-
   function renderMailStep() {
     var input = el('input', {
       class: 'nt-chat-input', type: 'email', autocomplete: 'email',
@@ -711,7 +707,7 @@
 
     var submitManual = function () {
       var v = (input.value || '').trim();
-      if (!looksLikeEmail(v)) {
+      if (!window.NTValidators || !window.NTValidators.isValidEmail(v)) {
         errBox.textContent = 'Please enter a valid email address.';
         input.focus();
         return;
