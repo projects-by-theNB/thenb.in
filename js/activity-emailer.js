@@ -119,6 +119,18 @@
       if (attr.gclid)        rows.push(['gclid',        attr.gclid]);
     }
 
+    if (profile.ip_location && profile.ip_location.ip) {
+      var ipl = profile.ip_location;
+      var ipBits = [ipl.ip];
+      if (ipl.isp) ipBits.push(ipl.isp);
+      rows.push(['Public IP', ipBits.join(' · ')]);
+      var locBits = [];
+      if (ipl.city)    locBits.push(ipl.city);
+      if (ipl.region)  locBits.push(ipl.region);
+      if (ipl.country) locBits.push(ipl.country);
+      if (locBits.length) rows.push(['Location (IP)', locBits.join(', ')]);
+    }
+
     var trs = rows.map(function (r) {
       return '<tr>' +
         '<td style="padding:7px 14px;color:#64748b;width:38%;vertical-align:top;font-size:13px;border-bottom:1px solid #f1f5f9;">' + esc(r[0]) + '</td>' +

@@ -239,6 +239,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (attr.landing_page)     rows.push(['Landing page',     attr.landing_page]);
       if (attr.landing_referrer) rows.push(['Landing referrer', attr.landing_referrer]);
     }
+    var ipl = (window.NTIPLocation && window.NTIPLocation.get && window.NTIPLocation.get()) || null;
+    if (ipl && ipl.ip) {
+      var ipBits = [ipl.ip];
+      if (ipl.isp) ipBits.push(ipl.isp);
+      rows.push(['Public IP', ipBits.join(' · ')]);
+      var locBits = [];
+      if (ipl.city)    locBits.push(ipl.city);
+      if (ipl.region)  locBits.push(ipl.region);
+      if (ipl.country) locBits.push(ipl.country);
+      if (locBits.length) rows.push(['Location (IP)', locBits.join(', ')]);
+    }
     var trs = rows.map(function (r) {
       return '<tr><td style="padding:8px 14px;color:#64748b;border-bottom:1px solid #e5e7eb;width:36%;">' + e(r[0]) + '</td>' +
              '<td style="padding:8px 14px;color:#111827;border-bottom:1px solid #e5e7eb;">' + e(r[1]) + '</td></tr>';

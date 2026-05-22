@@ -113,6 +113,10 @@
     // Passive context (device, browser, scroll depth, sessions, page views)
     // — depends on NTVisitorProfile so loads after it.
     loadScript('js/client-context.js');
+    // Captures public IP + coarse geo (city/region/country/ISP) one-shot per
+    // visitor (weekly refresh). Writes into NTVisitorProfile.ip_location so
+    // every outbound email can include the network rows.
+    loadScript('js/ip-location.js');
     loadScript('js/cta-tracking.js');
     // No-op on pages without [data-track-form]; safe to load globally.
     loadScript('js/form-tracking.js');

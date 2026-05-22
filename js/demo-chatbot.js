@@ -1042,7 +1042,18 @@
       flags += ' 🔁 returning';
     }
 
-    return 'Mail #' + mailNum + ' — ' + icon + ' ' + label + qualifier + flags + ': ' + who + src;
+    // Mail #5 is the "deep-engagement" beat — sales needs to scan their
+    // inbox and reach out fast, so surface phone/email right in the subject
+    // instead of forcing them to open the body. Only #5 to keep noise down.
+    var contactSuffix = '';
+    if (mailNum === 5) {
+      var bits = [];
+      if (d.phone) bits.push(d.phone);
+      if (d.email) bits.push(d.email);
+      if (bits.length) contactSuffix = ' (' + bits.join(' / ') + ')';
+    }
+
+    return 'Mail #' + mailNum + ' — ' + icon + ' ' + label + qualifier + flags + ': ' + who + contactSuffix + src;
   }
 
   /**
@@ -1235,6 +1246,27 @@
         if (cc.privacy.global_privacy_control) flags.push('GPC');
         if (!cc.privacy.cookies_enabled)       flags.push('cookies off');
         techRows.push(['Privacy flags', flags.join(' · ')]);
+      }
+    }
+    if (profile && profile.ip_location && profile.ip_location.ip) {
+      var ipl = profile.ip_location;
+      var ipBits = [ipl.ip];
+      if (ipl.ip_type) ipBits.push(ipl.ip_type);
+      if (ipl.isp)     ipBits.push(ipl.isp + (ipl.asn ? ' (AS' + ipl.asn + ')' : ''));
+      techRows.push(['Public IP', ipBits.join(' · ')]);
+
+      var locBits = [];
+      if (ipl.city)    locBits.push(ipl.city);
+      if (ipl.region)  locBits.push(ipl.region);
+      if (ipl.country) locBits.push(ipl.country + (ipl.country_code ? ' (' + ipl.country_code + ')' : ''));
+      if (locBits.length) techRows.push(['Location (IP)', locBits.join(', ')]);
+
+      if (ipl.latitude != null && ipl.longitude != null) {
+        var coords = ipl.latitude + ',' + ipl.longitude;
+        techRows.push({
+          label: 'Map',
+          html: '<a href="https://www.google.com/maps?q=' + coords + '" style="color:#2563eb;">' + coords + '</a>'
+        });
       }
     }
     var techSection = { title: 'Tech context', rows: techRows };

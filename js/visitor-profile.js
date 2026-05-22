@@ -105,6 +105,9 @@
       // Stable device/browser/OS fingerprint captured on first visit.
       // Set by NTVisitorProfile.setClientContext() — only writes once.
       client_context: null,
+      // Public IP + coarse geo (city/region/country/ISP), captured by
+      // js/ip-location.js. Refreshed at most weekly. Set via setIPLocation().
+      ip_location: null,
       // Number of distinct sessions (30-min activity window). Bumped on
       // each pageload where Date.now() - last_activity_at > 30 min.
       session_count: 0,
@@ -158,6 +161,7 @@
   if (!Array.isArray(profile.activity_email_log))       profile.activity_email_log = [];
   if (!profile.page_views_by_path || typeof profile.page_views_by_path !== 'object') profile.page_views_by_path = {};
   if (typeof profile.client_context === 'undefined')    profile.client_context = null;
+  if (typeof profile.ip_location === 'undefined')       profile.ip_location = null;
 
   /* ---------- record this page visit -------------------------------------- */
   (function trackVisit() {
@@ -251,6 +255,17 @@
     setClientContext: function (ctx) {
       if (!ctx || profile.client_context) return;
       profile.client_context = ctx;
+      persist();
+    },
+
+    /**
+     * Replace the stored public IP + geo snapshot. Called by js/ip-location.js
+     * after each successful lookup (rate-limited inside that module to roughly
+     * once per week per visitor).
+     */
+    setIPLocation: function (loc) {
+      if (!loc || !loc.ip) return;
+      profile.ip_location = loc;
       persist();
     },
 

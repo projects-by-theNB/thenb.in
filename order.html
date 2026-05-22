@@ -359,6 +359,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (attr.landing_page)           attrRows.push(['Landing page', attr.landing_page]);
       if (attrRows.length) sections.push(['Source', attrRows]);
     }
+    var ipl = (window.NTIPLocation && window.NTIPLocation.get && window.NTIPLocation.get()) || null;
+    if (ipl && ipl.ip) {
+      var netRows = [];
+      var ipStr = ipl.ip + (ipl.isp ? ' · ' + ipl.isp : '');
+      netRows.push(['Public IP', ipStr]);
+      var locBits = [];
+      if (ipl.city)    locBits.push(ipl.city);
+      if (ipl.region)  locBits.push(ipl.region);
+      if (ipl.country) locBits.push(ipl.country);
+      if (locBits.length) netRows.push(['Location (IP)', locBits.join(', ')]);
+      sections.push(['Network', netRows]);
+    }
 
     var html = sections.map(function (sec) {
       var rows = sec[1].map(function (r) {
