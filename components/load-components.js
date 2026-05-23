@@ -98,6 +98,10 @@
     var s = document.createElement('script');
     s.src = src;
     s.defer = true;
+    // Dynamically-inserted scripts default to async — force in-order
+    // execution so things like chatbox-integration.js can rely on the
+    // library script that came before it.
+    s.async = false;
     document.head.appendChild(s);
   }
 
@@ -127,7 +131,20 @@
     loadScript('js/cta-tracking.js');
     // No-op on pages without [data-track-form]; safe to load globally.
     loadScript('js/form-tracking.js');
-    loadScript('js/demo-chatbot.js');
+    // Chatbox widget — generic library served from jsDelivr (source at
+    // https://github.com/thenb-in/chatbox). Pin to an exact tag so a bad
+    // commit can't break every site at once; bump deliberately on release.
+    // To force-refresh after a tag move: purge.jsdelivr.net/gh/thenb-in/chatbox@TAG/...
+    // The integration shim wires the NT adapters (profile, attribution,
+    // mailer subject/body) and exposes window.NTChatbot for book-demo.
+    var chatboxRel = 'v1.0.0';
+    var chatboxBase = 'https://cdn.jsdelivr.net/gh/thenb-in/chatbox@' + chatboxRel + '/src/';
+    var cbStyle = document.createElement('link');
+    cbStyle.rel  = 'stylesheet';
+    cbStyle.href = chatboxBase + 'chatbox.css';
+    document.head.appendChild(cbStyle);
+    loadScript(chatboxBase + 'chatbox.js');
+    loadScript('js/chatbox-integration.js');
     // Sends mails when a known profile (phone OR email) keeps interacting
     // with the site outside the chatbot — session returns, pricing views,
     // deep scrolls, repeat product visits. Rate-limited inside.
