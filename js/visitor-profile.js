@@ -2,7 +2,7 @@
  * Persistent visitor profile.
  *
  * Auto-tracks every product page the visitor has ever browsed (localStorage,
- * 365 d TTL). The demo-chatbot reads this to pre-tick interests so a visitor
+ * 365 d TTL). The chatbox reads this to pre-tick interests so a visitor
  * who has hopped between /hrms, /erp and /crm sees all three pre-selected
  * when they finally open the chat.
  *

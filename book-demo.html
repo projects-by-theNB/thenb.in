@@ -189,49 +189,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var submitBtn = document.getElementById('bd-submit');
   var clearBtn = document.getElementById('bd-clear');
   var errorBox = document.getElementById('bd-error');
-  var dialMount = document.getElementById('bd-dial-mount');
   var phoneInput = document.getElementById('bd-phone');
   var prefillNotice = document.getElementById('bd-prefill-notice');
   var prefillClear = document.getElementById('bd-prefill-clear');
 
-  // Lazily-created NTDialPicker instance (the script loads via defer; the
-  // picker is built on the first call to ensureDialPicker after the helper
-  // has shown up on window).
-  var dialPicker = null;
-  function ensureDialPicker(initial) {
-    if (dialPicker) return dialPicker;
-    if (!window.NTDialPicker || !window.NTDialPicker.create) return null;
-    dialPicker = window.NTDialPicker.create({
-      selected:  initial || null,
-      ariaLabel: 'Country code'
-    });
-    if (dialMount) dialMount.appendChild(dialPicker.element);
-    return dialPicker;
+  // NTForms owns the phone (dial picker + validator) and email field wiring.
+  // It loads via load-components.js with defer, so it isn't on window yet
+  // when this inline script first runs — poll briefly until it shows up.
+  var ntForm = null;
+  function ensureNTForm(retries) {
+    if (ntForm) return ntForm;
+    if (typeof retries !== 'number') retries = 20;
+    if (window.NTForms && window.NTForms.attach) {
+      ntForm = window.NTForms.attach(form, {
+        phone: { input: '#bd-phone', dialMount: '#bd-dial-mount' },
+        email: '#bd-email'
+      });
+      return ntForm;
+    }
+    if (retries > 0) setTimeout(function () { ensureNTForm(retries - 1); }, 80);
+    return null;
   }
-  function getDialValue() { return dialPicker ? dialPicker.getValue() : null; }
-  function setDialValue(v) { if (dialPicker && v) dialPicker.setValue(v); }
+  ensureNTForm();
 
   // Maps chatbot team-size labels ("11 – 50") to this form's option values
   // ("11-50"). Tolerates en-dash, em-dash, regular spaces, and commas.
   function normaliseTeamSize(s) {
     if (!s) return '';
     return String(s).replace(/[–—]/g, '-').replace(/[\s,]/g, '');
-  }
-
-  // Splits "+91 98765 43210" → ["+91", "98765 43210"]. Falls back to ["", v].
-  function splitPhone(v) {
-    if (!v) return ['', ''];
-    var m = String(v).match(/^\s*(\+\d{1,4})\s*(.*)$/);
-    return m ? [m[1], m[2]] : ['', String(v)];
-  }
-
-  // Mounts the dial picker with the preferred dial code (saved → IP → +91).
-  // Safe to call repeatedly; only constructs the picker once.
-  function mountDialPicker(preferredDial) {
-    var ipDial = (window.NTIPLocation && window.NTIPLocation.getDialCode)
-      ? window.NTIPLocation.getDialCode() : null;
-    var chosen = preferredDial || ipDial || '+91';
-    if (ensureDialPicker(chosen)) setDialValue(chosen);
   }
 
   // Pull every overlapping field out of NTVisitorProfile and write it to the
@@ -244,9 +229,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       ? window.NTVisitorProfile.get() : null;
     if (!profile) {
       if (retries > 0) return setTimeout(function () { prefillFromProfile(retries - 1); }, 150);
-      // Still mount the dial-code picker even with no profile — IP is enough.
-      mountDialPicker(null);
-      return;
+      return; // NTForms mounted the dial picker with IP / +91 default already.
     }
 
     var applied = false;
@@ -281,15 +264,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }
     }
 
-    var parts = splitPhone(profile.phone);
-    var preferredDial = parts[0] || null;
-    mountDialPicker(preferredDial);
-    if (phoneInput && !phoneInput.value && parts[1]) {
-      phoneInput.value = parts[1];
-      applied = true;
-    } else if (phoneInput && !phoneInput.value && profile.phone && !parts[0]) {
-      // Phone without a recognisable dial-code prefix — drop it in as-is.
-      phoneInput.value = profile.phone;
+    if (profile.phone && phoneInput && !phoneInput.value) {
+      // NTForms.setPhone splits "+91 98765 43210" → picker + national digits;
+      // numbers without a dial prefix go in as-is and keep the IP/default dial.
+      var f = ensureNTForm();
+      if (f) f.setPhone(profile.phone);
+      else phoneInput.value = profile.phone;
       applied = true;
     }
 
@@ -301,9 +281,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // it's IP-derived / user-confirmed, not really a "prefilled" answer in
     // the same sense as name/email, and resetting it just makes the user
     // re-pick something they already had right.
-    var keptDial = getDialValue();
+    var keptDial = ntForm ? ntForm.getDialCode() : null;
     form.reset();
-    if (keptDial) setDialValue(keptDial);
+    if (keptDial && ntForm) ntForm.setDialCode(keptDial);
     if (prefillNotice) prefillNotice.hidden = true;
     Array.prototype.forEach.call(form.querySelectorAll('.nt-field.is-invalid'), function (f) {
       f.classList.remove('is-invalid');
@@ -358,20 +338,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   function validate(raw) {
-    // raw.phone here is just digits (no dial code) — that's what the user
-    // typed. We validate that on its own, the same way the chatbot does.
+    // NTForms covers phone (with dial-code-aware libphonenumber check) and
+    // email (with Google-verified skip). Name + company are simple required-
+    // field checks the page still owns.
     var ok = true;
     var name    = document.getElementById('bd-name');
     var company = document.getElementById('bd-company');
-    var phone   = document.getElementById('bd-phone');
-    var email   = document.getElementById('bd-email');
-
-    var V = window.NTValidators || {};
-    var dial = getDialValue() || '';
-    if (!raw.name)                                                       { setInvalid(name, true);    ok = false; } else setInvalid(name, false);
-    if (!raw.company)                                                    { setInvalid(company, true); ok = false; } else setInvalid(company, false);
-    if (!V.isValidPhoneDigits || !V.isValidPhoneDigits(raw.phone, dial)) { setInvalid(phone, true);   ok = false; } else setInvalid(phone, false);
-    if (!V.isValidEmail       || !V.isValidEmail(raw.email))             { setInvalid(email, true);   ok = false; } else setInvalid(email, false);
+    if (!raw.name)    { setInvalid(name, true);    ok = false; } else setInvalid(name, false);
+    if (!raw.company) { setInvalid(company, true); ok = false; } else setInvalid(company, false);
+    var f = ensureNTForm();
+    if (!f || !f.validate()) ok = false;
     return ok;
   }
 
@@ -405,7 +381,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // Dial code now comes from the custom picker — no <select name="dial_code">
     // in the form, so FormData doesn't carry it. Fall back to '' so a missing
     // picker just submits the raw digits.
-    var dial          = (getDialValue() || '').trim();
+    var dial          = ((ntForm && ntForm.getDialCode()) || '').trim();
     var combinedPhone = (dial ? dial + ' ' : '') + raw.phone;
 
     var interests = [];

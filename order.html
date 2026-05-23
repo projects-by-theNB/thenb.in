@@ -301,6 +301,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return obj;
   }
 
+  // NTForms owns phone (libphonenumber + IP dial fallback) and email
+  // (Google-verified skip). It loads via load-components.js with defer, so
+  // we poll briefly until it shows up. picker:false keeps the existing
+  // order-form layout — no visible dial picker, country is IP-derived.
+  var ntForm = null;
+  function ensureNTForm(retries) {
+    if (ntForm) return ntForm;
+    if (typeof retries !== 'number') retries = 20;
+    if (window.NTForms && window.NTForms.attach) {
+      ntForm = window.NTForms.attach(form, {
+        phone: { input: '#o-phone', picker: false },
+        email: '#o-email'
+      });
+      return ntForm;
+    }
+    if (retries > 0) setTimeout(function () { ensureNTForm(retries - 1); }, 80);
+    return null;
+  }
+  ensureNTForm();
+
   function validate(data) {
     var ok = true;
     requiredFields.forEach(function (id) {
@@ -310,13 +330,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (!v) { setInvalid(el, true); ok = false; }
       else setInvalid(el, false);
     });
-    var V = window.NTValidators || {};
-    var ipDial = (window.NTIPLocation && window.NTIPLocation.getDialCode)
-      ? window.NTIPLocation.getDialCode() : '';
-    var phone = document.getElementById('o-phone');
-    if (!V.isValidPhoneDigits || !V.isValidPhoneDigits(phone.value, ipDial)) { setInvalid(phone, true); ok = false; }
-    var email = document.getElementById('o-email');
-    if (!V.isValidEmail || !V.isValidEmail(email.value)) { setInvalid(email, true); ok = false; }
+    var f = ensureNTForm();
+    if (!f || !f.validate()) ok = false;
     var pin = document.getElementById('o-pincode');
     if (!/^[0-9]{6}$/.test(pin.value)) { setInvalid(pin, true); ok = false; }
     return ok;

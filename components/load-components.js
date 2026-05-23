@@ -93,6 +93,33 @@
     }
   }
 
+  // NTForms (chatbox/src/forms.js) takes all of its dependencies as adapters
+  // — pass the site's primitives in once they've loaded. Polls because all
+  // of these load via defer and may not be on window yet. Idempotent: only
+  // calls NTForms.configure() once.
+  var _ntFormsConfigured = false;
+  function configureNTFormsWhenReady(retries) {
+    if (_ntFormsConfigured) return;
+    if (typeof retries !== 'number') retries = 40;
+    if (window.NTForms && window.NTForms.configure &&
+        window.NTValidators && window.NTDialPicker && window.NTIPLocation &&
+        window.AppConfig) {
+      window.NTForms.configure({
+        validators:   window.NTValidators,
+        dialPicker:   window.NTDialPicker,
+        ipLocation:   window.NTIPLocation,
+        googleSignIn: window.AppConfig.googleClientId
+                        ? { clientId: window.AppConfig.googleClientId }
+                        : null,
+        profile:      window.NTVisitorProfile || null
+      });
+      _ntFormsConfigured = true;
+      return;
+    }
+    if (retries <= 0) return;
+    setTimeout(function () { configureNTFormsWhenReady(retries - 1); }, 80);
+  }
+
   function loadScript(src) {
     if (document.querySelector('script[src="' + src + '"]')) return;
     var s = document.createElement('script');
@@ -131,19 +158,24 @@
     loadScript('js/cta-tracking.js');
     // No-op on pages without [data-track-form]; safe to load globally.
     loadScript('js/form-tracking.js');
-    // Chatbox widget — generic library served from jsDelivr (source at
-    // https://github.com/thenb-in/chatbox). Pin to an exact tag so a bad
-    // commit can't break every site at once; bump deliberately on release.
-    // To force-refresh after a tag move: purge.jsdelivr.net/gh/thenb-in/chatbox@TAG/...
-    // The integration shim wires the NT adapters (profile, attribution,
-    // mailer subject/body) and exposes window.NTChatbot for book-demo.
-    var chatboxRel = 'v1.0.0';
+    // Chatbox widget + Forms module — served from jsDelivr (source at
+    // https://github.com/thenb-in/chatbox). Pin to an exact tag in prod so
+    // a bad commit can't break every site at once; bump deliberately on
+    // release. To force-refresh after a tag move:
+    //   purge.jsdelivr.net/gh/thenb-in/chatbox@TAG/...
+    // chatbox.js exposes window.Chatbox (chat widget) and forms.js exposes
+    // window.NTForms (regular-form wiring). chatbox-integration.js wires
+    // the site's adapters; configureNTFormsWhenReady() wires the same
+    // adapters into NTForms once it lands on window.
+    var chatboxRel = 'v1';
     var chatboxBase = 'https://cdn.jsdelivr.net/gh/thenb-in/chatbox@' + chatboxRel + '/src/';
     var cbStyle = document.createElement('link');
     cbStyle.rel  = 'stylesheet';
     cbStyle.href = chatboxBase + 'chatbox.css';
     document.head.appendChild(cbStyle);
     loadScript(chatboxBase + 'chatbox.js');
+    loadScript(chatboxBase + 'forms.js');
+    configureNTFormsWhenReady();
     loadScript('js/chatbox-integration.js');
     // Sends mails when a known profile (phone OR email) keeps interacting
     // with the site outside the chatbot — session returns, pricing views,
