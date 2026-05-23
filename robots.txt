@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Utility redirect pages - no indexing value
+Disallow: /meet
+Disallow: /reach
+
+# Conversion / form-confirmation pages — keep out of the index
+Disallow: /thank-you
+Disallow: /thank-you.html
+
+# High-intent order form — internal link only, not for organic search
+Disallow: /order
+Disallow: /order.html
+
+# Client portfolio projects
+Disallow: /client/
+
+# Disallow access to library and build files
+Disallow: /lib/
+Disallow: /gulp/
+Disallow: /dist/
+Disallow: /contactform/
+Disallow: /node_modules/
+
+Sitemap: https://www.navlakha.tech/sitemap.xml

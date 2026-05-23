@@ -43,6 +43,56 @@
   }
   </script>
 
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the Quotation → Sales Order → Invoice flow work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It is a one-click conversion at every stage. Build a quotation with item-wise pricing, taxes and discounts; when the customer accepts, convert it to a Sales Order with a single click — stock is reserved and production or dispatch is notified automatically. The Sales Order then converts directly into a GST-compliant Sales Invoice. No data is re-entered at any step."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I set customer-specific pricing and credit limits?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Each customer can have their own price list, discount slabs, and credit limit configured once. These are applied automatically whenever you raise a quotation or sales order for that customer — so the right price always appears without manual adjustment, and orders that breach credit limits trigger approval workflows."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does it generate GST-compliant invoices?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The system generates GST-compliant tax invoices, proforma invoices, and credit notes. It supports advance receipt adjustment, partial billing, returns, and credit-note workflows. Auto e-invoice and e-way bill generation is on the roadmap."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does it help with receivables and collections?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Outstanding receivables are tracked customer-wise with ageing buckets. Automated payment reminders go out on configurable schedules. Dashboards show sales performance by representative, region, and product, plus top customers and ageing reports — so your team follows up on time and DSO comes down predictably."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will sales orders connect to inventory, production, and procurement?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. A confirmed Sales Order automatically checks inventory, reserves stock, triggers a Work Order if production is needed, and raises a purchase requirement when raw material is short. Outgoing Quality Control clears finished goods before dispatch. Sales incentives and commissions feed directly into payroll — one connected flow across the ERP suite."
+        }
+      }
+    ]
+  }
+  </script>
+
   <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png" />
@@ -103,7 +153,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <nav class="product-breadcrumb" aria-label="breadcrumb">
         <a href="index.html">Home</a>
         <span class="sep"><i class="fa fa-angle-right"></i></span>
-        <a href="index.html#modules">ERP Suite</a>
+        <a href="erp.html">ERP Suite</a>
         <span class="sep"><i class="fa fa-angle-right"></i></span>
         <span class="current">Sales Management</span>
       </nav>
@@ -356,6 +406,70 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="erp-suite-cta-row">
         <a href="erp.html" class="erp-suite-view-all">View Full ERP Suite <i class="fa fa-arrow-right"></i></a>
       </div>
+    </div>
+  </section>
+
+  <!-- ======== FAQ ======== -->
+  <section id="faq" class="faq-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Common questions about the ERP Sales module.</p>
+      </div>
+      <ul class="faq-list" id="erp-sales-faq-list">
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-sales-faq1" aria-expanded="false">
+            How does the Quotation → Sales Order → Invoice flow work?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-sales-faq1" class="collapse" data-parent="#erp-sales-faq-list">
+            <p class="faq-answer">It is a one-click conversion at every stage. Build a quotation with item-wise pricing, taxes and discounts; when the customer accepts, convert it to a Sales Order with a single click — stock is reserved and production or dispatch is notified automatically. The Sales Order then converts directly into a GST-compliant Sales Invoice. No data is re-entered at any step.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-sales-faq2" aria-expanded="false">
+            Can I set customer-specific pricing and credit limits?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-sales-faq2" class="collapse" data-parent="#erp-sales-faq-list">
+            <p class="faq-answer">Yes. Each customer can have their own price list, discount slabs, and credit limit configured once. These are applied automatically whenever you raise a quotation or sales order for that customer — so the right price always appears without manual adjustment, and orders that breach credit limits trigger approval workflows.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-sales-faq3" aria-expanded="false">
+            Does it generate GST-compliant invoices?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-sales-faq3" class="collapse" data-parent="#erp-sales-faq-list">
+            <p class="faq-answer">Yes. The system generates GST-compliant tax invoices, proforma invoices, and credit notes. It supports advance receipt adjustment, partial billing, returns, and credit-note workflows. Auto e-invoice and e-way bill generation is on the roadmap.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-sales-faq4" aria-expanded="false">
+            How does it help with receivables and collections?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-sales-faq4" class="collapse" data-parent="#erp-sales-faq-list">
+            <p class="faq-answer">Outstanding receivables are tracked customer-wise with ageing buckets. Automated payment reminders go out on configurable schedules. Dashboards show sales performance by representative, region, and product, plus top customers and ageing reports — so your team follows up on time and DSO comes down predictably.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-sales-faq5" aria-expanded="false">
+            Will sales orders connect to inventory, production, and procurement?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-sales-faq5" class="collapse" data-parent="#erp-sales-faq-list">
+            <p class="faq-answer">Yes. A confirmed Sales Order automatically checks inventory, reserves stock, triggers a Work Order if production is needed, and raises a purchase requirement when raw material is short. Outgoing Quality Control clears finished goods before dispatch. Sales incentives and commissions feed directly into payroll — one connected flow across the ERP suite.</p>
+          </div>
+        </li>
+
+      </ul>
     </div>
   </section>
 

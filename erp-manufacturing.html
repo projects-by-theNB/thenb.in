@@ -43,6 +43,56 @@
   }
   </script>
 
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does the Manufacturing module support multi-level BOMs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. You can build multi-level Bills of Materials with sub-assemblies, alternate items, substitute routing, and configurable scrap and yield percentages. BOMs are version-controlled, so revisions are tracked over time, and the cost roll-up gives you a real-time standard cost for every product."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I plan and schedule production across machines and shifts?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Work orders can be raised from confirmed sales orders or directly from a production plan. Each work order is assigned to specific machines, workstations, and operators, and scheduled across shifts. Capacity planning and load balancing flag bottlenecks before they impact delivery."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is shop-floor activity tracked in real time?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Material issues and consumption, machine runtime and downtime, operator-wise output, and in-process quality checkpoints are all recorded as the work order progresses. WIP is visible in real time, so supervisors know exactly which batches are running, paused, or done — without chasing paper job cards."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will I know the true cost of each production run?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The module rolls up material, labour, and overhead into a per-unit cost for every batch. You can compare standard cost vs actual cost and view variance reports, machine utilisation efficiency, OEE dashboards, and scrap classified by root cause — so margin leakage gets caught early."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does Manufacturing connect to Purchase, Sales, QC, and HR?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Raw material shortages against the BOM auto-raise purchase requirements. Confirmed sales orders drive work-order creation. In-process QC checkpoints are embedded inside each work order stage. Machine downtime feeds into maintenance and AMC schedules in Asset Management. Shop-floor worker attendance and productivity feed payroll and incentives — all one connected flow."
+        }
+      }
+    ]
+  }
+  </script>
+
   <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png" />
@@ -90,7 +140,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <nav class="product-breadcrumb" aria-label="breadcrumb">
         <a href="index.html">Home</a>
         <span class="sep"><i class="fa fa-angle-right"></i></span>
-        <a href="index.html#modules">ERP Suite</a>
+        <a href="erp.html">ERP Suite</a>
         <span class="sep"><i class="fa fa-angle-right"></i></span>
         <span class="current">Manufacturing</span>
       </nav>
@@ -317,6 +367,70 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="erp-suite-cta-row">
         <a href="erp.html" class="erp-suite-view-all">View Full ERP Suite <i class="fa fa-arrow-right"></i></a>
       </div>
+    </div>
+  </section>
+
+  <!-- ======== FAQ ======== -->
+  <section id="faq" class="faq-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Common questions about the ERP Manufacturing module.</p>
+      </div>
+      <ul class="faq-list" id="erp-manufacturing-faq-list">
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-manufacturing-faq1" aria-expanded="false">
+            Does the Manufacturing module support multi-level BOMs?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-manufacturing-faq1" class="collapse" data-parent="#erp-manufacturing-faq-list">
+            <p class="faq-answer">Yes. You can build multi-level Bills of Materials with sub-assemblies, alternate items, substitute routing, and configurable scrap and yield percentages. BOMs are version-controlled, so revisions are tracked over time, and the cost roll-up gives you a real-time standard cost for every product.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-manufacturing-faq2" aria-expanded="false">
+            Can I plan and schedule production across machines and shifts?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-manufacturing-faq2" class="collapse" data-parent="#erp-manufacturing-faq-list">
+            <p class="faq-answer">Yes. Work orders can be raised from confirmed sales orders or directly from a production plan. Each work order is assigned to specific machines, workstations, and operators, and scheduled across shifts. Capacity planning and load balancing flag bottlenecks before they impact delivery.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-manufacturing-faq3" aria-expanded="false">
+            How is shop-floor activity tracked in real time?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-manufacturing-faq3" class="collapse" data-parent="#erp-manufacturing-faq-list">
+            <p class="faq-answer">Material issues and consumption, machine runtime and downtime, operator-wise output, and in-process quality checkpoints are all recorded as the work order progresses. WIP is visible in real time, so supervisors know exactly which batches are running, paused, or done — without chasing paper job cards.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-manufacturing-faq4" aria-expanded="false">
+            Will I know the true cost of each production run?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-manufacturing-faq4" class="collapse" data-parent="#erp-manufacturing-faq-list">
+            <p class="faq-answer">Yes. The module rolls up material, labour, and overhead into a per-unit cost for every batch. You can compare standard cost vs actual cost and view variance reports, machine utilisation efficiency, OEE dashboards, and scrap classified by root cause — so margin leakage gets caught early.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-manufacturing-faq5" aria-expanded="false">
+            How does Manufacturing connect to Purchase, Sales, QC, and HR?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-manufacturing-faq5" class="collapse" data-parent="#erp-manufacturing-faq-list">
+            <p class="faq-answer">Raw material shortages against the BOM auto-raise purchase requirements. Confirmed sales orders drive work-order creation. In-process QC checkpoints are embedded inside each work order stage. Machine downtime feeds into maintenance and AMC schedules in Asset Management. Shop-floor worker attendance and productivity feed payroll and incentives — all one connected flow.</p>
+          </div>
+        </li>
+
+      </ul>
     </div>
   </section>
 

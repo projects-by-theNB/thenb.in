@@ -80,8 +80,8 @@ Some of our clients –
         "@type": "OfferCatalog",
         "name": "Enterprise Software Products",
         "itemListElement": [
-          {"@type": "Offer", "name": "Attendance & Payroll Software", "url": "https://www.navlakha.tech/hrms"},
-          {"@type": "Offer", "name": "Attendance Management System", "url": "https://www.navlakha.tech/hrms"},
+          {"@type": "Offer", "name": "Attendance & Payroll Software (HRMS)", "url": "https://www.navlakha.tech/hrms"},
+          {"@type": "Offer", "name": "ERP Suite — Purchase, Sales, Manufacturing, QC, Assets", "url": "https://www.navlakha.tech/erp"},
           {"@type": "Offer", "name": "Store & Inventory Management Software", "url": "https://www.navlakha.tech/inventory"},
           {"@type": "Offer", "name": "Sales Force & CRM Tracking", "url": "https://www.navlakha.tech/crm"},
           {"@type": "Offer", "name": "Custom Application Development", "url": "https://www.navlakha.tech/custom"}
@@ -142,7 +142,7 @@ Some of our clients –
     }
     </script>
 
-    <!-- JSON-LD: SoftwareApplication list -->
+    <!-- JSON-LD: SoftwareApplication list — main products with sub-modules as hasPart -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -154,17 +154,83 @@ Some of our clients –
           "position": 1,
           "item": {
             "@type": "SoftwareApplication",
-            "name": "Attendance & Payroll Software",
+            "name": "Attendance & Payroll Software (HRMS)",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web, Android, iOS",
             "description": "Complete HRMS with AI-powered attendance, universal biometric device integration (any hardware brand), structured payroll and leave management, fully automated PF/ESIC/PT/TDS/CLRA compliance, casual labour management, and a user-friendly mobile app. Scales from 5 to 15,000 employees. Affordable pricing for Indian businesses.",
             "url": "https://www.navlakha.tech/hrms",
-            "offers": {"@type": "Offer", "availability": "https://schema.org/InStock"}
+            "offers": {"@type": "Offer", "availability": "https://schema.org/InStock"},
+            "hasPart": [
+              {
+                "@type": "SoftwareApplication",
+                "name": "Casual Labour Management HRMS",
+                "applicationCategory": "BusinessApplication",
+                "url": "https://www.navlakha.tech/casual-labour-hrms",
+                "description": "Manage on-call, seasonal and irregularly-scheduled workers with a flexible worker pool, irregular-shift scheduling, and CLRA-ready compliance."
+              },
+              {
+                "@type": "SoftwareApplication",
+                "name": "Contractor Management HRMS",
+                "applicationCategory": "BusinessApplication",
+                "url": "https://www.navlakha.tech/contractor-hrms",
+                "description": "Multi-contractor, multi-site workforce management with vendor payment reconciliation and statutory register generation."
+              }
+            ]
           }
         },
         {
           "@type": "ListItem",
           "position": 2,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "ERP Suite",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web, Android, iOS",
+            "description": "End-to-end ERP for Indian businesses — Purchase, Sales, Manufacturing, Quality Control and Asset Management modules built to work as one connected system with HR and Inventory.",
+            "url": "https://www.navlakha.tech/erp",
+            "offers": {"@type": "Offer", "availability": "https://schema.org/InStock"},
+            "hasPart": [
+              {
+                "@type": "SoftwareApplication",
+                "name": "ERP Purchase Management",
+                "applicationCategory": "BusinessApplication",
+                "url": "https://www.navlakha.tech/erp-purchase",
+                "description": "Requirement → Indent → RFQ → Quotation Comparison → PO → GRN → Purchase Invoice with multi-level approvals and 3-way matching."
+              },
+              {
+                "@type": "SoftwareApplication",
+                "name": "ERP Sales Management",
+                "applicationCategory": "BusinessApplication",
+                "url": "https://www.navlakha.tech/erp-sales",
+                "description": "Quotation → Sales Order → GST-compliant Invoice with customer-specific pricing, credit limits and receivables tracking."
+              },
+              {
+                "@type": "SoftwareApplication",
+                "name": "ERP Manufacturing",
+                "applicationCategory": "BusinessApplication",
+                "url": "https://www.navlakha.tech/erp-manufacturing",
+                "description": "Multi-level BOM, work order scheduling, shop-floor tracking, and standard-vs-actual costing for production runs."
+              },
+              {
+                "@type": "SoftwareApplication",
+                "name": "ERP Quality Control",
+                "applicationCategory": "BusinessApplication",
+                "url": "https://www.navlakha.tech/erp-quality-control",
+                "description": "Incoming, in-process and outgoing inspection gates with NCR, CAPA, root-cause analysis, and auto Certificate of Analysis."
+              },
+              {
+                "@type": "SoftwareApplication",
+                "name": "ERP Asset Management",
+                "applicationCategory": "BusinessApplication",
+                "url": "https://www.navlakha.tech/erp-asset-management",
+                "description": "Full asset lifecycle — QR-tagged register, SLM/WDV depreciation, preventive maintenance, AMC and warranty tracking."
+              }
+            ]
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
           "item": {
             "@type": "SoftwareApplication",
             "name": "Store & Inventory Management Software",
@@ -177,7 +243,7 @@ Some of our clients –
         },
         {
           "@type": "ListItem",
-          "position": 3,
+          "position": 4,
           "item": {
             "@type": "SoftwareApplication",
             "name": "Sales Force Automation & CRM",
@@ -185,6 +251,19 @@ Some of our clients –
             "operatingSystem": "Web, Android, iOS",
             "description": "Live field force tracking, call recording, route optimisation and sales performance analytics.",
             "url": "https://www.navlakha.tech/crm",
+            "offers": {"@type": "Offer", "availability": "https://schema.org/InStock"}
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "Custom Application Development",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web, Android, iOS",
+            "description": "Industry-specific custom software — enterprise systems, mobile apps and automation workflows — designed and built end-to-end around your exact processes.",
+            "url": "https://www.navlakha.tech/custom",
             "offers": {"@type": "Offer", "availability": "https://schema.org/InStock"}
           }
         }
@@ -579,10 +658,9 @@ Some of our clients –
                         <span class="feature-tag">Approval Workflows</span>
                         <span class="feature-tag">Vehicle Tracking</span>
                     </div>
-                    <a href="gatepass.html" class="arrow-indicator">
-                        <span>Learn More</span>
-                        <i class="fa fa-arrow-right"></i>
-                    </a>
+                    <span class="arrow-indicator" style="cursor:default; opacity:0.6;">
+                        <span>Coming Soon</span>
+                    </span>
                 </div>
                 <div class="module-card" data-module="safechat" color="purple">
                     <div class="module-icon">
@@ -595,10 +673,9 @@ Some of our clients –
                         <span class="feature-tag">SSO/SAML Auth</span>
                         <span class="feature-tag">Disappearing Msgs</span>
                     </div>
-                    <a href="safechat.html" class="arrow-indicator">
-                        <span>Learn More</span>
-                        <i class="fa fa-arrow-right"></i>
-                    </a>
+                    <span class="arrow-indicator" style="cursor:default; opacity:0.6;">
+                        <span>Coming Soon</span>
+                    </span>
                 </div>
                 <div class="module-card" data-module="projects" color="red">
                     <div class="module-icon">

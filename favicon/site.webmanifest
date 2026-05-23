@@ -1,6 +1,6 @@
 {
-    "name": "theNB",
-    "short_name": "theNB",
+    "name": "Navlakha Technologies",
+    "short_name": "Navlakha",
     "icons": [
         {
             "src": "android-chrome-192x192.png",
@@ -15,6 +15,6 @@
     ],
     "theme_color": "#2c2c2c",
     "background_color": "#2c2c2c",
-    "start_url": "www.thenb.in",
+    "start_url": "/",
     "display": "standalone"
 }

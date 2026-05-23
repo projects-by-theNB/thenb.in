@@ -43,6 +43,56 @@
   }
   </script>
 
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is covered in the Asset Management lifecycle?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Every asset is tracked from acquisition to disposal — Acquire (register with purchase details, cost, and QR/barcode tag), Depreciate (automatic monthly entries via SLM or WDV), Maintain (preventive maintenance schedules with service logs), Transfer (allocation, reassignment, and location moves with full history), and Dispose (sale, write-off, or end-of-life closure)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which depreciation methods are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Both Straight Line Method (SLM) and Written Down Value (WDV) are supported, configurable per asset category. The system handles useful life, residual value, partial-year depreciation for mid-year additions, and posts monthly depreciation entries automatically. You can pull a complete depreciation schedule and ledger report on demand."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does preventive maintenance scheduling work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Preventive maintenance intervals are defined per asset — daily, monthly, annually, or by operating hours. The system sends due-date reminders before maintenance is due, not after a breakdown. Every service event is logged with cost and vendor, and AMC contracts and warranty expiries are tracked with their own alerts."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I track assets across locations and identify them physically?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Every asset is tagged with a QR code or barcode. Scanning the tag pulls up the current location, custodian, service history, warranty status, and depreciation value — instantly from a phone. The system supports multi-entity and multi-branch asset registers, with transfer history retained when assets move."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does Asset Management connect to Purchase, Manufacturing, QC and HR?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Capital asset purchases auto-create asset records with depreciation schedules. Machine downtime data from the Manufacturing shop floor feeds maintenance and AMC scheduling. QC instrument calibration is managed as an asset with alert-driven renewals. Employee-assigned assets are linked in HR records, and transfers are reflected in the asset register without re-entry."
+        }
+      }
+    ]
+  }
+  </script>
+
   <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png" />
@@ -99,7 +149,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <nav class="product-breadcrumb" aria-label="breadcrumb">
         <a href="index.html">Home</a>
         <span class="sep"><i class="fa fa-angle-right"></i></span>
-        <a href="index.html#modules">ERP Suite</a>
+        <a href="erp.html">ERP Suite</a>
         <span class="sep"><i class="fa fa-angle-right"></i></span>
         <span class="current">Asset Management</span>
       </nav>
@@ -368,6 +418,70 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="erp-suite-cta-row">
         <a href="erp.html" class="erp-suite-view-all">View Full ERP Suite <i class="fa fa-arrow-right"></i></a>
       </div>
+    </div>
+  </section>
+
+  <!-- ======== FAQ ======== -->
+  <section id="faq" class="faq-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Common questions about the ERP Asset Management module.</p>
+      </div>
+      <ul class="faq-list" id="erp-asset-faq-list">
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-asset-faq1" aria-expanded="false">
+            What is covered in the Asset Management lifecycle?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-asset-faq1" class="collapse" data-parent="#erp-asset-faq-list">
+            <p class="faq-answer">Every asset is tracked from acquisition to disposal — Acquire (register with purchase details, cost, and QR/barcode tag), Depreciate (automatic monthly entries via SLM or WDV), Maintain (preventive maintenance schedules with service logs), Transfer (allocation, reassignment, and location moves with full history), and Dispose (sale, write-off, or end-of-life closure).</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-asset-faq2" aria-expanded="false">
+            Which depreciation methods are supported?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-asset-faq2" class="collapse" data-parent="#erp-asset-faq-list">
+            <p class="faq-answer">Both Straight Line Method (SLM) and Written Down Value (WDV) are supported, configurable per asset category. The system handles useful life, residual value, partial-year depreciation for mid-year additions, and posts monthly depreciation entries automatically. You can pull a complete depreciation schedule and ledger report on demand.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-asset-faq3" aria-expanded="false">
+            How does preventive maintenance scheduling work?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-asset-faq3" class="collapse" data-parent="#erp-asset-faq-list">
+            <p class="faq-answer">Preventive maintenance intervals are defined per asset — daily, monthly, annually, or by operating hours. The system sends due-date reminders before maintenance is due, not after a breakdown. Every service event is logged with cost and vendor, and AMC contracts and warranty expiries are tracked with their own alerts.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-asset-faq4" aria-expanded="false">
+            Can I track assets across locations and identify them physically?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-asset-faq4" class="collapse" data-parent="#erp-asset-faq-list">
+            <p class="faq-answer">Yes. Every asset is tagged with a QR code or barcode. Scanning the tag pulls up the current location, custodian, service history, warranty status, and depreciation value — instantly from a phone. The system supports multi-entity and multi-branch asset registers, with transfer history retained when assets move.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-asset-faq5" aria-expanded="false">
+            How does Asset Management connect to Purchase, Manufacturing, QC and HR?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-asset-faq5" class="collapse" data-parent="#erp-asset-faq-list">
+            <p class="faq-answer">Capital asset purchases auto-create asset records with depreciation schedules. Machine downtime data from the Manufacturing shop floor feeds maintenance and AMC scheduling. QC instrument calibration is managed as an asset with alert-driven renewals. Employee-assigned assets are linked in HR records, and transfers are reflected in the asset register without re-entry.</p>
+          </div>
+        </li>
+
+      </ul>
     </div>
   </section>
 

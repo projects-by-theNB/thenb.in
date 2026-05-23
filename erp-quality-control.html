@@ -43,6 +43,56 @@
   }
   </script>
 
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What inspection gates does the Quality Control module enforce?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Three mandatory checkpoints: Incoming Inspection (raw materials and components at receipt — pass, reject, or hold before warehouse entry), In-Process Inspection (defined stages during production, so defects are caught mid-process), and Outgoing Inspection (final QC before dispatch, with Certificate of Analysis generated automatically)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How are inspection checklists configured?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Checklists are configurable per item and per process stage, with numeric, visual, and pass/fail parameters. Each parameter can carry upper and lower tolerance limits. Inspectors can attach photos during inspection, and checklists are version-controlled so the exact specification used for each batch is preserved."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the NCR and root-cause workflow work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "When a defect is found, the inspector raises a Non-Conformance Report and classifies it by defect type, severity, and responsible party. Root cause is captured using the 5-Why framework, corrective and preventive action (CAPA) is assigned and tracked to closure, and NCR closure requires approval before the issue is signed off."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can the system generate Certificates of Analysis (CoA)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Once outgoing inspection passes, a Certificate of Analysis is auto-generated using a customisable template per product, batch-linked, and attached to the delivery. Digital signature and stamp support, plus a customer-wise CoA archive, make it easy to share and re-issue certificates whenever needed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does Quality Control connect to Purchase, Manufacturing, Sales, and Assets?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Incoming QC inspection is triggered on every Purchase Receipt before stock entry. In-process checkpoints are embedded inside every Manufacturing work order stage. Dispatch against Sales Orders is held until Outgoing QC is cleared. Calibration of QC instruments is tracked in Asset Management with due-date alerts. QC inspector certifications and shift assignments are HR-linked."
+        }
+      }
+    ]
+  }
+  </script>
+
   <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png" />
@@ -97,7 +147,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <nav class="product-breadcrumb" aria-label="breadcrumb">
         <a href="index.html">Home</a>
         <span class="sep"><i class="fa fa-angle-right"></i></span>
-        <a href="index.html#modules">ERP Suite</a>
+        <a href="erp.html">ERP Suite</a>
         <span class="sep"><i class="fa fa-angle-right"></i></span>
         <span class="current">Quality Control</span>
       </nav>
@@ -358,6 +408,70 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="erp-suite-cta-row">
         <a href="erp.html" class="erp-suite-view-all">View Full ERP Suite <i class="fa fa-arrow-right"></i></a>
       </div>
+    </div>
+  </section>
+
+  <!-- ======== FAQ ======== -->
+  <section id="faq" class="faq-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Common questions about the ERP Quality Control module.</p>
+      </div>
+      <ul class="faq-list" id="erp-qc-faq-list">
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-qc-faq1" aria-expanded="false">
+            What inspection gates does the Quality Control module enforce?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-qc-faq1" class="collapse" data-parent="#erp-qc-faq-list">
+            <p class="faq-answer">Three mandatory checkpoints: Incoming Inspection (raw materials and components at receipt — pass, reject, or hold before warehouse entry), In-Process Inspection (defined stages during production, so defects are caught mid-process), and Outgoing Inspection (final QC before dispatch, with Certificate of Analysis generated automatically).</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-qc-faq2" aria-expanded="false">
+            How are inspection checklists configured?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-qc-faq2" class="collapse" data-parent="#erp-qc-faq-list">
+            <p class="faq-answer">Checklists are configurable per item and per process stage, with numeric, visual, and pass/fail parameters. Each parameter can carry upper and lower tolerance limits. Inspectors can attach photos during inspection, and checklists are version-controlled so the exact specification used for each batch is preserved.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-qc-faq3" aria-expanded="false">
+            How does the NCR and root-cause workflow work?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-qc-faq3" class="collapse" data-parent="#erp-qc-faq-list">
+            <p class="faq-answer">When a defect is found, the inspector raises a Non-Conformance Report and classifies it by defect type, severity, and responsible party. Root cause is captured using the 5-Why framework, corrective and preventive action (CAPA) is assigned and tracked to closure, and NCR closure requires approval before the issue is signed off.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-qc-faq4" aria-expanded="false">
+            Can the system generate Certificates of Analysis (CoA)?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-qc-faq4" class="collapse" data-parent="#erp-qc-faq-list">
+            <p class="faq-answer">Yes. Once outgoing inspection passes, a Certificate of Analysis is auto-generated using a customisable template per product, batch-linked, and attached to the delivery. Digital signature and stamp support, plus a customer-wise CoA archive, make it easy to share and re-issue certificates whenever needed.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-qc-faq5" aria-expanded="false">
+            How does Quality Control connect to Purchase, Manufacturing, Sales, and Assets?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-qc-faq5" class="collapse" data-parent="#erp-qc-faq-list">
+            <p class="faq-answer">Incoming QC inspection is triggered on every Purchase Receipt before stock entry. In-process checkpoints are embedded inside every Manufacturing work order stage. Dispatch against Sales Orders is held until Outgoing QC is cleared. Calibration of QC instruments is tracked in Asset Management with due-date alerts. QC inspector certifications and shift assignments are HR-linked.</p>
+          </div>
+        </li>
+
+      </ul>
     </div>
   </section>
 

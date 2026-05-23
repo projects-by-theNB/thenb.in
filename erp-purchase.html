@@ -43,6 +43,56 @@
   }
   </script>
 
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can the Purchase module handle both internal stock fulfilment and external vendor procurement?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Two procurement paths are built into the same module. Internal Fulfilment skips the vendor cycle when material is already in stock — Requirement directly issues a Material Issue. External Procurement runs the full Requirement → Indent → RFQ → Quotation Comparison → Purchase Order → Purchase Receipt → Purchase Invoice cycle, with structured approvals at every stage."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does multi-vendor quotation comparison work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You send an RFQ to multiple vendors simultaneously. As vendors respond, the system builds a side-by-side comparison table automatically — comparing price, delivery time, terms, and negotiation history. You pick the best quote with full visibility, instead of stitching together spreadsheets manually."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the Purchase module prevent over-billing from vendors?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Every purchase invoice is held against a 3-way match — Purchase Order ↔ Goods Receipt Note ↔ Invoice. Quantities and rates must match before invoice booking is allowed. Short-shipments, rejections, and partial deliveries are recorded against the original PO, so you only ever pay for what was actually received."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will purchase data flow into inventory, accounts and manufacturing automatically?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Every Purchase Receipt updates inventory in real time. Vendor invoices link directly to accounts payable with GST captured at line level. Material issued from a PO can feed manufacturing directly, and capital asset purchases auto-create asset records with depreciation schedules — one transaction, zero re-entry across modules."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can we control purchase approvals at multiple levels?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Indents, RFQs and POs each have configurable multi-level approval workflows. You can route by amount, department, vendor, or material type. Every PO amendment carries a full audit trail of who approved what and when, and an approved vendor list with blacklisting controls who you can buy from."
+        }
+      }
+    ]
+  }
+  </script>
+
   <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png" />
@@ -103,7 +153,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <nav class="product-breadcrumb" aria-label="breadcrumb">
         <a href="index.html">Home</a>
         <span class="sep"><i class="fa fa-angle-right"></i></span>
-        <a href="index.html#modules">ERP Suite</a>
+        <a href="erp.html">ERP Suite</a>
         <span class="sep"><i class="fa fa-angle-right"></i></span>
         <span class="current">Purchase Management</span>
       </nav>
@@ -376,6 +426,70 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="erp-suite-cta-row">
         <a href="erp.html" class="erp-suite-view-all">View Full ERP Suite <i class="fa fa-arrow-right"></i></a>
       </div>
+    </div>
+  </section>
+
+  <!-- ======== FAQ ======== -->
+  <section id="faq" class="faq-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Common questions about the ERP Purchase module.</p>
+      </div>
+      <ul class="faq-list" id="erp-purchase-faq-list">
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-purchase-faq1" aria-expanded="false">
+            Can the Purchase module handle both internal stock fulfilment and external vendor procurement?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-purchase-faq1" class="collapse" data-parent="#erp-purchase-faq-list">
+            <p class="faq-answer">Yes. Two procurement paths are built into the same module. Internal Fulfilment skips the vendor cycle when material is already in stock — Requirement directly issues a Material Issue. External Procurement runs the full Requirement → Indent → RFQ → Quotation Comparison → Purchase Order → Purchase Receipt → Purchase Invoice cycle, with structured approvals at every stage.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-purchase-faq2" aria-expanded="false">
+            How does multi-vendor quotation comparison work?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-purchase-faq2" class="collapse" data-parent="#erp-purchase-faq-list">
+            <p class="faq-answer">You send an RFQ to multiple vendors simultaneously. As vendors respond, the system builds a side-by-side comparison table automatically — comparing price, delivery time, terms, and negotiation history. You pick the best quote with full visibility, instead of stitching together spreadsheets manually.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-purchase-faq3" aria-expanded="false">
+            Does the Purchase module prevent over-billing from vendors?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-purchase-faq3" class="collapse" data-parent="#erp-purchase-faq-list">
+            <p class="faq-answer">Yes. Every purchase invoice is held against a 3-way match — Purchase Order ↔ Goods Receipt Note ↔ Invoice. Quantities and rates must match before invoice booking is allowed. Short-shipments, rejections, and partial deliveries are recorded against the original PO, so you only ever pay for what was actually received.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-purchase-faq4" aria-expanded="false">
+            Will purchase data flow into inventory, accounts and manufacturing automatically?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-purchase-faq4" class="collapse" data-parent="#erp-purchase-faq-list">
+            <p class="faq-answer">Yes. Every Purchase Receipt updates inventory in real time. Vendor invoices link directly to accounts payable with GST captured at line level. Material issued from a PO can feed manufacturing directly, and capital asset purchases auto-create asset records with depreciation schedules — one transaction, zero re-entry across modules.</p>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <a class="faq-question collapsed" data-toggle="collapse" href="#erp-purchase-faq5" aria-expanded="false">
+            Can we control purchase approvals at multiple levels?
+            <span class="faq-icon"><i class="fa fa-plus"></i></span>
+          </a>
+          <div id="erp-purchase-faq5" class="collapse" data-parent="#erp-purchase-faq-list">
+            <p class="faq-answer">Yes. Indents, RFQs and POs each have configurable multi-level approval workflows. You can route by amount, department, vendor, or material type. Every PO amendment carries a full audit trail of who approved what and when, and an approved vendor list with blacklisting controls who you can buy from.</p>
+          </div>
+        </li>
+
+      </ul>
     </div>
   </section>
 
