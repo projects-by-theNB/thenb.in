@@ -144,35 +144,39 @@
     // Passive context (device, browser, scroll depth, sessions, page views)
     // — depends on NTVisitorProfile so loads after it.
     loadScript('js/client-context.js');
-    // Captures public IP + coarse geo (city/region/country/ISP) one-shot per
-    // visitor (weekly refresh). Writes into NTVisitorProfile.ip_location so
-    // every outbound email can include the network rows.
-    loadScript('js/ip-location.js');
     // Shared form validators (phone, email). Single source of truth used by
     // chatbot, book-demo, and order forms — load before anything that runs
     // a submit validation.
     loadScript('js/validators.js');
-    // Compact country-code picker used by the chatbot phone step and the
-    // book-demo form. Depends on NTIPLocation for the country list.
-    loadScript('js/dial-picker.js');
     loadScript('js/cta-tracking.js');
     // No-op on pages without [data-track-form]; safe to load globally.
     loadScript('js/form-tracking.js');
-    // Chatbox widget + Forms module — served from jsDelivr (source at
+    // Chatbox widget + sibling adapters — served from jsDelivr (source at
     // https://github.com/thenb-in/chatbox). Pin to an exact tag in prod so
     // a bad commit can't break every site at once; bump deliberately on
     // release. To force-refresh after a tag move:
     //   purge.jsdelivr.net/gh/thenb-in/chatbox@TAG/...
-    // chatbox.js exposes window.Chatbox (chat widget) and forms.js exposes
-    // window.NTForms (regular-form wiring). chatbox-integration.js wires
-    // the site's adapters; configureNTFormsWhenReady() wires the same
-    // adapters into NTForms once it lands on window.
-    var chatboxRel = 'v1';
+    //
+    // Sibling modules loaded from the same release:
+    //   - ip-location.js — public IP + coarse geo; writes into
+    //     NTVisitorProfile.ip_location for the email body rows. Also
+    //     supplies the country list for dial-picker.
+    //   - dial-picker.js — compact searchable country-code popover used by
+    //     the chatbot phone step and the book-demo form. Depends on
+    //     NTIPLocation, so loads after it.
+    //   - chatbox.js     — exposes window.Chatbox (chat widget).
+    //   - forms.js       — exposes window.NTForms (regular-form wiring).
+    // chatbox-integration.js wires the site's adapters;
+    // configureNTFormsWhenReady() wires the same adapters into NTForms once
+    // it lands on window.
+    var chatboxRel = 'main';
     var chatboxBase = 'https://cdn.jsdelivr.net/gh/thenb-in/chatbox@' + chatboxRel + '/src/';
     var cbStyle = document.createElement('link');
     cbStyle.rel  = 'stylesheet';
     cbStyle.href = chatboxBase + 'chatbox.css';
     document.head.appendChild(cbStyle);
+    loadScript(chatboxBase + 'ip-location.js');
+    loadScript(chatboxBase + 'dial-picker.js');
     loadScript(chatboxBase + 'chatbox.js');
     loadScript(chatboxBase + 'forms.js');
     configureNTFormsWhenReady();
