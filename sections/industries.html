@@ -1,0 +1,70 @@
+<!--==========================
+  Industries Section — premium dual-row marquee.
+  Each row is duplicated inside the track so the CSS animation can loop
+  seamlessly (translate -50% over the doubled content == one set width).
+============================-->
+<section id="industries" class="industries-section">
+  <div class="industries-bg-orb industries-bg-orb-1"></div>
+  <div class="industries-bg-orb industries-bg-orb-2"></div>
+
+  <div class="container industries-container">
+    <header class="industries-header">
+      <span class="industries-eyebrow">
+        <span class="industries-eyebrow-dot"></span> Trusted Across Sectors
+      </span>
+      <h3 class="industries-title">Industries We <span class="accent">Transform</span></h3>
+      <p class="industries-subtitle">From farms and factories to clinics and classrooms — we've shipped working software across 16+ industries. Find yours below.</p>
+    </header>
+
+    <!-- Row 1: scrolls right → left -->
+    <div class="industries-marquee">
+      <div class="industries-track industries-track-left">
+        <!-- set 1 -->
+        <div class="industry-chip tint-amber"><span class="industry-emoji">🌾</span><span>Agriculture &amp; Food</span></div>
+        <div class="industry-chip tint-blue"><span class="industry-emoji">🏭</span><span>Manufacturing</span></div>
+        <div class="industry-chip tint-rose"><span class="industry-emoji">🛒</span><span>Retail &amp; Distribution</span></div>
+        <div class="industry-chip tint-orange"><span class="industry-emoji">🏗️</span><span>Construction &amp; Infra</span></div>
+        <div class="industry-chip tint-emerald"><span class="industry-emoji">💊</span><span>Healthcare</span></div>
+        <div class="industry-chip tint-violet"><span class="industry-emoji">🧪</span><span>Pharmaceuticals</span></div>
+        <div class="industry-chip tint-cyan"><span class="industry-emoji">🚚</span><span>Logistics &amp; Warehousing</span></div>
+        <div class="industry-chip tint-indigo"><span class="industry-emoji">🎓</span><span>Education</span></div>
+        <!-- set 2 (duplicate for seamless loop) -->
+        <div class="industry-chip tint-amber"   aria-hidden="true"><span class="industry-emoji">🌾</span><span>Agriculture &amp; Food</span></div>
+        <div class="industry-chip tint-blue"    aria-hidden="true"><span class="industry-emoji">🏭</span><span>Manufacturing</span></div>
+        <div class="industry-chip tint-rose"    aria-hidden="true"><span class="industry-emoji">🛒</span><span>Retail &amp; Distribution</span></div>
+        <div class="industry-chip tint-orange"  aria-hidden="true"><span class="industry-emoji">🏗️</span><span>Construction &amp; Infra</span></div>
+        <div class="industry-chip tint-emerald" aria-hidden="true"><span class="industry-emoji">💊</span><span>Healthcare</span></div>
+        <div class="industry-chip tint-violet"  aria-hidden="true"><span class="industry-emoji">🧪</span><span>Pharmaceuticals</span></div>
+        <div class="industry-chip tint-cyan"    aria-hidden="true"><span class="industry-emoji">🚚</span><span>Logistics &amp; Warehousing</span></div>
+        <div class="industry-chip tint-indigo"  aria-hidden="true"><span class="industry-emoji">🎓</span><span>Education</span></div>
+      </div>
+    </div>
+
+    <!-- Row 2: scrolls left → right -->
+    <div class="industries-marquee">
+      <div class="industries-track industries-track-right">
+        <div class="industry-chip tint-pink"><span class="industry-emoji">🏨</span><span>Hospitality</span></div>
+        <div class="industry-chip tint-rose"><span class="industry-emoji">🛍️</span><span>FMCG</span></div>
+        <div class="industry-chip tint-violet"><span class="industry-emoji">🧵</span><span>Textiles &amp; Apparel</span></div>
+        <div class="industry-chip tint-slate"><span class="industry-emoji">🚗</span><span>Automotive</span></div>
+        <div class="industry-chip tint-blue"><span class="industry-emoji">🏢</span><span>Real Estate</span></div>
+        <div class="industry-chip tint-indigo"><span class="industry-emoji">💻</span><span>IT &amp; ITES</span></div>
+        <div class="industry-chip tint-emerald"><span class="industry-emoji">🏦</span><span>Financial Services</span></div>
+        <div class="industry-chip tint-amber"><span class="industry-emoji">⚡</span><span>Energy &amp; Utilities</span></div>
+        <div class="industry-chip tint-pink"    aria-hidden="true"><span class="industry-emoji">🏨</span><span>Hospitality</span></div>
+        <div class="industry-chip tint-rose"    aria-hidden="true"><span class="industry-emoji">🛍️</span><span>FMCG</span></div>
+        <div class="industry-chip tint-violet"  aria-hidden="true"><span class="industry-emoji">🧵</span><span>Textiles &amp; Apparel</span></div>
+        <div class="industry-chip tint-slate"   aria-hidden="true"><span class="industry-emoji">🚗</span><span>Automotive</span></div>
+        <div class="industry-chip tint-blue"    aria-hidden="true"><span class="industry-emoji">🏢</span><span>Real Estate</span></div>
+        <div class="industry-chip tint-indigo"  aria-hidden="true"><span class="industry-emoji">💻</span><span>IT &amp; ITES</span></div>
+        <div class="industry-chip tint-emerald" aria-hidden="true"><span class="industry-emoji">🏦</span><span>Financial Services</span></div>
+        <div class="industry-chip tint-amber"   aria-hidden="true"><span class="industry-emoji">⚡</span><span>Energy &amp; Utilities</span></div>
+      </div>
+    </div>
+
+    <div class="industries-footnote">
+      <span class="industries-footnote-icon" aria-hidden="true">💬</span>
+      <span>Don't see your industry? We've probably built for it before — <a href="book-demo.html" class="industries-footnote-link" data-cta-type="industries_talk" data-cta-location="industries">tell us about it</a>.</span>
+    </div>
+  </div>
+</section>
