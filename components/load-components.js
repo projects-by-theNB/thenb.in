@@ -136,10 +136,11 @@
     loadHtml('header-placeholder', COMPONENTS + 'header.html', initHeader);
     loadHtml('footer-placeholder', COMPONENTS + 'footer.html', initFooter);
     loadHtml('module-details-placeholder', 'sections/module-details.html');
-    loadHtml('industries-placeholder', 'sections/industries.html');
     loadHtml('modules-placeholder', 'sections/product-modules.html');
     loadHtml('testimonials-placeholder', 'sections/testimonials.html');
     loadHtml('privacy-cta-placeholder', COMPONENTS + 'privacy-cta.html');
+    loadHtml('why-choose-placeholder', 'sections/why-choose.html');
+    loadHtml('journey-placeholder', 'sections/journey.html');
     // config.js exposes window.AppConfig (mailer creds + Google client ID)
     // — load it first so chatbot + Google sign-in can use it on every page.
     loadScript('lib/custom/js/config.js');
