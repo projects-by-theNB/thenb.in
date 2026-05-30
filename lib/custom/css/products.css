@@ -147,6 +147,46 @@ a { text-decoration: none; transition: var(--nt-transition); }
 .custom-hero    { background: linear-gradient(135deg, #0d1b2a 0%, #2d0d4a 55%, #7b1fa2 100%); }
 .gatepass-hero  { background: linear-gradient(135deg, #0d1b2a 0%, #1a1a3d 55%, #413e66 100%); }
 .safechat-hero  { background: linear-gradient(135deg, #0d1b2a 0%, #0a2a2a 55%, #0a7a6a 100%); }
+.connect-hero   { background: linear-gradient(135deg, #0d1b2a 0%, #1e2350 55%, #4f46e5 100%); }
+
+/* Widen the Connect hero + balance left/right */
+.connect-hero .container {
+  max-width: 1340px;
+  width: 100%;
+}
+.connect-hero .row {
+  justify-content: space-between;
+}
+.connect-hero .hero-subtitle { max-width: 600px; }
+
+/* Connect hero phone visual (top-right) */
+.connect-hero-visual {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.connect-hero-phone {
+  width: 270px;
+  max-width: 100%;
+  padding: 12px 11px 14px;
+  border-radius: 36px;
+  background: linear-gradient(160deg, #1e293b, #0f172a);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+  transform: rotate(2deg);
+  transition: transform 0.4s ease;
+}
+.connect-hero-phone:hover { transform: rotate(0deg) translateY(-4px); }
+.connect-hero-phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 26px;
+}
+@media (max-width: 991px) {
+  .connect-hero-visual { margin-top: 36px; justify-content: center; }
+  .connect-hero-phone { transform: none; }
+}
 
 /* -------------------------
    Breadcrumb
@@ -176,6 +216,26 @@ a { text-decoration: none; transition: var(--nt-transition); }
   color: rgba(255,255,255,0.90);
   font-weight: 600;
 }
+
+/* Free pill (Connect) */
+.hero-free-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.28);
+  backdrop-filter: blur(4px);
+}
+.hero-free-pill i { color: #6ee7b7; }
 
 /* Hero content */
 .product-hero h1 {
