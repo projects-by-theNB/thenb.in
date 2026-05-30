@@ -93,6 +93,34 @@
     }
   }
 
+  // The testimonials partial is injected async, so its Owl carousel must be
+  // initialised here (after the markup lands) rather than on DOMReady.
+  function initTestimonialsCarousel() {
+    if (typeof jQuery === 'undefined' || !jQuery.fn.owlCarousel) return;
+    var $c = jQuery('.testimonials-carousel');
+    if (!$c.length || $c.hasClass('owl-loaded')) return;
+    // Continuous, never-stopping glide: a linear transition whose speed
+    // equals the timeout removes the pause between slides, so the strip
+    // scrolls smoothly on its own. Pauses on hover so people can read.
+    $c.owlCarousel({
+      autoplay: true,
+      autoplayTimeout: 5000,
+      autoplaySpeed: 5000,
+      smartSpeed: 5000,
+      slideTransition: 'linear',
+      autoplayHoverPause: true,
+      dots: false,
+      nav: false,
+      loop: true,
+      margin: 24,
+      responsive: {
+        0:    { items: 1 },
+        640:  { items: 2 },
+        1000: { items: 3 }
+      }
+    });
+  }
+
   // NTForms (chatbox/src/forms.js) takes all of its dependencies as adapters
   // — pass the site's primitives in once they've loaded. Polls because all
   // of these load via defer and may not be on window yet. Idempotent: only
@@ -137,7 +165,7 @@
     loadHtml('footer-placeholder', COMPONENTS + 'footer.html', initFooter);
     loadHtml('module-details-placeholder', 'sections/module-details.html');
     loadHtml('modules-placeholder', 'sections/product-modules.html');
-    loadHtml('testimonials-placeholder', 'sections/testimonials.html');
+    loadHtml('testimonials-placeholder', 'sections/testimonials.html', initTestimonialsCarousel);
     loadHtml('privacy-cta-placeholder', COMPONENTS + 'privacy-cta.html');
     loadHtml('why-choose-placeholder', 'sections/why-choose.html');
     loadHtml('journey-placeholder', 'sections/journey.html');
