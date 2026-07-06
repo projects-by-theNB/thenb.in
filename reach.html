@@ -22,7 +22,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const name = urlParams.get('name');
         
-        let targetNumber = 8275269688;
+        let targetNumber = '8275269688';
         
         // Priority: name parameter first, then whatsapp parameter
         if (name) {
@@ -34,7 +34,7 @@
         }
         
         // Redirect to WhatsApp if we have a valid number
-        window.location.href = `https://wa.me/${targetNumber}`;
+        window.location.href = `https://wa.me/91${targetNumber}`;
     </script>
 </head>
 <body>
