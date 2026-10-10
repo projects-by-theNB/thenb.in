@@ -1,14 +1,22 @@
-# Octo STS trust policy. Lets a GitHub Actions run from
-# projects-by-theNB/landing-page, on its master branch, federate its ambient
-# OIDC identity for a short-lived (~1h) installation token scoped to this repo
-# (thenb.in) — no long-lived PAT stored anywhere.
+# Octo STS trust policy for the landing-page publish job.
 #
-# The landing-page publish workflow re-publishes this file on every deploy
-# (source of truth: landing-page/deploy/chainguard/app-token.sts.yaml), so it
-# survives the `git rm -r .` that rebuilds this repo. This copy is the one-time
-# seed that lets the very first token exchange succeed.
+# This file is the SOURCE OF TRUTH, kept in landing-page, but Octo STS reads
+# it from the *target* repo (projects-by-theNB/thenb.in). The publish workflow
+# (.github/workflows/publish-gulp-results.yml) copies it into thenb.in at
+#   .github/chainguard/app-token.sts.yaml
+# on every deploy, so it survives the `git rm -r .` that rebuilds thenb.in.
+#
+# It lets a GitHub Actions run from projects-by-theNB/landing-page, on its
+# master branch, federate its ambient OIDC identity for a short-lived (~1h)
+# installation token scoped to thenb.in — no long-lived PAT stored anywhere.
+#
+# NOTE: the very first deploy is a chicken-and-egg — thenb.in has no policy
+# yet, so the token exchange 404s before the copy can run. Seed thenb.in once
+# by hand with this file at .github/chainguard/app-token.sts.yaml; after that
+# the workflow keeps it in sync automatically.
 issuer: https://token.actions.githubusercontent.com
 subject_pattern: repo:projects-by-theNB/landing-page:ref:refs/heads/master
 
 permissions:
+  # The publish job force-replaces thenb.in's contents and pushes a commit.
   contents: write

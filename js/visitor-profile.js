@@ -41,8 +41,7 @@
     'inventory.html':           'inventory',
     'crm.html':                 'crm',
     'custom.html':              'custom',
-    'gatepass.html':            'visitor_mgmt',
-    'safechat.html':            'safechat'
+    'gatepass.html':            'visitor_mgmt'
   };
 
   function detectCurrentProduct() {

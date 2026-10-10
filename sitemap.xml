@@ -95,15 +95,34 @@
   <changefreq>monthly</changefreq>
   <priority>0.90</priority>
 </url>
+<!-- Industry ERP cluster -->
 <url>
-  <loc>https://www.navlakha.tech/custom</loc>
-  <lastmod>2026-05-20</lastmod>
+  <loc>https://www.navlakha.tech/manufacturing-erp</loc>
+  <lastmod>2026-10-09</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.85</priority>
 </url>
 <url>
-  <loc>https://www.navlakha.tech/connect</loc>
-  <lastmod>2026-05-30</lastmod>
+  <loc>https://www.navlakha.tech/college-erp</loc>
+  <lastmod>2026-10-09</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.85</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/fmcg-erp</loc>
+  <lastmod>2026-10-09</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.85</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/packaging-erp</loc>
+  <lastmod>2026-10-09</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.85</priority>
+</url>
+<url>
+  <loc>https://www.navlakha.tech/custom</loc>
+  <lastmod>2026-05-20</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.85</priority>
 </url>
