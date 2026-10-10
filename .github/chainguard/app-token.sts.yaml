@@ -1,0 +1,14 @@
+# Octo STS trust policy. Lets a GitHub Actions run from
+# projects-by-theNB/landing-page, on its master branch, federate its ambient
+# OIDC identity for a short-lived (~1h) installation token scoped to this repo
+# (thenb.in) — no long-lived PAT stored anywhere.
+#
+# The landing-page publish workflow re-publishes this file on every deploy
+# (source of truth: landing-page/deploy/chainguard/app-token.sts.yaml), so it
+# survives the `git rm -r .` that rebuilds this repo. This copy is the one-time
+# seed that lets the very first token exchange succeed.
+issuer: https://token.actions.githubusercontent.com
+subject_pattern: repo:projects-by-theNB/landing-page:ref:refs/heads/master
+
+permissions:
+  contents: write
